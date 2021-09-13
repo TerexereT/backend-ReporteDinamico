@@ -42,9 +42,9 @@ export default class Aboterminal {
 		try {
 			const info: any = {
 				TERMINAL: true,
-				MONTOTOTAL: true,
-				FECHPROCESO: true,
-				ESTATUS: true,
+				MONTOTOTAL: false,
+				FECHPROCESO: false,
+				ESTATUS: false,
 			};
 
 			res.status(200).json({ message: 'reporte exitoso', info });
