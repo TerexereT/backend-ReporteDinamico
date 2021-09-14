@@ -1,15 +1,17 @@
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import * as express from 'express';
-import * as bodyParser from 'body-parser';
 import { Request, Response } from 'express';
 import { Routes } from './routes';
+import { preRoutes, posRoutes } from './Middlewares/index';
 
 createConnection()
 	.then(async (connection) => {
 		// create express app
 		const app = express();
-		app.use(bodyParser.json());
+		app.use(express.json());
+
+		preRoutes(app);
 
 		// register express routes from defined application routes
 		Routes.forEach((route) => {
@@ -22,6 +24,8 @@ createConnection()
 				}
 			});
 		});
+
+		posRoutes(app);
 
 		// setup express app here
 		// ...

@@ -39,7 +39,7 @@ export const Routes: any[] = [
 		action: 'keys',
 	},
 	{
-		method: 'get',
+		method: 'post',
 		route: '/aboterminal',
 		controller: Aboterminal,
 		action: 'all',

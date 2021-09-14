@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { selectQuery, dateRang, FormatQuery, selects } from '../functions/index';
+import { selectQuery, dateRang, FormatQuery, selects } from '../functions/history';
 // @ts-ignore
 import numeral from 'numeral';
 import { getConnection } from 'typeorm';
