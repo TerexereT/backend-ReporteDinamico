@@ -18,7 +18,7 @@ interface msg {
 	info: any;
 }
 
-export default class sin_plan {
+export default class sin_comision {
 	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			// definimos variables

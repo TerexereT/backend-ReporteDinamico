@@ -4,6 +4,7 @@ import { Router } from 'express';
 import History from './controller/history';
 import Aboterminal from './controller/aboterminal';
 import sin_plan from './controller/mantenimiento/sin_plan';
+import sin_comision from './controller/mantenimiento/sin_comision';
 
 // export const Routes = [{
 //     method: "get",
@@ -53,14 +54,26 @@ export const Routes: any[] = [
 	},
 	{
 		method: 'post',
-		route: '/mantenimiento/sinPlan',
+		route: '/mantenimiento/0',
 		controller: sin_plan,
 		action: 'all',
 	},
 	{
 		method: 'get',
-		route: '/mantenimiento/sinPlan/keys',
+		route: '/mantenimiento/0/keys',
 		controller: sin_plan,
+		action: 'keys',
+	},
+	{
+		method: 'post',
+		route: '/mantenimiento/1',
+		controller: sin_comision,
+		action: 'all',
+	},
+	{
+		method: 'get',
+		route: '/mantenimiento/1/keys',
+		controller: sin_comision,
 		action: 'keys',
 	},
 ];
