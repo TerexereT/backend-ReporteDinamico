@@ -32,6 +32,8 @@ export const FormatQuery = (selects: string): string => {
 
 	return /* sql */ /*sql*/ `
     select ${selects}
-     from PlanCuota where estatusId in ('25','26') and fechaProceso <='${today} 00:00:00.000'
+    from PlanCuota
+	left outer join Estatus as e ON estatusId = e.id
+	where estatusId in ('25','26') and fechaProceso <='${today} 00:00:00.000'
     `;
 };

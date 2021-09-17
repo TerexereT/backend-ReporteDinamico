@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { createConnection } from 'typeorm';
+import { createConnection, getConnection } from 'typeorm';
 import * as express from 'express';
 import { Request, Response } from 'express';
 import { Routes } from './routes';
@@ -7,6 +7,8 @@ import { preRoutes, posRoutes } from './Middlewares/index';
 
 createConnection()
 	.then(async (connection) => {
+		// await fs.
+
 		// create express app
 		const app = express();
 		app.use(express.json());

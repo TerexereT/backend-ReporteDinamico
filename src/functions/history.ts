@@ -14,7 +14,7 @@ hisFechaEjecucion,
 
 count from  LoteCerradoDetalle
 
-	   where aboTerminal = Historico.aboTerminal and hisFechaEjecucion = Historico.hisFechaEjecucion
+   where aboTerminal = Historico.aboTerminal and hisFechaEjecucion = Historico.hisFechaEjecucion
 
 ) as [TRANSACCION]
 
@@ -29,6 +29,14 @@ where hisFechaEjecucion BETWEEN @StartDate AND @EndDate -- and aboTerminal = '59
 GROUP BY hisFechaEjecucion, aboTerminal,hisFechaProceso) order by hisFechaEjecucion asc`;
 
 export const selects: select[] = [
+	{
+		key: 'NOMBRE',
+		query: 'd.aliNombres AS [NOMBRE]',
+	},
+	{
+		key: 'APELLIDOS',
+		query: 'd.aliNombres AS [APELLIDOS]',
+	},
 	{
 		key: 'CEDULA_RIF',
 		query: 'c.comerRif AS [CEDULA-RIF]',
@@ -46,12 +54,12 @@ export const selects: select[] = [
 		query: 'a.aboTerminal AS TERMINAL',
 	},
 	{
-		key: 'FechaEjec',
+		key: 'Fecha',
 		query: 'a.hisFechaEjecucion AS FechaEjec',
 	},
 	{
-		key: 'FechaPreceso',
-		query: 'a.hisFechaProceso AS FechaPreceso',
+		key: 'Fecha Proceso',
+		query: 'a.hisFechaProceso AS FechaProceso',
 	},
 	{
 		key: 'COD_COMERCIO',
@@ -108,7 +116,7 @@ export const dateRang = (init: string, end: string): string => {
 	return /* sql */ ` WHERE   hisFechaEjecucion BETWEEN '${initDate}' AND  '${endDate}'`;
 };
 
-export const FormatQuery = (DatesRang: string, selects: string): string => {
+export const FormatQuery = (DatesRang: string, selects: string, bank?: string): string => {
 	return /* sql */ `
     select *
 
@@ -177,6 +185,8 @@ export const FormatQuery = (DatesRang: string, selects: string): string => {
     Cartera_Ter AS g ON a.aboTerminal = Terminal_Id LEFT OUTER JOIN
 
     Cartera AS h ON g.Cod_Cartera = h.Cod_Cartera
+
+	${bank ? /*sql*/ `whare h.Nombres_Org like '%'+ ${bank} +'%'` : ``}
 
     group by c.comerRif, c.comerDesc, c.comerDireccion, a.aboTerminal, a.hisFechaEjecucion, d.aliIdentificacion,d.aliNombres, d.aliApellidos,c.comerCod,c.comerCuentaBanco,
 
