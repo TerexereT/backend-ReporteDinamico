@@ -23,6 +23,9 @@ export default class History {
 		try {
 			// definimos variables
 			const { keys } = req.body;
+
+			console.log('keys', keys);
+
 			const { init, end } = req.query;
 
 			// formateamos la data
@@ -31,21 +34,21 @@ export default class History {
 			const query = FormatQuery(Dates, selects);
 
 			// ejecucion del querys ya formateado
-			const resp: any = await getConnection().query(query);
+			const info: any = await getConnection().query(query);
 
 			// if (keys.includes('TRANSACCION')) {
 			// 	const trans: any = await pool.query(transQuery);
 			// }
 
-			const info: any[] = resp.map((item: any) => {
-				Object.keys(item).forEach((key: any) => {
-					if (typeof item[key] === 'number') {
-						item[key] = 'Bs' + numeral(item[key]).format('0.0,00');
-					}
-				});
+			// const info: any[] = resp.map((item: any) => {
+			// 	Object.keys(item).forEach((key: any) => {
+			// 		if (typeof item[key] === 'number') {
+			// 			item[key] = 'Bs' + numeral(item[key]).format('0.0,00');
+			// 		}
+			// 	});
 
-				return item;
-			});
+			// 	return item;
+			// });
 
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });

@@ -41,5 +41,7 @@ createConnection()
 			console.log(`            (o.o)`);
 			console.log('            (|_|)*');
 		});
+
+		console.log('DB OK');
 	})
 	.catch((error) => console.log(error));

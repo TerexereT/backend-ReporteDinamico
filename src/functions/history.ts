@@ -20,7 +20,7 @@ count from  LoteCerradoDetalle
 
  
 
-from Historico
+from [MilPagos].[dbo].[Historico] with (NOLOCK)
 
  
 
@@ -116,7 +116,7 @@ export const dateRang = (init: string, end: string): string => {
 	return /* sql */ ` WHERE   hisFechaEjecucion BETWEEN '${initDate}' AND  '${endDate}'`;
 };
 
-export const FormatQuery = (DatesRang: string, selects: string, bank?: string): string => {
+export const FormatQuery = ({ init, end }: any, selects: string, bank?: string): string => {
 	return /* sql */ `
     select *
 
@@ -168,7 +168,7 @@ export const FormatQuery = (DatesRang: string, selects: string, bank?: string): 
 
     
 
-    WHERE   hisFechaEjecucion BETWEEN '2021-07-10' AND  '2021-07-15'
+    WHERE   hisFechaEjecucion BETWEEN '${init}' AND  '${end}'
 
                   GROUP BY hisFechaEjecucion, aboTerminal,hisFechaProceso,aboCodAfi) AS a INNER JOIN
 

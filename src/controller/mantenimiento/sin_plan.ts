@@ -18,15 +18,15 @@ interface msg {
 	info: any;
 }
 
-export default class History {
-	async allHistory(req: Request<any, msg, body, Querys>, res: Response<msg>) {
+export default class sin_plan {
+	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			// definimos variables
 			const { keys } = req.body;
-			const { init, end } = req.query;
+
+			console.log('keys', keys);
 
 			// formateamos la data
-			const Dates = dateRang(init, end);
 			const selects = selectQuery(keys);
 			const query = FormatQuery(selects);
 
