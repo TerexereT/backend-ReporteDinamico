@@ -116,7 +116,12 @@ export const dateRang = (init: string, end: string): string => {
 	return /* sql */ ` WHERE   hisFechaEjecucion BETWEEN '${initDate}' AND  '${endDate}'`;
 };
 
-export const FormatQuery = ({ init, end }: any, selects: string, bank?: string): string => {
+export const FormatQuery = (dateRang: any, selects: string, bank?: string): string => {
+
+	
+	const { init, end } = dateRang;
+	console.log({ init, end });
+	
 	return /* sql */ `
     select *
 
@@ -170,6 +175,7 @@ export const FormatQuery = ({ init, end }: any, selects: string, bank?: string):
 
     WHERE   hisFechaEjecucion BETWEEN '${init}' AND  '${end}'
 
+	
                   GROUP BY hisFechaEjecucion, aboTerminal,hisFechaProceso,aboCodAfi) AS a INNER JOIN
 
     Abonos AS b ON a.aboTerminal = b.aboTerminal INNER JOIN

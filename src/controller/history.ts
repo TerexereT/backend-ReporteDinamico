@@ -24,14 +24,14 @@ export default class History {
 			// definimos variables
 			const { keys } = req.body;
 
-			console.log('keys', keys);
+			console.log('req.', req.query);
 
-			const { init, end } = req.query;
+			const { init, end }:any = req.query;
 
 			// formateamos la data
 			const Dates = dateRang(init, end);
 			const selects = selectQuery(keys);
-			const query = FormatQuery(Dates, selects);
+			const query = FormatQuery({ init, end }, selects);
 
 			// ejecucion del querys ya formateado
 			const info: any = await getConnection().query(query);

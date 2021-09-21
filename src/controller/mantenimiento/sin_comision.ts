@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { selectQuery, dateRang, FormatQuery, selects } from '../../functions/mantenimineto/sin_plan';
+import { selectQuery, dateRang, FormatQuery, selects } from '../../functions/mantenimineto/sin_comision';
 // @ts-ignore
 import numeral from 'numeral';
 import { getConnection } from 'typeorm';
@@ -27,23 +27,22 @@ export default class sin_comision {
 			// formateamos la data
 			const selects = selectQuery(keys);
 			const query = FormatQuery(selects);
-
 			// ejecucion del querys ya formateado
-			const resp: any = await getConnection().query(query);
+			const info: any = await getConnection().query(query);
 
 			// if (keys.includes('TRANSACCION')) {
 			// 	const trans: any = await pool.query(transQuery);
 			// }
 
-			const info: any[] = resp.map((item: any) => {
-				Object.keys(item).forEach((key: any) => {
-					if (typeof item[key] === 'number') {
-						item[key] = 'Bs' + numeral(item[key]).format('0.0,00');
-					}
-				});
+			// const info: any[] = resp.map((item: any) => {
+			// 	Object.keys(item).forEach((key: any) => {
+			// 		if (typeof item[key] === 'number') {
+			// 			item[key] = 'Bs' + numeral(item[key]).format('0.0,00');
+			// 		}
+			// 	});
 
-				return item;
-			});
+			// 	return item;
+			// });
 
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });

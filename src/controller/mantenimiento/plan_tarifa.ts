@@ -18,7 +18,7 @@ interface msg {
 	info: any;
 }
 
-export default class sin_plan {
+export default class plan_tarifa {
 	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			// definimos variables
@@ -27,13 +27,10 @@ export default class sin_plan {
 			// formateamos la data
 			const selects = selectQuery(keys);
 			const query = FormatQuery(selects);
-
 			// ejecucion del querys ya formateado
-			// const resp: any = await getConnection().query(query);
 			const info: any = await getConnection().query(query);
 
-		
-
+			
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {
