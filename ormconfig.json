@@ -1,7 +1,7 @@
 {
 	"type": "mssql",
 
-	"host": "10.198.71.45",
+	"host": "10.198.72.31",
 	"username": "usr_milpagos",
 	"password": "usr_milpagos",
 	"database": "milpagos",
