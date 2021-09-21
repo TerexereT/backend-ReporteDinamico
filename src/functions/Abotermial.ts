@@ -9,7 +9,7 @@ export const selects: select[] = [
 	{ key: 'TERMINAL', query: `aboterminal TERMINAL` },
 	{ key: 'MONTOTOTAL', query: `montoTotal MONTOTOTAL` },
 	{ key: 'FECHPROCESO', query: `fechaProceso FECHPROCESO` },
-	{ key: 'ESTATUS', query: `estatusId ESTATUS` },
+	{ key: 'ESTATUS', query: `descripcion ESTATUS` },
 ];
 
 export const selectQuery = (keys: string[]) => {

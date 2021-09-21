@@ -6,6 +6,8 @@ import Aboterminal from './controller/aboterminal';
 import sin_plan from './controller/mantenimiento/sin_plan';
 import sin_comision from './controller/mantenimiento/sin_comision';
 import plan_tarifa from './controller/mantenimiento/plan_tarifa';
+import plan_man_inactivo from './controller/mantenimiento/plan_mantenimiento_inactivo';
+import plan_comi_inactivo from './controller/mantenimiento/plan_mantenimiento_inactivo';
 
 // export const Routes = [{
 //     method: "get",
@@ -76,16 +78,27 @@ export const Routes: any[] = [
 		route: '/mantenimiento/1/keys',
 		controller: sin_comision,
 		action: 'keys',
-	},	{
+	},{
 		method: 'post',
 		route: '/mantenimiento/2',
-		controller: plan_tarifa,
+		controller: plan_man_inactivo,
 		action: 'all',
 	},
 	{
 		method: 'get',
 		route: '/mantenimiento/2/keys',
-		controller: plan_tarifa,
+		controller: plan_man_inactivo,
+		action: 'keys',
+	},{
+		method: 'post',
+		route: '/mantenimiento/3',
+		controller: plan_comi_inactivo,
+		action: 'all',
+	},
+	{
+		method: 'get',
+		route: '/mantenimiento/3/keys',
+		controller: plan_comi_inactivo,
 		action: 'keys',
 	},
 ];

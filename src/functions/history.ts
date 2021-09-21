@@ -98,7 +98,7 @@ export const selects: select[] = [
 		query: '(a.monto_abono) AS [MONTO_ABONAR]',
 	},
 	{ key: 'TASA', query: 'f.hisTasaBCV AS [TASA]' },
-	{ key: 'TIPO CARTERA', query: 'h.Nombre_Org AS [ORG]' },
+	{ key: 'TIPO CARTERA', query: 'h.Nombre_Org AS [TIPO_CARTERA]' },
 ];
 
 export const selectQuery = (keys: string[]) => {

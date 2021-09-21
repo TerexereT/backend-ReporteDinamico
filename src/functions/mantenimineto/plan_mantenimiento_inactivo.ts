@@ -34,7 +34,7 @@ export const dateRang = (init: string, end: string): string => {
 export const FormatQuery = (selects: string): string => {
 	const today: string = DateTime.local().toFormat('yyyy-MM-dd');
 
-	console.log('hola soy sin plan de comisiones');
+	console.log('hola soy sin plan');
 	
 
 	return /* sql */ /*sql*/ `
@@ -43,7 +43,7 @@ export const FormatQuery = (selects: string): string => {
 	join Comercios b on b.comerCod=a.aboCodComercio
 	join contactos c on c.contCodComer=b.comerCod
 	join aliados g on g.id=b.comerCodAliado 
-
-	where a.hisComisionBancaria > '0.00' and  a.aboterminal not in (select aboterminal from  PlanPago where planId in ('2','5','6','7')) and a.hisFechaEjecucion > GETDATE()-1
-	ORDER BY a.aboTerminal asc`;
+	
+	where a.hisComisionBancaria > '0.00' and  a.aboterminal not in (select aboterminal from  PlanPago where planId in ('1','5','6','7','8','9') and estatusId='23' ) and a.hisFechaEjecucion > GETDATE()-1
+	ORDER BY a.aboTerminal asc`
 };
