@@ -41,6 +41,6 @@ export const FormatQuery = (selects: string): string => {
 	join contactos c on c.contCodComer=b.comerCod
 	join aliados g on g.id=b.comerCodAliado
 	
-	where a.hisComisionBancaria > '0.00' and  a.aboterminal not in (select aboterminal from  PlanPago where planId in ('2','5','6','7')) and a.hisFechaEjecucion > GETDATE()-1
+	where a.hisComisionBancaria > '0.00' and  a.aboterminal not in (select aboterminal from  PlanPago where planId in ('2','5','6','7') and estatusId='23') and a.hisFechaEjecucion > GETDATE()-1
 	ORDER BY a.aboTerminal asc`;
 };
