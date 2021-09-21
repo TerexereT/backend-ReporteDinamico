@@ -54,11 +54,11 @@ export const selects: select[] = [
 		query: 'a.aboTerminal AS TERMINAL',
 	},
 	{
-		key: 'Fecha',
+		key: 'FECHA',
 		query: 'a.hisFechaEjecucion AS FechaEjec',
 	},
 	{
-		key: 'Fecha Proceso',
+		key: 'FECHA PROCESO',
 		query: 'a.hisFechaProceso AS FechaProceso',
 	},
 	{
@@ -98,7 +98,7 @@ export const selects: select[] = [
 		query: '(a.monto_abono) AS [MONTO_ABONAR]',
 	},
 	{ key: 'TASA', query: 'f.hisTasaBCV AS [TASA]' },
-	{ key: 'ORG', query: 'h.Nombre_Org AS [ORG]' },
+	{ key: 'TIPO CARTERA', query: 'h.Nombre_Org AS [ORG]' },
 ];
 
 export const selectQuery = (keys: string[]) => {
@@ -117,11 +117,9 @@ export const dateRang = (init: string, end: string): string => {
 };
 
 export const FormatQuery = (dateRang: any, selects: string, bank?: string): string => {
-
-	
 	const { init, end } = dateRang;
 	console.log({ init, end });
-	
+
 	return /* sql */ `
     select *
 
