@@ -30,11 +30,11 @@ GROUP BY hisFechaEjecucion, aboTerminal,hisFechaProceso) order by hisFechaEjecuc
 
 export const selects: select[] = [
 	{
-		key: 'NOMBRE',
+		key: 'NOMBRE_ACI',
 		query: 'd.aliNombres AS [NOMBRE]',
 	},
 	{
-		key: 'APELLIDOS',
+		key: 'APELLIDOS_ACI',
 		query: 'd.aliNombres AS [APELLIDOS]',
 	},
 	{
