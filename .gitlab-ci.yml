@@ -1,0 +1,44 @@
+before_script:
+  - apt-get update -qq
+  - apt-get install -qq git dos2unix
+  - mkdir ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  - echo $SSH_PRIVATE_KEY >> ~/.ssh/key_64.pem
+  - cat ~/.ssh/key_64.pem |base64 -d > ~/.ssh/key.pem
+  - chmod 400 ~/.ssh/key.pem
+  - eval "$(ssh-agent -s)"
+  - cat ~/.ssh/key.pem
+  - echo $IP_REMOTE
+  - which ssh-agent
+ 
+deploy_dev: 
+  stage: deploy
+  script: 
+     
+    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTE " cd $DOCUMENT_ROOT/ && sudo  git  stash && sudo git  stash pop && sudo git reset --hard "
+    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTE " cd $DOCUMENT_ROOT/ && sudo git checkout dev && sudo git pull --rebase --autostash "
+    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTE " cd $DOCUMENT_ROOT/ && sudo npm install && sudo npm audit fix "
+    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTE " cd $DOCUMENT_ROOT && sudo pm2 restart api-reportes  "
+  only: 
+    - dev
+deploy_qa: 
+  stage: deploy
+  script: 
+     
+  
+    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTEQA " cd $DOCUMENT_ROOT/ && sudo  git  stash && sudo git  stash pop && sudo git reset --hard "
+    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTEQA " cd $DOCUMENT_ROOT/ && sudo git checkout qa && sudo git pull --rebase --autostash "
+    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTEQA " cd $DOCUMENT_ROOT/ && sudo npm install && sudo npm audit fix "
+    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTEQA " cd $DOCUMENT_ROOT && sudo pm2 restart api-reportes  "
+  only: 
+    - qa
+#deploy_produccion: 
+#  stage: deploy
+#  script: 
+     
+#    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTEPRO " sudo pm2 delete 0 " 
+#    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTEPRO " cd $DOCUMENT_ROOT/ && sudo git checkout master && sudo git pull --rebase --autostash "
+#    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTEPRO " cd $DOCUMENT_ROOT/ && sudo npm install && sudo npm audit fix "
+#    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTEPRO " cd $DOCUMENT_ROOT && sudo pm2 --name api start npm -- start  "
+#  only: 
+#    - master        
