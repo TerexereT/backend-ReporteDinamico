@@ -25,7 +25,7 @@ export const dateRang = (init: string, end: string): string => {
 	const initDate = DateTime.fromFormat(init, 'YYYY-MM-DD');
 	const endDate = DateTime.fromFormat(end, 'YYYY-MM-DD');
 
-	return /* sql */ ` WHERE   hisFechaEjecucion BETWEEN '${initDate}' AND  '${endDate}'`;
+	return /* sql */ ` WHERE  hisFechaEjecucion BETWEEN '${initDate}' AND  '${endDate}'`;
 };
 
 export const FormatQuery = (selects: string): string => {
