@@ -70,8 +70,8 @@ export const selects: select[] = [
 		query: 'c.comerCuentaBanco as [N_CUENTA]',
 	},
 	{
-		key: 'N_AFILIADO',
-		query: 'a.aboCodAfi as [N_AFILIADO]',
+		key: 'AFILIADO',
+		query: 'a.aboCodAfi as [AFILIADO]',
 	},
 	{
 		key: 'MONTO_NETO',

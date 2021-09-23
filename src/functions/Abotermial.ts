@@ -7,6 +7,7 @@ interface select {
 
 export const selects: select[] = [
 	{ key: 'TERMINAL', query: `aboterminal TERMINAL` },
+	{ key: 'AFILIADO',query: 'a.aboCodAfi as [AFILIADO]'},
 	{ key: 'MONTOTOTAL', query: `montoTotal MONTOTOTAL` },
 	{ key: 'FECHPROCESO', query: `fechaProceso FECHPROCESO` },
 	{ key: 'ESTATUS', query: `descripcion ESTATUS` },
