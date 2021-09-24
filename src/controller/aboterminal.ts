@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { selectQuery, FormatQuery } from '../functions/Abotermial';
+import { selectQuery, FormatQuery,selects } from '../functions/Abotermial';
 // @ts-ignore
 import numeral from 'numeral';
 import { DateTime } from 'luxon';
@@ -24,31 +24,42 @@ export default class Aboterminal {
 		try {
 			const { keys } = req.body;
 
+			// console.log('holaaaaaa');
+
+
 			// date today with in format yyyy-MM-dd luxon js
 
 			// formateamos la data
 			const selects = selectQuery(keys);
 			const sql = FormatQuery(selects);
+			
 
 			// ejecucion del querys ya formateado
 			const info = await getConnection().query(sql);
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {
+			console.log('err',err);
+			
 			res.status(400).json(err);
 		}
 	}
 
+
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
-			console.log('holaaaaaa');
+			// console.log('holaaaaaa keys');
 
-			const info: any = {
-				TERMINAL: true,
-				MONTOTOTAL: false,
-				FECHPROCESO: false,
-				ESTATUS: false,
-			};
+			let keys: any = {};
+			selects.forEach((item: any) => {
+				const { key }: any = item;
+
+				keys[key] = key === 'TERMINAL';
+			});
+
+			const { TERMINAL, ...resto } = keys;
+
+			const info: any = { TERMINAL, ...resto };
 
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {
