@@ -7,7 +7,7 @@ import sin_plan from './controller/mantenimiento/sin_plan';
 import sin_comision from './controller/mantenimiento/sin_comision';
 import plan_tarifa from './controller/mantenimiento/plan_tarifa';
 import plan_man_inactivo from './controller/mantenimiento/plan_mantenimiento_inactivo';
-import plan_comi_inactivo from './controller/mantenimiento/plan_mantenimiento_inactivo';
+import plan_comi_inactivo from './controller/mantenimiento/plan_comision_inactivo';
 
 // export const Routes = [{
 //     method: "get",
