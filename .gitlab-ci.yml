@@ -7,9 +7,13 @@ before_script:
   - cat ~/.ssh/key_64.pem |base64 -d > ~/.ssh/key.pem
   - chmod 400 ~/.ssh/key.pem
   - eval "$(ssh-agent -s)"
-  - cat ~/.ssh/key.pem
-  - echo $IP_REMOTE
+  ##SSH PRO
+  - echo $SSH_PRIVATE_KEY_PRO >> ~/.ssh/key_64_PRO.pem
+  - cat ~/.ssh/key_64_PRO.pem |base64 -d > ~/.ssh/key_PRO.pem
+  - chmod 400 ~/.ssh/key_PRO.pem
+  - eval "$(ssh-agent -s)"
   - which ssh-agent
+  
  
 #deploy_dev: 
 #  stage: deploy
@@ -24,19 +28,15 @@ before_script:
 deploy_qa: 
   stage: deploy
   script: 
-    #- ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTEQA " cd $DOCUMENT_ROOT/ && sudo  git  stash && sudo git  stash pop && sudo git reset --hard "
     - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTEQA " cd $DOCUMENT_ROOT/ && sudo git checkout qa && sudo git pull --rebase --autostash "
-    #- ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTEQA " cd $DOCUMENT_ROOT/ && sudo npm install && sudo npm audit fix "
     - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTEQA " cd $DOCUMENT_ROOT && sudo pm2 restart api-reportes  "
   only: 
     - qa
-#deploy_produccion: 
-#  stage: deploy
-#  script: 
+deploy_produccion: 
+  stage: deploy
+  script: 
      
-#    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTEPRO " sudo pm2 delete 0 " 
-#    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTEPRO " cd $DOCUMENT_ROOT/ && sudo git checkout master && sudo git pull --rebase --autostash "
-#    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTEPRO " cd $DOCUMENT_ROOT/ && sudo npm install && sudo npm audit fix "
-#    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTEPRO " cd $DOCUMENT_ROOT && sudo pm2 --name api start npm -- start  "
-#  only: 
-#    - master        
+    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTE_PRO " cd $DOCUMENT_ROOT/ && sudo git checkout master && sudo git pull --rebase --autostash "
+    - ssh  -i ~/.ssh/key.pem $USUARIO@$IP_REMOTE_PRO " cd $DOCUMENT_ROOT && sudo pm2 --name api start npm -- start  "
+  only: 
+    - master        
