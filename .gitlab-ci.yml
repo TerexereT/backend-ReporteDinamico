@@ -39,4 +39,4 @@ deploy_produccion:
     - ssh  -i ~/.ssh/key_PRO.pem $USUARIO@$IP_REMOTE_PRO " cd $DOCUMENT_ROOT/ && sudo git checkout master && sudo git pull --rebase --autostash "
     - ssh  -i ~/.ssh/key_PRO.pem $USUARIO@$IP_REMOTE_PRO " cd $DOCUMENT_ROOT && sudo pm2 --name api start npm -- start  "
   only: 
-    - master        
+    - main 
