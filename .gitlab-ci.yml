@@ -37,7 +37,7 @@ deploy_produccion:
   script: 
      
     - ssh  -i ~/.ssh/key_PRO.pem $USUARIO@$IP_REMOTE_PRO " cd $DOCUMENT_ROOT/ && sudo git checkout main && sudo git pull --rebase --autostash "
-    - ssh  -i ~/.ssh/key_PRO.pem $USUARIO@$IP_REMOTE_PRO " cd $DOCUMENT_ROOT && sudo pm2 start api-reportes  "
+    - ssh  -i ~/.ssh/key_PRO.pem $USUARIO@$IP_REMOTE_PRO " cd $DOCUMENT_ROOT && sudo pm2 start npm -- start  "
     #- ssh  -i ~/.ssh/key_PRO.pem $USUARIO@$IP_REMOTE_PRO " cd $DOCUMENT_ROOT && sudo pm2 --name api start npm -- start  "
   only: 
     - main 
