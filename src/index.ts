@@ -8,7 +8,7 @@ require('dotenv').config();
 
 const { HOST, USER, PASS, DB } = process.env;
 
-createConnection({ type: 'mssql', host: HOST, username: USER, password: PASS, database: DB, options: {} })
+createConnection()
 	//
 	.then(async (connection) => {
 		// create express app
