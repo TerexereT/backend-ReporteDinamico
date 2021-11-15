@@ -8,6 +8,7 @@ import sin_comision from './controller/mantenimiento/sin_comision';
 import plan_tarifa from './controller/mantenimiento/plan_tarifa';
 import plan_man_inactivo from './controller/mantenimiento/plan_mantenimiento_inactivo';
 import plan_comi_inactivo from './controller/mantenimiento/plan_comision_inactivo';
+import cuotas_vencidas from './controller/cuotas_vencidas';
 
 export const Routes: any[] = [
 	{
@@ -80,6 +81,18 @@ export const Routes: any[] = [
 		method: 'get',
 		route: '/mantenimiento/3/keys',
 		controller: plan_comi_inactivo,
+		action: 'keys',
+	},
+	{
+		method: 'post',
+		route: '/cuotas_resumidas',
+		controller: cuotas_vencidas,
+		action: 'all',
+	},
+	{
+		method: 'get',
+		route: '/cuotas_resumidas/keys',
+		controller: cuotas_vencidas,
 		action: 'keys',
 	},
 ];
