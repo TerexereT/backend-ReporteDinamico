@@ -1,14 +1,13 @@
 // import {UserController} from "./controller/UserController";
 
-import { Router } from 'express';
-import History from './controller/history';
 import Aboterminal from './controller/aboterminal';
-import sin_plan from './controller/mantenimiento/sin_plan';
-import sin_comision from './controller/mantenimiento/sin_comision';
-import plan_tarifa from './controller/mantenimiento/plan_tarifa';
-import plan_man_inactivo from './controller/mantenimiento/plan_mantenimiento_inactivo';
+import cuotas_resumidas from './controller/CuotasVencidas/cuotas_resumidas';
+import cuotas_vencidas from './controller/CuotasVencidas/cuotas_vencidas';
+import History from './controller/history';
 import plan_comi_inactivo from './controller/mantenimiento/plan_comision_inactivo';
-import cuotas_vencidas from './controller/cuotas_vencidas';
+import plan_man_inactivo from './controller/mantenimiento/plan_mantenimiento_inactivo';
+import sin_comision from './controller/mantenimiento/sin_comision';
+import sin_plan from './controller/mantenimiento/sin_plan';
 
 export const Routes: any[] = [
 	{
@@ -85,14 +84,26 @@ export const Routes: any[] = [
 	},
 	{
 		method: 'post',
-		route: '/cuotas_resumidas',
+		route: '/cuotas_vencidas',
 		controller: cuotas_vencidas,
 		action: 'all',
 	},
 	{
 		method: 'get',
-		route: '/cuotas_resumidas/keys',
+		route: '/cuotas_vencidas/keys',
 		controller: cuotas_vencidas,
+		action: 'keys',
+	},
+	{
+		method: 'post',
+		route: '/cuotas_resumidas',
+		controller: cuotas_resumidas,
+		action: 'all',
+	},
+	{
+		method: 'get',
+		route: '/cuotas_resumidas/keys',
+		controller: cuotas_resumidas,
 		action: 'keys',
 	},
 ];

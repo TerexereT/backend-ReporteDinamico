@@ -1,9 +1,6 @@
 import { Request, Response } from 'express';
-import { selectQuery, FormatQuery, selects } from '../functions/cuotas_vencidas';
-// @ts-ignore
-import numeral from 'numeral';
-import { DateTime } from 'luxon';
 import { getConnection } from 'typeorm';
+import { FormatQuery, selectQuery, selects } from '../../functions/CuotasVencidas/cuotas_resumidas';
 
 interface body {
 	keys: string[];
