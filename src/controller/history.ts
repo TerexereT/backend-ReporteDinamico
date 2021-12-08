@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
 import { selectQuery, dateRang, FormatQuery, selects } from '../functions/history';
-// @ts-ignore
-import numeral from 'numeral';
 import { getConnection } from 'typeorm';
 
 interface body {
@@ -26,7 +24,7 @@ export default class History {
 
 			console.log('req.', req.query);
 
-			const { init, end }:any = req.query;
+			const { init, end }: any = req.query;
 
 			// formateamos la data
 			const Dates = dateRang(init, end);
