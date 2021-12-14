@@ -351,56 +351,48 @@ from (
 	 
 	
 	FROM
+	   	(SELECT 
+				hisFechaEjecucion,
 	
-		   (SELECT 
+				hisFechaProceso,
 	
-				  hisFechaEjecucion,
+				aboTerminal,
 	
-				  hisFechaProceso,
+				aboCodAfi,
 	
-				 aboTerminal,
+				hisLote,
 	
-				  aboCodAfi,
+				(SUM(hisAmountTDD) + SUM(hisAmountTDC)) AS Monto_Neto, ---TARJETA DE CREDITO + TARJETA DE DEBITO
 	
-				  hisLote,
+				SUM(hisAmountTDD) as Monto_Neto_tdd,
 	
-				 (SUM(hisAmountTDD) + SUM(hisAmountTDC)) AS Monto_Neto, ---TARJETA DE CREDITO + TARJETA DE DEBITO
-	
-				  SUM(hisAmountTDD) as Monto_Neto_tdd,
-	
-				  SUM(hisAmountTDC) as Monto_neto_tdc,
+				SUM(hisAmountTDC) as Monto_neto_tdc,
 	
 				  --( (hisAmountTDC + hisAmountComisionBanco) – monto bruto visa electro) - hisAmountTDCImpuesto
 	
-				  ((SUM(hisAmountTDC) + SUM(hisAmountComisionBanco)) - Sum(hisAmountTDCImpuesto)) as montp_neve,
-	
-				  (SUM(hisAmountTDD) + SUM(hisAmountComisionBanco) - SUM(hisAmountTDCImpuesto)) as monto_bruto_tdd, --Monto Bruto TDD
-	
-				  (SUM(hisAmountTDC) + SUM(hisAmountTDCImpuesto)) as monto_bruto_tdc, --Monto Bruto TDC
-	
-				  (SUM(hisIvaSobreMantenimiento) + SUM(hisComisionMantenimiento) + SUM(hisComisionBancaria)) as comision_mantenimiento,--Comision de Mantenimiento
-	
-				  SUM(hisComisionMantenimiento) AS comision_servicio, -- COMISION DE SERVISIO es Base Imponible
-	
-				  SUM(hisAmountComisionBanco) AS comision_banco, -- COMISION BANCARIA
-	
-				  SUM(hisNetoComisionBancaria) AS monto_por_comision, -- COBRO POR COMISION BANCARIA 1,50%
-	
-				  SUM(hisIvaSobreMantenimiento) AS monto_por_servicio, -- COMISION POR SERVICIO ($35+iva = $40,60 a tasa BCV)
-	
-				  (SUM(hisAmountComisionBanco) - SUM(hisAmountTDCImpuesto)) AS monto_comision_tdd,  --CALCULA LA COMISION DE TDD CUANDO HAY CREDITO
-	
-				  SUM(hisAmountTotal) AS monto_abono,  -- SIGUE IGUAL
-	
-				  Sum(hisAmountTDCImpuesto) as Monto_afilia_tdc,
-	
-				  Sum(hisComisionBancaria) as comision_bacaria_1_50
-	
-				 
-	
-	 
-	
-			
+				((SUM(hisAmountTDC) + SUM(hisAmountComisionBanco)) - Sum(hisAmountTDCImpuesto)) as montp_neve,
+
+				(SUM(hisAmountTDD) + SUM(hisAmountComisionBanco) - SUM(hisAmountTDCImpuesto)) as monto_bruto_tdd, --Monto Bruto TDD
+
+				(SUM(hisAmountTDC) + SUM(hisAmountTDCImpuesto)) as monto_bruto_tdc, --Monto Bruto TDC
+
+				(SUM(hisIvaSobreMantenimiento) + SUM(hisComisionMantenimiento) + SUM(hisComisionBancaria)) as comision_mantenimiento,--Comision de Mantenimiento
+
+				SUM(hisComisionMantenimiento) AS comision_servicio, -- COMISION DE SERVISIO es Base Imponible
+
+				SUM(hisAmountComisionBanco) AS comision_banco, -- COMISION BANCARIA
+
+				SUM(hisNetoComisionBancaria) AS monto_por_comision, -- COBRO POR COMISION BANCARIA 1,50%
+
+				SUM(hisIvaSobreMantenimiento) AS monto_por_servicio, -- COMISION POR SERVICIO ($35+iva = $40,60 a tasa BCV)
+
+				(SUM(hisAmountComisionBanco) - SUM(hisAmountTDCImpuesto)) AS monto_comision_tdd,  --CALCULA LA COMISION DE TDD CUANDO HAY CREDITO
+
+				SUM(hisAmountTotal) AS monto_abono,  -- SIGUE IGUAL
+
+				Sum(hisAmountTDCImpuesto) as Monto_afilia_tdc,
+
+				Sum(hisComisionBancaria) as comision_bacaria_1_50
 	
 	FROM    
 	
@@ -410,9 +402,7 @@ from (
 	
 	 
 	
-	WHERE   hisFechaEjecucion BETWEEN @StartDate AND @EndDate
-	
-				  GROUP BY hisFechaEjecucion, aboTerminal,hisFechaProceso,aboCodAfi, hisLote ) AS a INNER JOIN
+	WHERE   hisFechaEjecucion BETWEEN @StartDate AND @EndDate GROUP BY hisFechaEjecucion, aboTerminal,hisFechaProceso,aboCodAfi, hisLote ) AS a INNER JOIN
 	
 	Abonos AS b ON a.aboTerminal = b.aboTerminal INNER JOIN
 	
