@@ -275,7 +275,7 @@ export const FormatQuery = (dateRang: any, selects: string): string => {
 	${preQuery(init, end)}
 
     select ${selects}
-	
+
 from (
 
 	Select
@@ -428,7 +428,7 @@ from (
 	
 	 
 	
-	Order By Terminal, Lote asc
+	Order By Terminal asc
 	
 	 `;
 };
