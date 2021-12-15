@@ -58,8 +58,8 @@ export const selects: select[] = [
 		query: '[N_CUENTA]',
 	},
 	{
-		key: 'FECHA PROCESO',
-		query: 'FechaProceso',
+		key: 'FECHA_PROCESO',
+		query: 'FechaPreceso',
 	},
 	{
 		key: 'FECHA',
@@ -79,7 +79,7 @@ export const selects: select[] = [
 	},
 	{
 		key: 'MONTO_BRUTO_VISA_ELEC',
-		query: 'CONVERT(VARCHAR,CAST(MontoBrutoVisaElec AS MONEY),1) as MONTO_BRUTO_VISA_ELEC',
+		query: 'CONVERT(VARCHAR,CAST(MontoBrutoVisaElectro AS MONEY),1) as MONTO_BRUTO_VISA_ELEC',
 	},
 	{
 		key: 'TOTAL_MONTOS_BRUTOS',
@@ -189,13 +189,10 @@ export const selects: select[] = [
 ];
 
 const preQuery = (init, end) => /*sql*/ `
-USE [MilPagos]
 
-GO
 
 DELETE FROM [dbo].[Temp_CerradoDetalle]
 
-GO
 
 INSERT INTO Temp_CerradoDetalle
 
@@ -390,7 +387,7 @@ from (
 	
 	 
 	
-	WHERE   hisFechaEjecucion BETWEEN @StartDate AND @EndDate GROUP BY hisFechaEjecucion, aboTerminal,hisFechaProceso,aboCodAfi, hisLote ) AS a INNER JOIN
+	WHERE   hisFechaEjecucion BETWEEN  '${init}' and '${end}' GROUP BY hisFechaEjecucion, aboTerminal,hisFechaProceso,aboCodAfi, hisLote ) AS a INNER JOIN
 	
 	Abonos AS b ON a.aboTerminal = b.aboTerminal INNER JOIN
 	
