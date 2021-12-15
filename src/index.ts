@@ -4,13 +4,13 @@ import * as express from 'express';
 import { Request, Response } from 'express';
 import { Routes } from './routes';
 import { preRoutes, posRoutes } from './Middlewares/index';
+require('dotenv').config();
+
+const { HOST, USER, PASS, DB } = process.env;
 
 createConnection()
+	//
 	.then(async (connection) => {
-		// await fs.
-
-	
-
 		// create express app
 		const app = express();
 		app.use(express.json());
