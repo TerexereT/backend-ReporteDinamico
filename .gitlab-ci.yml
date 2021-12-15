@@ -36,13 +36,7 @@ deploy_produccion:
   stage: deploy
   script: 
      
-<<<<<<< HEAD
     - ssh  -i ~/.ssh/key_PRO.pem $USUARIO@$IP_REMOTE_PRO " cd $DOCUMENT_ROOT/ && sudo git checkout main && sudo git pull "
     - ssh  -i ~/.ssh/key_PRO.pem $USUARIO@$IP_REMOTE_PRO " cd $DOCUMENT_ROOT && sudo pm2 --name api start npm -- start  "
-=======
-    - ssh  -i ~/.ssh/key_PRO.pem $USUARIO@$IP_REMOTE_PRO " cd $DOCUMENT_ROOT/ && sudo git checkout main && sudo git pull --rebase --autostash "
-    - ssh  -i ~/.ssh/key_PRO.pem $USUARIO@$IP_REMOTE_PRO " cd $DOCUMENT_ROOT && sudo pm2 start npm -- start  "
-    #- ssh  -i ~/.ssh/key_PRO.pem $USUARIO@$IP_REMOTE_PRO " cd $DOCUMENT_ROOT && sudo pm2 --name api start npm -- start  "
->>>>>>> 0ef3cc2bc034e443133a62590eb387c4978917b8
   only: 
     - main 
