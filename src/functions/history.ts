@@ -122,8 +122,6 @@ export const selects: select[] = [
 	
 		   (SUM(MontoBrutoVisaElectro) * 0.02)
 	
-	   
-	
 		ELSE 0.00
 	
 	END as COMISION_AFILIA_VISA_ELEC`,
@@ -151,7 +149,6 @@ export const selects: select[] = [
 		( SUM(MontoBrutoVisaElectro) <> 0  ) then
 		
 		 
-		
 		(Monto_neto_tdc +  (SUM(MontoBrutoVisaElectro) * 0.02) - SUM(MontoBrutoVisaElectro) )		 
 		
 		else 0.00
@@ -202,11 +199,7 @@ GO
 
 INSERT INTO Temp_CerradoDetalle
 
-          
-
-                 
-
-       SELECT
+ SELECT
 
       [aboTerminal]
 
@@ -281,7 +274,8 @@ export const FormatQuery = (dateRang: any, selects: string): string => {
 	return /* sql */ `
 	${preQuery(init, end)}
 
-    ${selects}
+    select ${selects}
+	
 from (
 
 	Select
@@ -341,13 +335,7 @@ from (
 	SUM(te.CANT_TRANSACCION) as CANT_TRANSACCION
 	
 	 
-	
-	 
-	
-	 
-	
-	 
-	
+
 	 
 	
 	FROM
