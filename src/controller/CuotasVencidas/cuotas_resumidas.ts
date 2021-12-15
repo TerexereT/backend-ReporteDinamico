@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { selectQuery, dateRang, FormatQuery, selects } from '../functions/history';
 import { getConnection } from 'typeorm';
+import { FormatQuery, selectQuery, selects } from '../../functions/CuotasVencidas/cuotas_resumidas';
 
 interface body {
 	keys: string[];
@@ -16,47 +16,32 @@ interface msg {
 	info: any;
 }
 
-export default class History {
-	async allHistory(req: Request<any, msg, body, Querys>, res: Response<msg>) {
+export default class Aboterminal {
+	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
-			// definimos variables
 			const { keys } = req.body;
 
-			console.log('req.', req.query);
-
-			const { init, end }: any = req.query;
-
 			// formateamos la data
-			const Dates = dateRang(init, end);
 			const selects = selectQuery(keys);
-			const query = FormatQuery({ init, end }, selects);
+
+			const sql = FormatQuery(selects);
 
 			// ejecucion del querys ya formateado
-			const info: any = await getConnection().query(query);
-
-			// if (keys.includes('TRANSACCION')) {
-			// 	const trans: any = await pool.query(transQuery);
-			// }
-
-			// const info: any[] = resp.map((item: any) => {
-			// 	Object.keys(item).forEach((key: any) => {
-			// 		if (typeof item[key] === 'number') {
-			// 			item[key] = 'Bs' + numeral(item[key]).format('0.0,00');
-			// 		}
-			// 	});
-
-			// 	return item;
-			// });
+			const info = await getConnection().query(sql);
 
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {
+			console.log('err', err);
+
 			res.status(400).json(err);
 		}
 	}
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
+			// console.log('holaaaaaa keys');
+
 			let keys: any = {};
 			selects.forEach((item: any) => {
 				const { key }: any = item;
