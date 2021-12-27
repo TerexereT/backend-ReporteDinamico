@@ -88,7 +88,7 @@ export const selects: select[] = [
 	},
 	{
 		key: 'COMISION_AFILIADO_TDD',
-		query: `CASE WHEN SUM(MontoBrutoTDD) <> 0.00 THEN monto_comision_tdd ELSE 0.00 END as [COMISION_AFILIA_TDD]`,
+		query: `CASE WHEN SUM(MontoBrutoTDD) <> 0.00 THEN sum(monto_comision_tdd) - (SUM(MontoBrutoVisaElectro) * 0.02) ELSE 0.00 END as [COMISION_AFILIA_TDD]`,
 	},
 	{
 		key: 'COMISION_AFILIADO_TDC',
