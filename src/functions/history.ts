@@ -58,8 +58,8 @@ export const selects: select[] = [
 		query: '[N_CUENTA]',
 	},
 	{
-		key: 'FECHA PROCESO',
-		query: 'FechaProceso',
+		key: 'FECHA_PROCESO',
+		query: 'FechaPreceso',
 	},
 	{
 		key: 'FECHA',
@@ -79,7 +79,7 @@ export const selects: select[] = [
 	},
 	{
 		key: 'MONTO_BRUTO_VISA_ELEC',
-		query: 'CONVERT(VARCHAR,CAST(MontoBrutoVisaElec AS MONEY),1) as MONTO_BRUTO_VISA_ELEC',
+		query: 'CONVERT(VARCHAR,CAST(MontoBrutoVisaElectro AS MONEY),1) as MONTO_BRUTO_VISA_ELEC',
 	},
 	{
 		key: 'TOTAL_MONTOS_BRUTOS',
@@ -88,7 +88,7 @@ export const selects: select[] = [
 	},
 	{
 		key: 'COMISION_AFILIADO_TDD',
-		query: `CASE WHEN SUM(MontoBrutoTDD) <> 0.00 THEN monto_comision_tdd ELSE 0.00 END as [COMISION_AFILIA_TDD]`,
+		query: `CASE WHEN SUM(MontoBrutoTDD) <> 0.00 THEN sum(monto_comision_tdd) - (SUM(MontoBrutoVisaElectro) * 0.02) ELSE 0.00 END as [COMISION_AFILIA_TDD]`,
 	},
 	{
 		key: 'COMISION_AFILIADO_TDC',
@@ -122,8 +122,6 @@ export const selects: select[] = [
 	
 		   (SUM(MontoBrutoVisaElectro) * 0.02)
 	
-	   
-	
 		ELSE 0.00
 	
 	END as COMISION_AFILIA_VISA_ELEC`,
@@ -151,7 +149,6 @@ export const selects: select[] = [
 		( SUM(MontoBrutoVisaElectro) <> 0  ) then
 		
 		 
-		
 		(Monto_neto_tdc +  (SUM(MontoBrutoVisaElectro) * 0.02) - SUM(MontoBrutoVisaElectro) )		 
 		
 		else 0.00
@@ -192,21 +189,14 @@ export const selects: select[] = [
 ];
 
 const preQuery = (init, end) => /*sql*/ `
-USE [MilPagos]
 
-GO
 
 DELETE FROM [dbo].[Temp_CerradoDetalle]
 
-GO
 
 INSERT INTO Temp_CerradoDetalle
 
-          
-
-                 
-
-       SELECT
+ SELECT
 
       [aboTerminal]
 
@@ -281,7 +271,8 @@ export const FormatQuery = (dateRang: any, selects: string): string => {
 	return /* sql */ `
 	${preQuery(init, end)}
 
-    ${selects}
+    select ${selects}
+
 from (
 
 	Select
@@ -341,13 +332,7 @@ from (
 	SUM(te.CANT_TRANSACCION) as CANT_TRANSACCION
 	
 	 
-	
-	 
-	
-	 
-	
-	 
-	
+
 	 
 	
 	FROM
@@ -402,7 +387,7 @@ from (
 	
 	 
 	
-	WHERE   hisFechaEjecucion BETWEEN @StartDate AND @EndDate GROUP BY hisFechaEjecucion, aboTerminal,hisFechaProceso,aboCodAfi, hisLote ) AS a INNER JOIN
+	WHERE   hisFechaEjecucion BETWEEN  '${init}' and '${end}' GROUP BY hisFechaEjecucion, aboTerminal,hisFechaProceso,aboCodAfi, hisLote ) AS a INNER JOIN
 	
 	Abonos AS b ON a.aboTerminal = b.aboTerminal INNER JOIN
 	
@@ -440,7 +425,7 @@ from (
 	
 	 
 	
-	Order By Terminal, Lote asc
+	Order By Terminal asc
 	
 	 `;
 };
