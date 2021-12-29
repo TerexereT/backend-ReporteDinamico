@@ -137,27 +137,20 @@ export const selects: select[] = [
 	},
 	{
 		key: 'MONTO_NETO_TDC',
-		query: `case when
-
+		query: `case when 
 		(SUM(MontoBrutoTDD) <> 0.00 and SUM(MontoBrutoTDC) = 0.00 and SUM(MontoBrutoVisaElectro) = 0.00  ) then
-		
 		0.00
-		
-		when
-		
+		--'Solo debito'
+		when 
 		 (SUM(MontoBrutoTDC) <> 0 and SUM(MontoBrutoVisaElectro) = 0.00) then
+		round(Monto_neto_tdc, 2 )
+		--'Solo master y visa'
+		when 
+		( SUM(MontoBrutoVisaElectro) <> 0.00  ) then
 		
-		 round(Monto_neto_tdc, 2 )
-		
-		when
-		
-		( SUM(MontoBrutoVisaElectro) <> 0  ) then
-		
-		 
-		round((Monto_neto_tdc +  (SUM(MontoBrutoVisaElectro) * 0.02) - SUM(MontoBrutoVisaElectro) ), 2)		 
+		round((Monto_neto_tdc +  (SUM(MontoBrutoVisaElectro) * 0.02) - SUM(MontoBrutoVisaElectro) ),2)
 		
 		else 0.00
-		
 		end  as MONTO_NETO_TDC`,
 	},
 	{
