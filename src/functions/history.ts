@@ -90,7 +90,7 @@ export const selects: select[] = [
 		key: 'COMISION_AFILIADO_TDD',
 		query: `CASE
 		WHEN SUM(MontoBrutoTDD) <> 0.00 THEN 
-		round(sum(monto_comision_tdd) - (SUM(MontoBrutoVisaElectro) * 0.02)), 2)
+		round(sum(monto_comision_tdd) - (SUM(MontoBrutoVisaElectro) * 0.02), 2)
 		
 		ELSE 0.00
 	END as [COMISION_AFILIA_TDD]`,
@@ -293,18 +293,12 @@ export const FormatQuery = (dateRang: any, selects: string): string => {
 		a.hisFechaEjecucion AS FechaEjec, -- Fecha de ejecucion 
 		a.hisLote as [LOTE],
 		round(SUM(te.mont_bruto_tdd),2)  as MontoBrutoTDD,
-		--SUM(te.mont_bruto_tdd ) as MontoBrutoTDD,
 		round(SUM(te.mont_bruto_tdc),2)  as MontoBrutoTDC,
-		--SUM(te.mont_bruto_tdc ) as MontoBrutoTDC,
 		round(SUM(te.mont_bruto_tdc_visa_ele),2) as MontoBrutoVisaElectro,
-		--SUM(te.mont_bruto_tdc_visa_ele ) as MontoBrutoVisaElectro,
 		Monto_Neto_tdd as Monto_Neto_tdd,
 		round( Monto_neto_tdc, 2) as Monto_neto_tdc,
-		--Monto_neto_tdc as Monto_neto_tdc,
 		round( Monto_afilia_tdc, 2) as Monto_afilia_tdc,
-		--Monto_afilia_tdc as Monto_afilia_tdc,
 		round(SUM(mont_comision_tdc_visa_ele),2) as mont_comision_tdc_visa_ele,
-		--SUM(mont_comision_tdc_visa_ele) as mont_comision_tdc_visa_ele,
 		a.monto_comision_tdd as monto_comision_tdd,
 		a.comision_servicio as [COMISION_MANTENIMIENTO],
 		a.comision_bacaria_1_50 as [COMISION_BANCARIA_1_50_USO],
