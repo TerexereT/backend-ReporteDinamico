@@ -90,7 +90,7 @@ export const selects: select[] = [
 		key: 'COMISION_AFILIADO_TDD',
 		query: `CASE
 		WHEN SUM(MontoBrutoTDD) <> 0.00 THEN 
-		round(sum(monto_comision_tdd) - (SUM(MontoBrutoVisaElectro) * 0.02), 2)
+		round(sum(monto_comision_tdd) - (SUM(MontoBrutoVisaElectro) * 0.02)), 2)
 		
 		ELSE 0.00
 	END as [COMISION_AFILIA_TDD]`,
