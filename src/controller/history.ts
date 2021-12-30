@@ -31,6 +31,8 @@ export default class History {
 			const selects = selectQuery(keys);
 			const query = FormatQuery({ init, end }, selects);
 
+			console.log('query', query);
+
 			// ejecucion del querys ya formateado
 			const info: any = await getConnection().query(query);
 
