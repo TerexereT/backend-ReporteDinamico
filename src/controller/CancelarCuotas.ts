@@ -15,7 +15,7 @@ interface Querys {
 
 interface msg {
 	message: string;
-	info: any;
+	info?: any;
 }
 
 export default class CancelarCuotas {
@@ -34,7 +34,6 @@ export default class CancelarCuotas {
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {
 			console.log('err', err);
-
 			res.status(400).json(err);
 		}
 	}
@@ -75,39 +74,30 @@ export default class CancelarCuotas {
 		try {
 			console.log('req.body', req.body);
 
-			const { MONTOCOMISION, IVA, FECHPROCESO }: any = req.body;
+			const { IVA, FECHPROCESO, MONTOTOTAL, dicomSelected }: any = req.body;
 
-			console.log(`
-			UPDATE [dbo].[PlanCuota]
-
-				SET
-					 [montoComision] = ${MONTOCOMISION},
-					[montoIVA] = ${IVA},
-					[estatusId] = 27,
-					[fechaProceso] = '${DateTime.now().toSQLDate()}'
-
-					WHERE aboTerminal = '${req.body.terminal}' AND fechaProceso = '${DateTime.fromISO(FECHPROCESO).toSQLDate()}'
-			GO`);
+			const MONTOCOMISION = MONTOTOTAL * dicomSelected.valorVenta;
+			const montoIVA = IVA * dicomSelected.valorVenta;
 
 			// ejecucion del querys ya formateado
-			const info = await getConnection().query(
+			await getConnection().query(
 				`
 				UPDATE [dbo].[PlanCuota]
 
 					SET
 					 	[montoComision] = ${MONTOCOMISION},
-						[montoIVA] = ${IVA},
+						[montoIVA] = ${montoIVA},
 						[estatusId] = 27,
 						[fechaProceso] = '${DateTime.now().toSQLDate()}'
 
 					WHERE aboTerminal = '${req.body.terminal}' AND fechaProceso = '${DateTime.fromISO(FECHPROCESO).toSQLDate()}'
-				GO`
+				`
 			);
 
-			console.log('info', info);
-
-			res.status(200).json({ message: 'reporte exitoso', info });
+			res.status(200).json({ message: 'reporte editrado' });
 		} catch (err) {
+			console.log(err);
+
 			res.status(400).json(err);
 		}
 	}

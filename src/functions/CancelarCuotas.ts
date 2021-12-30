@@ -8,40 +8,47 @@ interface select {
 export const selects: select[] = [
 	{ key: 'FECHPROCESO', query: 'fechaProceso FECHPROCESO' },
 	{ key: 'AFILIADO', query: 'aboCodAfi as AFILIADO' },
-	{ key: 'MONTOTOTAL', query: `montoTotal MONTOTOTAL` },
+	{ key: 'MONTOTOTAL', query: `montoTotal as MONTOTOTAL` },
 	{
-		key: 'MONTOCOMISION',
+		key: 'IVA',
 		query: `
-            (montoTotal * 
-                ((SELECT valor FROM [MilPagos].[dbo].[Parametros] WHERE id = 13)) * 0.01
-            ) as IVA, 
-            
-            ((montoTotal)* (SELECT * FROM OPENQUERY([POSTILION_7019], 'SELECT TOP 1 valorVenta
-            FROM (
-              SELECT TOP 2 valorVenta 
-              FROM [rep_post_dia].[dbo].[tasas_dicom]
-            
-              ORDER BY id DESC
-            ) sub
-            ORDER BY valorVenta desc'))) as MONTOCOMISION`,
+	        (MONTOTOTAL *
+	            ((SELECT valor FROM [MilPagos].[dbo].[Parametros] WHERE id = 13)) * 0.01
+	        ) as IVA`,
 	},
-	{
-		key: 'MONTOIVA',
-		query: `
-            (
-		    	((montoTotal)* (SELECT * FROM OPENQUERY([POSTILION_7019], 'SELECT TOP 1 valorVenta
-		    		FROM (
-		    		  SELECT TOP 2 valorVenta 
-		    		  FROM [rep_post_dia].[dbo].[tasas_dicom]
-                    
-		    		  ORDER BY id DESC
-		    		) sub
-		    		ORDER BY valorVenta desc')))
+	// {
+	// 	key: 'MONTOCOMISION',
+	// 	query: `
+	//         (montoTotal *
+	//             ((SELECT valor FROM [MilPagos].[dbo].[Parametros] WHERE id = 13)) * 0.01
+	//         ) as IVA,
 
-		    * (montoTotal * ((SELECT valor FROM [MilPagos].[dbo].[Parametros] WHERE id = 13)) * 0.01)) 
-		     as MONTOIVA 
-        `,
-	},
+	//         ((montoTotal)* (SELECT * FROM OPENQUERY([POSTILION_7019], 'SELECT TOP 1 valorVenta
+	//         FROM (
+	//           SELECT TOP 2 valorVenta
+	//           FROM [rep_post_dia].[dbo].[tasas_dicom]
+
+	//           ORDER BY id DESC
+	//         ) sub
+	//         ORDER BY valorVenta desc'))) as MONTOCOMISION`,
+	// },
+	// {
+	// 	key: 'MONTOIVA',
+	// 	query: `
+	//         (
+	// 	    	((montoTotal)* (SELECT * FROM OPENQUERY([POSTILION_7019], 'SELECT TOP 1 valorVenta
+	// 	    		FROM (
+	// 	    		  SELECT TOP 2 valorVenta
+	// 	    		  FROM [rep_post_dia].[dbo].[tasas_dicom]
+
+	// 	    		  ORDER BY id DESC
+	// 	    		) sub
+	// 	    		ORDER BY valorVenta desc')))
+
+	// 	    * (montoTotal * ((SELECT valor FROM [MilPagos].[dbo].[Parametros] WHERE id = 13)) * 0.01))
+	// 	     as MONTOIVA
+	//     `,
+	// },
 	{
 		key: 'ESTATUS',
 		query: `descripcion ESTATUS`,
