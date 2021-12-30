@@ -94,6 +94,12 @@ export default class CancelarCuotas {
 				`
 			);
 
+			await getConnection().query(/*sql*/ `
+				INSERT INTO [dbo].[general_logs] ([descript] ,[email] ,[id_origin_logs])
+     			
+				VALUES	('[msg: edicion lista]','atovar@tranred.com', 4)
+			`);
+
 			res.status(200).json({ message: 'reporte editrado' });
 		} catch (err) {
 			console.log(err);
