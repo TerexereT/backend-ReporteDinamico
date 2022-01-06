@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
-import { selectQuery, FormatQuery, selects } from '../functions/CancelarCuotas';
 import { DateTime } from 'luxon';
 import { getConnection } from 'typeorm';
+import { FormatQuery, selectQuery, selects } from '../functions/CancelarCuotas';
+
+const { NODE_DEV } = process.env;
 
 interface body {
 	keys: string[];
@@ -61,7 +63,9 @@ export default class CancelarCuotas {
 		try {
 			// ejecucion del querys ya formateado
 			const info = await getConnection().query(
-				`(SELECT * FROM OPENQUERY([POSTILION_7019],'SELECT TOP 6 id, valorVenta FROM [rep_post_dia].[dbo].[tasas_dicom] WHERE valorVenta NOT IN (0) ORDER BY id DESC'))`
+				`(SELECT * FROM OPENQUERY([${
+					NODE_DEV === 'DEV' ? 'POSTILION_DESA' : 'POSTILION_7019'
+				}],'SELECT TOP 6 id, valorVenta FROM [rep_post_dia].[dbo].[tasas_dicom] WHERE valorVenta NOT IN (0) ORDER BY id DESC'))`
 			);
 
 			res.status(200).json({ message: 'reporte exitoso', info });
@@ -88,7 +92,11 @@ export default class CancelarCuotas {
 					 	[montoComision] = ${MONTOCOMISION},
 						[montoIVA] = ${montoIVA},
 						[estatusId] = 27,
-						[fechaProceso] = '${DateTime.now().toSQLDate()}'
+						[fechaPago] = '${DateTime.now().toSQLDate()}',
+						[fechaProceso] = '${DateTime.now().toSQLDate()}',
+						[fechaProcesoLoteCerrado] = '${DateTime.now().toSQLDate()}',
+						[tasaValor] = ${dicomSelected.valorVenta},
+						[tasaId] = ${dicomSelected.id}
 
 					WHERE aboTerminal = '${req.body.terminal}' AND fechaProceso = '${DateTime.fromISO(FECHPROCESO).toSQLDate()}'
 				`

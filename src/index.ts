@@ -8,7 +8,25 @@ require('dotenv').config();
 
 const { HOST, USER, PASS, DB } = process.env;
 
-createConnection()
+createConnection({
+	type: 'mssql',
+	host: HOST,
+	username: USER,
+	password: PASS,
+	database: DB,
+	requestTimeout: 30000000,
+	connectionTimeout: 30000,
+	synchronize: false,
+	logging: true,
+	entities: ['src/entity/**/*.ts'],
+	migrations: ['src/migration/**/*.ts'],
+	subscribers: ['src/subscriber/**/*.ts'],
+	cli: {
+		entitiesDir: 'src/entity',
+		migrationsDir: 'src/migration',
+		subscribersDir: 'src/subscriber',
+	},
+})
 	//
 	.then(async (connection) => {
 		// create express app
@@ -44,5 +62,12 @@ createConnection()
 			console.log('            (|_|)*');
 			console.log('DB OK');
 		});
+		/*
+			HOST=10.198.71.45
+			USER=reportes_dinamicos
+			PASS=R1p0rt3$Din4mic0s339
+			DB=milpagos
+			PORT=4040
+		*/
 	})
 	.catch((error) => console.log(error));
