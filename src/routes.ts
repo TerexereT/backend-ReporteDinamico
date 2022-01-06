@@ -1,6 +1,7 @@
 // import {UserController} from "./controller/UserController";
 
 import Aboterminal from './controller/aboterminal';
+import CancelarCuotas from './controller/CancelarCuotas';
 import cuotas_resumidas from './controller/CuotasVencidas/cuotas_resumidas';
 import cuotas_vencidas from './controller/CuotasVencidas/cuotas_vencidas';
 import History from './controller/history';
@@ -105,5 +106,29 @@ export const Routes: any[] = [
 		route: '/cuotas_resumidas/keys',
 		controller: cuotas_resumidas,
 		action: 'keys',
+	},
+	{
+		method: 'post',
+		route: '/cancelar_cuotas',
+		controller: CancelarCuotas,
+		action: 'all',
+	},
+	{
+		method: 'get',
+		route: '/cancelar_cuotas/keys',
+		controller: CancelarCuotas,
+		action: 'keys',
+	},
+	{
+		method: 'put',
+		route: '/cancelar_cuotas/cuota',
+		controller: CancelarCuotas,
+		action: 'update',
+	},
+	{
+		method: 'get',
+		route: '/dicom',
+		controller: CancelarCuotas,
+		action: 'dicom',
 	},
 ];

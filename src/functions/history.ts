@@ -88,7 +88,12 @@ export const selects: select[] = [
 	},
 	{
 		key: 'COMISION_AFILIADO_TDD',
-		query: `CASE WHEN SUM(MontoBrutoTDD) <> 0.00 THEN monto_comision_tdd ELSE 0.00 END as [COMISION_AFILIA_TDD]`,
+		query: `CASE
+		WHEN SUM(MontoBrutoTDD) <> 0.00 THEN 
+		round(sum(monto_comision_tdd) - (SUM(MontoBrutoVisaElectro) * 0.02), 2)
+		
+		ELSE 0.00
+	END as [COMISION_AFILIA_TDD]`,
 	},
 	{
 		key: 'COMISION_AFILIADO_TDC',
@@ -120,7 +125,7 @@ export const selects: select[] = [
 
 		WHEN ( SUM(MontoBrutoVisaElectro) <> 0  ) THEN
 	
-		   (SUM(MontoBrutoVisaElectro) * 0.02)
+		 round((SUM(cast(convert(float,(MontoBrutoVisaElectro * 0.02)) as decimal(15,2)))), 2)
 	
 		ELSE 0.00
 	
@@ -132,32 +137,25 @@ export const selects: select[] = [
 	},
 	{
 		key: 'MONTO_NETO_TDC',
-		query: `case when
-
+		query: `case when 
 		(SUM(MontoBrutoTDD) <> 0.00 and SUM(MontoBrutoTDC) = 0.00 and SUM(MontoBrutoVisaElectro) = 0.00  ) then
-		
 		0.00
-		
-		when
-		
+		--'Solo debito'
+		when 
 		 (SUM(MontoBrutoTDC) <> 0 and SUM(MontoBrutoVisaElectro) = 0.00) then
+		round(Monto_neto_tdc, 2 )
+		--'Solo master y visa'
+		when 
+		( SUM(MontoBrutoVisaElectro) <> 0.00  ) then
 		
-		Monto_neto_tdc
-		
-		when
-		
-		( SUM(MontoBrutoVisaElectro) <> 0  ) then
-		
-		 
-		(Monto_neto_tdc +  (SUM(MontoBrutoVisaElectro) * 0.02) - SUM(MontoBrutoVisaElectro) )		 
+		round((Monto_neto_tdc +  (SUM(MontoBrutoVisaElectro) * 0.02) - SUM(MontoBrutoVisaElectro) ),2)
 		
 		else 0.00
-		
 		end  as MONTO_NETO_TDC`,
 	},
 	{
 		key: 'MONTO_NETO_VISA_ELECTRO',
-		query: '( MontoBrutoVisaElectro - (SUM(MontoBrutoVisaElectro) * 0.02)) as MONTO_NETO_VISA_ELEC',
+		query: 'round(( MontoBrutoVisaElectro - (SUM(MontoBrutoVisaElectro) * 0.02)), 2 ) as MONTO_NETO_VISA_ELEC',
 	},
 	{
 		key: 'COMISION_MANTENIMIENTO',
@@ -273,66 +271,35 @@ export const FormatQuery = (dateRang: any, selects: string): string => {
 
     select ${selects}
 
-from (
-
-	Select
-	
-	a.aboCodAfi as [N_AFILIADO],
-	
-	a.aboTerminal AS TERMINAL, -- BIEN 3
-	
-	d.aliNombres AS NOMBRES,
-	
-	d.aliApellidos AS APELLIDOS,
-	
-	c.comerRif AS [CEDULA_RIF], -- BIEN 2
-	
-	c.comerDesc AS COMERCIO, -- BIEN 1
-	
-	c.comerDireccion AS DIRECCION,
-	
-	c.comerCod as [COD_COMERCIO],
-	
-	c.comerCuentaBanco as [N_CUENTA] ,--comerCuentaBanco
-	
-	a.hisFechaProceso AS FechaPreceso, -- Fecha de ejecucion
-	
-	a.hisFechaEjecucion AS FechaEjec, -- Fecha de ejecucion
-	
-	a.hisLote as [LOTE],
-	
-	SUM(te.mont_bruto_tdd ) as MontoBrutoTDD,
-	
-	SUM(te.mont_bruto_tdc ) as MontoBrutoTDC,
-	
-	SUM(te.mont_bruto_tdc_visa_ele ) as MontoBrutoVisaElectro,
-	
-	Monto_Neto_tdd as Monto_Neto_tdd,
-	
-	Monto_neto_tdc as Monto_neto_tdc,
-	
-	Monto_afilia_tdc as Monto_afilia_tdc,
-	
-	SUM(mont_comision_tdc_visa_ele) as mont_comision_tdc_visa_ele,
-	
-	a.monto_comision_tdd as monto_comision_tdd,
-	
-	a.comision_servicio as [COMISION_MANTENIMIENTO],
-	
-	a.comision_bacaria_1_50 as [COMISION_BANCARIA_1_50_USO],
-	
-	a.monto_por_servicio as [IVA] ,
-	
-	(a.monto_abono) AS [MONTO_ABONAR], -- CHECK 8
-	
-	te.hisTasaBCV AS [TASA],
-	
-	h.Nombre_Org AS [TIPO_DE_CARTERA],
-	
-	SUM(te.CANT_TRANSACCION) as CANT_TRANSACCION
-	
-	 
-
+	from (
+		Select 
+		a.aboCodAfi as [N_AFILIADO],
+		a.aboTerminal AS TERMINAL, 	-- BIEN 3
+		d.aliNombres AS NOMBRES,
+		d.aliApellidos AS APELLIDOS,
+		c.comerRif AS [CEDULA_RIF], -- BIEN 2
+		c.comerDesc AS COMERCIO, -- BIEN 1
+		c.comerDireccion AS DIRECCION,
+		c.comerCod as [COD_COMERCIO], 
+		c.comerCuentaBanco as [N_CUENTA] ,--comerCuentaBanco
+		a.hisFechaProceso AS FechaPreceso, -- Fecha de ejecucion 
+		a.hisFechaEjecucion AS FechaEjec, -- Fecha de ejecucion 
+		a.hisLote as [LOTE],
+		round(SUM(te.mont_bruto_tdd),2)  as MontoBrutoTDD,
+		round(SUM(te.mont_bruto_tdc),2)  as MontoBrutoTDC,
+		round(SUM(te.mont_bruto_tdc_visa_ele),2) as MontoBrutoVisaElectro,
+		Monto_Neto_tdd as Monto_Neto_tdd,
+		round( Monto_neto_tdc, 2) as Monto_neto_tdc,
+		round( Monto_afilia_tdc, 2) as Monto_afilia_tdc,
+		round(SUM(mont_comision_tdc_visa_ele),2) as mont_comision_tdc_visa_ele,
+		a.monto_comision_tdd as monto_comision_tdd,
+		a.comision_servicio as [COMISION_MANTENIMIENTO],
+		a.comision_bacaria_1_50 as [COMISION_BANCARIA_1_50_USO],
+		a.monto_por_servicio as [IVA] ,
+		(a.monto_abono) AS [MONTO_ABONAR], -- CHECK 8
+		te.hisTasaBCV AS [TASA],
+		h.Nombre_Org AS [TIPO_DE_CARTERA],
+		SUM(te.CANT_TRANSACCION) as CANT_TRANSACCION
 	 
 	
 	FROM

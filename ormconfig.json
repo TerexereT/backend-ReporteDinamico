@@ -1,8 +1,8 @@
 {
 	"type": "mssql",
-	"host": "10.198.71.45",
-	"username": "reportes_dinamicos",
-	"password": "R1p0rt3$Din4mic0s339",
+	"host": "10.198.72.31",
+	"username": "amendoza",
+	"password": "Am1523246.",
 	"database": "milpagos",
 	"options": {
 		"trustServerCertificate": true
@@ -10,7 +10,7 @@
 	"requestTimeout": 30000000,
 	"connectionTimeout": 30000,
 	"synchronize": true,
-	"logging": false,
+	"logging": true,
 	"entities": ["src/entity/**/*.ts"],
 	"migrations": ["src/migration/**/*.ts"],
 	"subscribers": ["src/subscriber/**/*.ts"],
