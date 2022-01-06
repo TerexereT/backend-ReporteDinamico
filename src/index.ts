@@ -44,5 +44,13 @@ createConnection()
 			console.log('            (|_|)*');
 			console.log('DB OK');
 		});
+		/*
+			HOST=10.198.71.45
+			USER=reportes_dinamicos
+			PASS=R1p0rt3$Din4mic0s339
+			DB=milpagos
+			PORT=4040
+				
+		*/
 	})
 	.catch((error) => console.log(error));
