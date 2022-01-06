@@ -1,0 +1,22 @@
+{
+	"type": "mssql",
+	"host": "10.198.72.31",
+	"username": "amendoza",
+	"password": "Am1523246.",
+	"database": "milpagos",
+	"options": {
+		"trustServerCertificate": true
+	},
+	"requestTimeout": 30000000,
+	"connectionTimeout": 30000,
+	"synchronize": true,
+	"logging": true,
+	"entities": ["src/entity/**/*.ts"],
+	"migrations": ["src/migration/**/*.ts"],
+	"subscribers": ["src/subscriber/**/*.ts"],
+	"cli": {
+		"entitiesDir": "src/entity",
+		"migrationsDir": "src/migration",
+		"subscribersDir": "src/subscriber"
+	}
+}
