@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 import { DateTime } from 'luxon';
 import { getConnection } from 'typeorm';
 import { FormatQuery, selectQuery, selects } from '../functions/CancelarCuotas';
+require('dotenv').config();
 
-const { NODE_DEV } = process.env;
+const { NODE_ENV } = process.env;
 
 interface body {
 	keys: string[];
@@ -64,7 +65,7 @@ export default class CancelarCuotas {
 			// ejecucion del querys ya formateado
 			const info = await getConnection().query(
 				`(SELECT * FROM OPENQUERY([${
-					NODE_DEV === 'DEV' ? 'POSTILION_DESA' : 'POSTILION_7019'
+					NODE_ENV === 'dev' ? 'POSTILION_DESA' : 'POSTILION_7019'
 				}],'SELECT TOP 6 id, valorVenta FROM [rep_post_dia].[dbo].[tasas_dicom] WHERE valorVenta NOT IN (0) ORDER BY id DESC'))`
 			);
 
