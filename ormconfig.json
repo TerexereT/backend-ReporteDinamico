@@ -1,8 +1,8 @@
 {
 	"type": "mssql",
-	"host": "10.198.72.31",
-	"username": "amendoza",
-	"password": "Am1523246.",
+	"host": "10.198.71.45",
+	"username": "reportes_dinamicos",
+	"password": "R1p0rt3$Din4mic0s339",
 	"database": "milpagos",
 	"options": {
 		"trustServerCertificate": true
