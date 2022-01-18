@@ -140,11 +140,11 @@ export const selects: select[] = [
 		query: `case when 
 		(SUM(MontoBrutoTDD) <> 0.00 and SUM(MontoBrutoTDC) = 0.00 and SUM(MontoBrutoVisaElectro) = 0.00  ) then
 		0.00
-		--'Solo debito'
+		
 		when 
 		 (SUM(MontoBrutoTDC) <> 0 and SUM(MontoBrutoVisaElectro) = 0.00) then
 		round(Monto_neto_tdc, 2 )
-		--'Solo master y visa'
+		
 		when 
 		( SUM(MontoBrutoVisaElectro) <> 0.00  ) then
 		
@@ -274,16 +274,16 @@ export const FormatQuery = (dateRang: any, selects: string): string => {
 	from (
 		Select 
 		a.aboCodAfi as [N_AFILIADO],
-		a.aboTerminal AS TERMINAL, 	-- BIEN 3
+		a.aboTerminal AS TERMINAL, 	
 		d.aliNombres AS NOMBRES,
 		d.aliApellidos AS APELLIDOS,
-		c.comerRif AS [CEDULA_RIF], -- BIEN 2
-		c.comerDesc AS COMERCIO, -- BIEN 1
+		c.comerRif AS [CEDULA_RIF], 
+		c.comerDesc AS COMERCIO, 
 		c.comerDireccion AS DIRECCION,
 		c.comerCod as [COD_COMERCIO], 
-		c.comerCuentaBanco as [N_CUENTA] ,--comerCuentaBanco
-		a.hisFechaProceso AS FechaPreceso, -- Fecha de ejecucion 
-		a.hisFechaEjecucion AS FechaEjec, -- Fecha de ejecucion 
+		c.comerCuentaBanco as [N_CUENTA] ,
+		a.hisFechaProceso AS FechaPreceso,  
+		a.hisFechaEjecucion AS FechaEjec,  
 		a.hisLote as [LOTE],
 		round(SUM(te.mont_bruto_tdd),2)  as MontoBrutoTDD,
 		round(SUM(te.mont_bruto_tdc),2)  as MontoBrutoTDC,
@@ -296,7 +296,7 @@ export const FormatQuery = (dateRang: any, selects: string): string => {
 		a.comision_servicio as [COMISION_MANTENIMIENTO],
 		a.comision_bacaria_1_50 as [COMISION_BANCARIA_1_50_USO],
 		a.monto_por_servicio as [IVA] ,
-		(a.monto_abono) AS [MONTO_ABONAR], -- CHECK 8
+		(a.monto_abono) AS [MONTO_ABONAR], 
 		te.hisTasaBCV AS [TASA],
 		h.Nombre_Org AS [TIPO_DE_CARTERA],
 		SUM(te.CANT_TRANSACCION) as CANT_TRANSACCION
@@ -314,33 +314,31 @@ export const FormatQuery = (dateRang: any, selects: string): string => {
 	
 				hisLote,
 	
-				(SUM(hisAmountTDD) + SUM(hisAmountTDC)) AS Monto_Neto, ---TARJETA DE CREDITO + TARJETA DE DEBITO
+				(SUM(hisAmountTDD) + SUM(hisAmountTDC)) AS Monto_Neto, 
 	
 				SUM(hisAmountTDD) as Monto_Neto_tdd,
 	
 				SUM(hisAmountTDC) as Monto_neto_tdc,
 	
-				  --( (hisAmountTDC + hisAmountComisionBanco) – monto bruto visa electro) - hisAmountTDCImpuesto
-	
 				((SUM(hisAmountTDC) + SUM(hisAmountComisionBanco)) - Sum(hisAmountTDCImpuesto)) as montp_neve,
 
-				(SUM(hisAmountTDD) + SUM(hisAmountComisionBanco) - SUM(hisAmountTDCImpuesto)) as monto_bruto_tdd, --Monto Bruto TDD
+				(SUM(hisAmountTDD) + SUM(hisAmountComisionBanco) - SUM(hisAmountTDCImpuesto)) as monto_bruto_tdd, 
 
-				(SUM(hisAmountTDC) + SUM(hisAmountTDCImpuesto)) as monto_bruto_tdc, --Monto Bruto TDC
+				(SUM(hisAmountTDC) + SUM(hisAmountTDCImpuesto)) as monto_bruto_tdc, 
 
-				(SUM(hisIvaSobreMantenimiento) + SUM(hisComisionMantenimiento) + SUM(hisComisionBancaria)) as comision_mantenimiento,--Comision de Mantenimiento
+				(SUM(hisIvaSobreMantenimiento) + SUM(hisComisionMantenimiento) + SUM(hisComisionBancaria)) as comision_mantenimiento,
 
-				SUM(hisComisionMantenimiento) AS comision_servicio, -- COMISION DE SERVISIO es Base Imponible
+				SUM(hisComisionMantenimiento) AS comision_servicio, 
 
-				SUM(hisAmountComisionBanco) AS comision_banco, -- COMISION BANCARIA
+				SUM(hisAmountComisionBanco) AS comision_banco, 
 
-				SUM(hisNetoComisionBancaria) AS monto_por_comision, -- COBRO POR COMISION BANCARIA 1,50%
+				SUM(hisNetoComisionBancaria) AS monto_por_comision, 
 
-				SUM(hisIvaSobreMantenimiento) AS monto_por_servicio, -- COMISION POR SERVICIO ($35+iva = $40,60 a tasa BCV)
+				SUM(hisIvaSobreMantenimiento) AS monto_por_servicio, 
 
-				(SUM(hisAmountComisionBanco) - SUM(hisAmountTDCImpuesto)) AS monto_comision_tdd,  --CALCULA LA COMISION DE TDD CUANDO HAY CREDITO
+				(SUM(hisAmountComisionBanco) - SUM(hisAmountTDCImpuesto)) AS monto_comision_tdd, 
 
-				SUM(hisAmountTotal) AS monto_abono,  -- SIGUE IGUAL
+				SUM(hisAmountTotal) AS monto_abono,
 
 				Sum(hisAmountTDCImpuesto) as Monto_afilia_tdc,
 
