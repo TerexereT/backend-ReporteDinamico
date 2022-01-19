@@ -2,7 +2,7 @@ import { DateTime } from 'luxon';
 require('dotenv').config();
 
 const { NODE_ENV } = process.env;
-     
+
 interface select {
 	key: string;
 	query: string;
@@ -26,7 +26,7 @@ export const selects: select[] = [
 		key: 'MONTOTOTAL_BS',
 		query: `
         ((Sum(montoTotal) * 1.16)* (SELECT * FROM OPENQUERY([${
-			NODE_ENV === 'dev' ? 'POSTILION_DESA' : 'POSTILION_7019'
+					NODE_ENV === 'prod' ? 'POSTILION_7019' : 'POSTILION_DESA'
 				}], 'SELECT TOP 1 valorVenta
         FROM (
           SELECT TOP 2 valorVenta 

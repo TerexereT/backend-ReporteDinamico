@@ -148,7 +148,7 @@ export const selects: select[] = [
 		when 
 		( SUM(MontoBrutoVisaElectro) <> 0.00  ) then
 		
-		round((Monto_neto_tdc +  (SUM(MontoBrutoVisaElectro) * 0.02) - SUM(MontoBrutoVisaElectro) ),2)
+		round((Monto_neto_tdc +  (SUM(MontoBrutoVisaElectro) * 0.02) - SUM(MontoBrutoVisaElectro) * -1 ),2)
 		
 		else 0.00
 		end  as MONTO_NETO_TDC`,
