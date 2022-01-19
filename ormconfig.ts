@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	type: 'mssql',
 	host: process.env.HOST || '10.198.72.31',
 	username: process.env.USER || 'amendoza',
