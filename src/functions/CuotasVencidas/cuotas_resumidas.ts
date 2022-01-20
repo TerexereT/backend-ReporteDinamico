@@ -17,8 +17,8 @@ descripcion as ESTATUS
 */
 
 export const selects: select[] = [
-	{ key: 'TERMINAL', query: `CONCAT('T-',aboterminal ) as TERMINAL` },
-	{ key: 'AFILIADO', query: `CONCAT('A-',aboCodAfi ) as N_AFILIADO` },
+	{ key: 'TERMINAL', query: `aboterminal as TERMINAL` },
+	{ key: 'AFILIADO', query: `aboCodAfi as N_AFILIADO` },
 	{ key: 'MONTO', query: `Format(Sum(montoTotal) , 'N2', 'es-es') as MONTO` },
 	{ key: 'IVA', query: `Format((Sum(montoTotal) * 0.16) , 'N2', 'es-es') as IVA` },
 	{ key: 'MONTOTOTAL', query: `Format((Sum(montoTotal) * 1.16) , 'N2', 'es-es') as MONTOTOTAL` },
