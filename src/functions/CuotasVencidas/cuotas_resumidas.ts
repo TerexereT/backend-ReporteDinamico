@@ -17,24 +17,24 @@ descripcion as ESTATUS
 */
 
 export const selects: select[] = [
-	{ key: 'TERMINAL', query: `aboterminal as TERMINAL` },
-	{ key: 'AFILIADO', query: 'aboCodAfi as AFILIADO' },
-	{ key: 'MONTO', query: `Sum(montoTotal) as MONTO` },
-	{ key: 'IVA', query: `(Sum(montoTotal) * 0.16) as IVA` },
-	{ key: 'MONTOTOTAL', query: `(Sum(montoTotal) * 1.16) as MONTOTOTAL` },
+	{ key: 'TERMINAL', query: `CONCAT('T-',aboterminal ) as TERMINAL` },
+	{ key: 'AFILIADO', query: `CONCAT('A-',aboCodAfi ) as N_AFILIADO` },
+	{ key: 'MONTO', query: `Format(Sum(montoTotal) , 'N2', 'es-es') as MONTO` },
+	{ key: 'IVA', query: `Format((Sum(montoTotal) * 0.16) , 'N2', 'es-es') as IVA` },
+	{ key: 'MONTOTOTAL', query: `Format((Sum(montoTotal) * 1.16) , 'N2', 'es-es') as MONTOTOTAL` },
 	{
 		key: 'MONTOTOTAL_BS',
 		query: `
-        ((Sum(montoTotal) * 1.16)* (SELECT * FROM OPENQUERY([${
-					NODE_ENV === 'prod' ? 'POSTILION_7019' : 'POSTILION_DESA'
-				}], 'SELECT TOP 1 valorVenta
-        FROM (
-          SELECT TOP 2 valorVenta 
-          FROM [rep_post_dia].[dbo].[tasas_dicom]
-           
-          ORDER BY id DESC
-        ) sub
-        ORDER BY valorVenta desc'))) as MONTOTOTAL_BS
+		Format(((Sum(montoTotal) * 1.16) * (SELECT * FROM OPENQUERY([${
+			NODE_ENV === 'prod' ? 'POSTILION_7019' : 'POSTILION_DESA'
+					}], 'SELECT TOP 1 valorVenta
+			FROM (
+			SELECT TOP 2 valorVenta 
+			FROM [rep_post_dia].[dbo].[tasas_dicom]
+			
+			ORDER BY id DESC
+			) sub
+			ORDER BY valorVenta desc'))) , 'N2', 'es-es')  as MONTOTOTAL_BS
         `,
 	},
 	{ key: 'CANT_CUOTAS', query: `COUNT(aboterminal) as CANT_CUOTAS` },
