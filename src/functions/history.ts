@@ -31,11 +31,11 @@ GROUP BY hisFechaEjecucion, aboTerminal,hisFechaProceso) order by hisFechaEjecuc
 export const selects: select[] = [
 	{
 		key: 'N_AFILIADO',
-		query: '[N_AFILIADO]',
+		query: `CONCAT('A-',[N_AFILIADO] ) as [N_AFILIADO]`,
 	},
 	{
 		key: 'TERMINAL',
-		query: 'TERMINAL',
+		query: `CONCAT('T-',TERMINAL ) as TERMINAL`,
 	},
 	{
 		key: 'CEDULA_RIF',
@@ -55,7 +55,7 @@ export const selects: select[] = [
 	},
 	{
 		key: 'N_CUENTA',
-		query: '[N_CUENTA]',
+		query: `CONCAT('C-',[N_CUENTA] ) as [N_CUENTA]`,
 	},
 	{
 		key: 'FECHA_PROCESO',
@@ -71,109 +71,98 @@ export const selects: select[] = [
 	},
 	{
 		key: 'MONTO_BRUTO_TDD',
-		query: 'CONVERT(VARCHAR,CAST(MontoBrutoTDD AS MONEY),1) as MONTO_BRUTO_TDD',
+		query: `Format(MontoBrutoTDD , 'N2', 'es-es') as MontoBrutoTDD`,
 	},
 	{
 		key: 'MONTO_BRUTO_TDC',
-		query: 'CONVERT(VARCHAR,CAST(MontoBrutoTDC AS MONEY),1) as MONTO_BRUTO_TDC',
+		query: `Format(MontoBrutoTDC , 'N2', 'es-es') as MONTO_BRUTO_TDC`,
 	},
 	{
 		key: 'MONTO_BRUTO_VISA_ELEC',
-		query: 'CONVERT(VARCHAR,CAST(MontoBrutoVisaElectro AS MONEY),1) as MONTO_BRUTO_VISA_ELEC',
+		query: `Format(MontoBrutoVisaElectro , 'N2', 'es-es') as MONTO_BRUTO_VISA_ELEC`,
 	},
 	{
 		key: 'TOTAL_MONTOS_BRUTOS',
-		query:
-			'CONVERT(VARCHAR,CAST((MontoBrutoTDD + MontoBrutoTDC + MontoBrutoVisaElectro) AS MONEY),1) as TOTAL_MONTOS_BRUTOS',
+		query: `Format((MontoBrutoTDD + MontoBrutoTDC + MontoBrutoVisaElectro) , 'N2', 'es-es') as TOTAL_MONTOS_BRUTOS`,
 	},
 	{
 		key: 'COMISION_AFILIADO_TDD',
 		query: `CASE
-		WHEN SUM(MontoBrutoTDD) <> 0.00 THEN 
-		round(sum(monto_comision_tdd) - (SUM(MontoBrutoVisaElectro) * 0.02), 2)
-		
-		ELSE 0.00
-	END as [COMISION_AFILIA_TDD]`,
+					WHEN SUM(MontoBrutoTDD) <> 0.00 THEN 
+						Format(( sum(monto_comision_tdd) - (SUM(MontoBrutoVisaElectro) * 0.02) ) , 'N2', 'es-es')
+					ELSE Format(0 , 'N2', 'es-es')
+				END as [COMISION_AFILIA_TDD]`,
 	},
 	{
 		key: 'COMISION_AFILIADO_TDC',
-		query: /*sql*/ `case when
-
-		(SUM(MontoBrutoTDD) <> 0.00 and SUM(MontoBrutoTDC) = 0.00 and SUM(MontoBrutoVisaElectro) = 0.00  ) then
-		
-		0.00
-		
-		when
-		
-		(SUM(MontoBrutoTDC) <> 0 and SUM(MontoBrutoVisaElectro) = 0.00) then
-		
-		Monto_afilia_tdc
-		
-		when
-		
-		( SUM(MontoBrutoVisaElectro) <> 0  ) then
-
-		Monto_afilia_tdc
-	
-		else 0.00
-		
-		end  as COMISION_AFILIA_TDC`,
+		query: `case 
+					when (SUM(MontoBrutoTDD) <> 0.00 and SUM(MontoBrutoTDC) = 0.00 and SUM(MontoBrutoVisaElectro) = 0.00  ) 
+						then
+							Format(0 , 'N2', 'es-es')
+					when (SUM(MontoBrutoTDC) <> 0 and SUM(MontoBrutoVisaElectro) = 0.00) 
+						then
+							Format(Monto_afilia_tdc , 'N2', 'es-es') 
+					when ( SUM(MontoBrutoVisaElectro) <> 0  )
+							then
+								Format(Monto_afilia_tdc , 'N2', 'es-es') 
+					else Format(0 , 'N2', 'es-es')
+				end  as COMISION_AFILIA_TDC`,
 	},
 	{
 		key: 'COMISION_AFILIADO_VISA_ELECTRO',
 		query: `CASE
-
-		WHEN ( SUM(MontoBrutoVisaElectro) <> 0  ) THEN
-	
-		 round((SUM(cast(convert(float,(MontoBrutoVisaElectro * 0.02)) as decimal(15,2)))), 2)
-	
-		ELSE 0.00
-	
-	END as COMISION_AFILIA_VISA_ELEC`,
+					WHEN ( SUM(MontoBrutoVisaElectro) <> 0  ) 
+						THEN 
+							Format((MontoBrutoVisaElectro * 0.02) , 'N2', 'es-es') 
+					ELSE Format(0 , 'N2', 'es-es')
+				END as COMISION_AFILIA_VISA_ELEC`,
 	},
 	{
 		key: 'MONTO_NETO_TDD',
-		query: 'Monto_Neto_tdd as MONTO_NETO_TDD',
+		query: `Format(Monto_Neto_tdd , 'N2', 'es-es') as MONTO_NETO_TDD`,
 	},
 	{
 		key: 'MONTO_NETO_TDC',
-		query: `case when 
-		(SUM(MontoBrutoTDD) <> 0.00 and SUM(MontoBrutoTDC) = 0.00 and SUM(MontoBrutoVisaElectro) = 0.00  ) then
-		0.00
-		
-		when 
-		 (SUM(MontoBrutoTDC) <> 0 and SUM(MontoBrutoVisaElectro) = 0.00) then
-		round(Monto_neto_tdc, 2 )
-		
-		when 
-		( SUM(MontoBrutoVisaElectro) <> 0.00  ) then
-		
-		round((Monto_neto_tdc +  (SUM(MontoBrutoVisaElectro) * 0.02) - SUM(MontoBrutoVisaElectro) * -1 ),2)
-		
-		else 0.00
-		end  as MONTO_NETO_TDC`,
+		query: `case 
+					when (SUM(MontoBrutoTDD) <> 0.00 and SUM(MontoBrutoTDC) = 0.00 and SUM(MontoBrutoVisaElectro) = 0.00  )
+						then
+							Format(0 , 'N2', 'es-es')
+					when ( SUM(MontoBrutoTDC) = 0.00 and SUM(MontoBrutoVisaElectro) = 0.00  )
+						then
+							Format(0 , 'N2', 'es-es')
+					when ( SUM(MontoBrutoTDC) = 0.00 and SUM(MontoBrutoVisaElectro) <> 0.00  )
+						then
+							Format(0 , 'N2', 'es-es')
+					when (SUM(MontoBrutoTDC) <> 0 and SUM(MontoBrutoVisaElectro) = 0.00)
+						then
+							Format(Monto_neto_tdc, 'N2', 'es-es') 
+					when ( SUM(MontoBrutoTDC) <> 0 and  SUM(MontoBrutoVisaElectro) <> 0.00  ) 
+						then
+							Format( (SUM(Monto_neto_tdc) -  (SUM(MontoBrutoVisaElectro) - SUM(MontoBrutoVisaElectro) * 0.02)    ), 'N2', 'es-es')
+					else Format(0 , 'N2', 'es-es')
+				end  as MONTO_NETO_TDC`,
 	},
 	{
 		key: 'MONTO_NETO_VISA_ELECTRO',
-		query: 'round(( MontoBrutoVisaElectro - (SUM(MontoBrutoVisaElectro) * 0.02)), 2 ) as MONTO_NETO_VISA_ELEC',
+		query: `Format(( MontoBrutoVisaElectro - (SUM(MontoBrutoVisaElectro) * 0.02)), 'N2', 'es-es') as MONTO_NETO_VISA_ELEC`,
 	},
 	{
 		key: 'COMISION_MANTENIMIENTO',
-		query: '[COMISION_MANTENIMIENTO]',
+		query: `Format([COMISION_MANTENIMIENTO], 'N2', 'es-es') as [COMISION_MANTENIMIENTO]`,
 	},
 	{
 		key: 'IVA',
-		query: '[IVA]',
+		query: `Format([IVA], 'N2', 'es-es') as [IVA]`,
 	},
 	{
 		key: 'COMISION_BANCARIA_1_50_USO',
-		query: '[COMISION_BANCARIA_1_50_USO]',
+		query: `Format([COMISION_BANCARIA_1_50_USO], 'N2', 'es-es') as [COMISION_BANCARIA_1_50_USO]`,
 	},
 	{
 		key: 'MONTO_ABONAR',
-		query: '[MONTO_ABONAR]',
+		query: `Format([MONTO_ABONAR], 'N2', 'es-es') as [MONTO_ABONAR]`,
 	},
-	{ key: 'TASA', query: '[TASA]' },
+	{ key: 'TASA', query: `Format(CONVERT(float, [TASA]), 'N2', 'es-es') as [TASA]` },
 	{ key: 'CANT_TRANSACCION', query: '[CANT_TRANSACCION]' },
 	{ key: 'TIPO_DE_CARTERA', query: '[TIPO_DE_CARTERA]' },
 	{
