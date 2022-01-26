@@ -106,7 +106,9 @@ export default class CancelarCuotas {
 			await getConnection().query(/*sql*/ `
 				INSERT INTO [dbo].[general_logs] ([descript] ,[email] ,[id_origin_logs])
      			
-				VALUES	('[msg: edicion lista]','atovar@tranred.com', 4)
+				VALUES	('[msg: ${req.body.terminal} ${DateTime.now().toSQLDate()} tasa ${
+				dicomSelected.valorVenta
+			}]','atovar@tranred.com.ve', 8)
 			`);
 
 			res.status(200).json({ message: 'reporte editrado' });

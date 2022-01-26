@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { selectQuery, dateRang, FormatQuery, selects } from '../functions/history';
 import { getConnection } from 'typeorm';
+import { dateRang, FormatQuery, selectQuery, selects } from '../functions/history';
 
 interface body {
 	keys: string[];
@@ -22,7 +22,7 @@ export default class History {
 			// definimos variables
 			const { keys } = req.body;
 
-			console.log('req.', req.query);
+			// console.log('req.', req.query);
 
 			const { init, end }: any = req.query;
 
@@ -31,7 +31,7 @@ export default class History {
 			const selects = selectQuery(keys);
 			const query = FormatQuery({ init, end }, selects);
 
-			console.log('query', query);
+			// console.log('query', query);
 
 			// ejecucion del querys ya formateado
 			const info: any = await getConnection().query(query);
