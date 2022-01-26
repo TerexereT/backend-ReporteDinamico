@@ -9,6 +9,7 @@ import plan_comi_inactivo from './controller/mantenimiento/plan_comision_inactiv
 import plan_man_inactivo from './controller/mantenimiento/plan_mantenimiento_inactivo';
 import sin_comision from './controller/mantenimiento/sin_comision';
 import sin_plan from './controller/mantenimiento/sin_plan';
+import ReporteACI from './controller/ReporteACI';
 
 export const Routes: any[] = [
 	{
@@ -130,5 +131,17 @@ export const Routes: any[] = [
 		route: '/dicom',
 		controller: CancelarCuotas,
 		action: 'dicom',
+	},
+	{
+		method: 'get',
+		route: '/reporte_aci/keys',
+		controller: ReporteACI,
+		action: 'keys',
+	},
+	{
+		method: 'get',
+		route: '/reporte_aci',
+		controller: ReporteACI,
+		action: 'all',
 	},
 ];
