@@ -19,7 +19,7 @@ export const selects: select[] = [
 	{
 		key: 'MONTOTOTAL_BS',
 		query: `
-		Format(((Sum(montoTotal) * 1.16) * (SELECT * FROM OPENQUERY([POSTILION_DESA], 'SELECT TOP 1 valorVenta
+		Format(((Sum(montoTotal) * 1.16) * (SELECT * FROM OPENQUERY([7019], 'SELECT TOP 1 valorVenta
         FROM (
         SELECT TOP 2 valorVenta 
         FROM [rep_post_dia].[dbo].[tasas_dicom]
@@ -47,7 +47,7 @@ const preQuery = () => /*sql*/ `
 	Format((Sum(montoTotal) * 0.16) , 'N2', 'es-es') as IVA,
 	Format((Sum(montoTotal) * 1.16) , 'N2', 'es-es') as MONTOTOTAL ,
 	descripcion as ESTATUS,
-	Format(((Sum(montoTotal) * 1.16) * (SELECT * FROM OPENQUERY([POSTILION_DESA], 'SELECT TOP 1 valorVenta
+	Format(((Sum(montoTotal) * 1.16) * (SELECT * FROM OPENQUERY([POSTILION_7019], 'SELECT TOP 1 valorVenta
 	FROM (
 	SELECT TOP 2 valorVenta 
 	FROM [rep_post_dia].[dbo].[tasas_dicom]
@@ -88,7 +88,6 @@ export const dateRang = (init: string, end: string): string => {
 
 export const FormatQuery = (selects: string): string => {
 	const today: string = DateTime.local().toFormat('yyyy-MM-dd');
-	console.log('entre al query');
 
 	return /*sql*/ `
 	${preQuery()}

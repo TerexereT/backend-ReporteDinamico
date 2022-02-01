@@ -42,7 +42,35 @@ export default class ReporteACI {
 			const sql = FormatQuery(selects2);
 
 			// ejecucion del querys ya formateado
-			const info: ACIxClient[] = await getConnection().query(sql);
+			const info = await getConnection().query(sql);
+			for (let index = 0; index < info.length; index++) {
+				const {
+					aci_nombre,
+					cli_nombre,
+					aboTerminal,
+					afiliado,
+					monto,
+					iva,
+					mont_total,
+					estatus,
+					monto_total_bs,
+					CANT_TRANSACCION,
+				} = info[index];
+
+				// formateando con key names
+				info[index] = {
+					CLIENTNOMBRES: cli_nombre,
+					CANT_CUOTAS: CANT_TRANSACCION,
+					ACINOMBRES: aci_nombre,
+					TERMINAL: aboTerminal,
+					AFILIADO: afiliado,
+					MONTO: monto,
+					IVA: iva,
+					MONTOTOTAL: mont_total,
+					MONTOTOTAL_BS: monto_total_bs,
+					ESTATUS: estatus,
+				};
+			}
 
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
