@@ -57,21 +57,35 @@ export default class ReporteACI {
 					CANT_TRANSACCION,
 				} = info[index];
 
+				if (cli_nombre === 'CLIENTES') {
+					info[index] = {
+						CLIENTNOMBRES: 'Clientes',
+						CANT_CUOTAS: CANT_TRANSACCION,
+						ACINOMBRES: aci_nombre,
+						TERMINAL: aboTerminal,
+						AFILIADO: afiliado,
+						MONTO: monto,
+						IVA: iva,
+						MONTOTOTAL: mont_total,
+						MONTOTOTAL_BS: monto_total_bs,
+						ESTATUS: estatus,
+					};
+				} else {
+					info[index] = {
+						CLIENTNOMBRES: cli_nombre,
+						CANT_CUOTAS: CANT_TRANSACCION,
+						ACINOMBRES: '',
+						TERMINAL: aboTerminal,
+						AFILIADO: afiliado,
+						MONTO: monto,
+						IVA: iva,
+						MONTOTOTAL: mont_total,
+						MONTOTOTAL_BS: monto_total_bs,
+						ESTATUS: estatus,
+					};
+				}
 				// formateando con key names
-				info[index] = {
-					CLIENTNOMBRES: cli_nombre,
-					CANT_CUOTAS: CANT_TRANSACCION,
-					ACINOMBRES: aci_nombre,
-					TERMINAL: aboTerminal,
-					AFILIADO: afiliado,
-					MONTO: monto,
-					IVA: iva,
-					MONTOTOTAL: mont_total,
-					MONTOTOTAL_BS: monto_total_bs,
-					ESTATUS: estatus,
-				};
 			}
-
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {
