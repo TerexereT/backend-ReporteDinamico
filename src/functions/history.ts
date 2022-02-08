@@ -162,7 +162,7 @@ export const selects: select[] = [
 		key: 'MONTO_ABONAR',
 		query: `Format([MONTO_ABONAR], 'N2', 'es-es') as [MONTO_ABONAR]`,
 	},
-	{ key: 'TASA', query: `Format(CONVERT(float, [TASA]), 'N2', 'es-es') as [TASA]` },
+	{ key: 'TASA', query: `[TASA]` },
 	{ key: 'CANT_TRANSACCION', query: '[CANT_TRANSACCION]' },
 	{ key: 'TIPO_DE_CARTERA', query: '[TIPO_DE_CARTERA]' },
 	{
