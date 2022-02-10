@@ -11,8 +11,8 @@ interface select {
 export const selects: select[] = [
 	{ key: 'ACINOMBRES', query: `ACINOMBRES` },
 	{ key: 'CLIENTNOMBRES', query: `CLIENTNOMBRES` },
-	{ key: 'DIRECCION', query: `direccion` },
-	{ key: 'NUMEROS', query: `numeros` },
+	{ key: 'DIRECCION', query: `DIRECCION` },
+	{ key: 'NUMEROS', query: `NUMEROS` },
 	{ key: 'TERMINAL', query: `TERMINAL` },
 	{ key: 'AFILIADO', query: `AFILIADO` },
 	{ key: 'MONTO', query: `MONTO` },
