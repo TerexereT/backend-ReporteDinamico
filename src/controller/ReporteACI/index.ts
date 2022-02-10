@@ -17,17 +17,34 @@ interface msg {
 }
 
 interface ACIxClient {
-	CLIENTNOMBRES?: string;
-	MONTOTOTAL_BS: number;
-	CANT_CUOTAS: string;
 	ACINOMBRES: string;
+	CLIENTNOMBRES?: string;
+	DIRECCION: string;
+	NUMEROS: string;
+	TERMINAL: string;
+	AFILIADO: string;
 	MONTOTOTAL: number;
-	TERMINAL?: string;
-	AFILIADO?: string;
-	ESTATUS: string;
-	MONTO: number;
 	IVA: number;
+	ESTATUS: string;
+	CANT_CUOTAS: string;
+	MONTOTOTAL_BS: number;
+	MONTO: number;
 }
+
+/*
+ACINOMBRES: '& LINARES 2000 C.A INVERSIONES RODRIGUEZ',
+  CLIENTNOMBRES: 'LEIDY ANDREINA MARTINEZ GARCIA',
+  DIRECCION: 'LEIDY ANDREINA MARTINEZ GARCIA',
+  NUMEROS: '02128712003 - 04144669004',
+  TERMINAL: '59019248',
+  AFILIADO: '000000720008172',
+  MONTO: '167,04',
+  IVA: '26,73',
+  MONTOTOTAL: '193,77',
+  ESTATUS: 'Vencida',
+  MONTOTOTAL_BS: '870,15',
+  CANT_CUOTAS: 144
+*/
 
 export default class ReporteACI {
 	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
@@ -45,43 +62,49 @@ export default class ReporteACI {
 			const info = await getConnection().query(sql);
 			for (let index = 0; index < info.length; index++) {
 				const {
-					aci_nombre,
-					cli_nombre,
-					aboTerminal,
-					afiliado,
-					monto,
-					iva,
-					mont_total,
-					estatus,
-					monto_total_bs,
-					CANT_TRANSACCION,
+					CLIENTNOMBRES,
+					ACINOMBRES,
+					DIRECCION,
+					NUMEROS,
+					TERMINAL,
+					AFILIADO,
+					MONTOTOTAL,
+					IVA,
+					ESTATUS,
+					CANT_CUOTAS,
+					MONTOTOTAL_BS,
+					MONTO,
 				} = info[index];
 
-				if (cli_nombre === 'CLIENTES') {
+				if (CLIENTNOMBRES === 'CLIENTES') {
 					info[index] = {
+						ACINOMBRES,
 						CLIENTNOMBRES: 'Clientes',
-						CANT_CUOTAS: CANT_TRANSACCION,
-						ACINOMBRES: aci_nombre,
-						TERMINAL: aboTerminal,
-						AFILIADO: afiliado,
-						MONTO: monto,
-						IVA: iva,
-						MONTOTOTAL: mont_total,
-						MONTOTOTAL_BS: monto_total_bs,
-						ESTATUS: estatus,
+						DIRECCION,
+						NUMEROS,
+						TERMINAL,
+						AFILIADO,
+						MONTOTOTAL,
+						IVA,
+						ESTATUS,
+						CANT_CUOTAS,
+						MONTOTOTAL_BS,
+						MONTO,
 					};
 				} else {
 					info[index] = {
-						CLIENTNOMBRES: cli_nombre,
-						CANT_CUOTAS: CANT_TRANSACCION,
 						ACINOMBRES: '',
-						TERMINAL: aboTerminal,
-						AFILIADO: afiliado,
-						MONTO: monto,
-						IVA: iva,
-						MONTOTOTAL: mont_total,
-						MONTOTOTAL_BS: monto_total_bs,
-						ESTATUS: estatus,
+						CLIENTNOMBRES,
+						DIRECCION,
+						NUMEROS,
+						TERMINAL,
+						AFILIADO,
+						MONTOTOTAL,
+						IVA,
+						ESTATUS,
+						CANT_CUOTAS,
+						MONTOTOTAL_BS,
+						MONTO,
 					};
 				}
 				// formateando con key names
