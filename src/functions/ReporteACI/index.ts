@@ -9,18 +9,18 @@ interface select {
 }
 
 export const selects: select[] = [
-	{ key: 'ACINOMBRES', query: `ACINOMBRES` },
-	{ key: 'CLIENTNOMBRES', query: `CLIENTNOMBRES` },
-	{ key: 'direccion', query: `direccion` },
-	{ key: 'numeros', query: `numeros` },
-	{ key: 'TERMINAL', query: `TERMINAL` },
-	{ key: 'AFILIADO', query: `AFILIADO` },
-	{ key: 'MONTO', query: `MONTO` },
-	{ key: 'IVA', query: `IVA` },
-	{ key: 'MONTOTOTAL', query: `MONTOTOTAL` },
-	{ key: 'ESTATUS', query: `ESTATUS` },
-	{ key: 'MONTOTOTAL_BS', query: `MONTOTOTAL_BS` },
-	{ key: 'CANT_CUOTAS', query: `CANT_CUOTAS` },
+	{ key: 'ACINOMBRES', query: `aci_nombre AS ACINOMBRES` },
+	{ key: 'CLIENTNOMBRES', query: `cli_nombre AS CLIENTNOMBRES` },
+	{ key: 'DIRECCION', query: `direccion AS DIRECCION` },
+	{ key: 'NUMEROS', query: `numeros AS NUMEROS ` },
+	{ key: 'TERMINAL', query: `aboTerminal AS TERMINAL` },
+	{ key: 'AFILIADO', query: `afiliado AS AFILIADO` },
+	{ key: 'MONTO', query: `monto AS MONTO` },
+	{ key: 'IVA', query: `iva AS IVA` },
+	{ key: 'MONTOTOTAL', query: `mont_total AS MONTOTOTAL` },
+	{ key: 'ESTATUS', query: `estatus AS ESTATUS` },
+	{ key: 'MONTOTOTAL_BS', query: `monto_total_bs AS MONTOTOTAL_BS` },
+	{ key: 'CANT_CUOTAS', query: `CANT_TRANSACCION AS CANT_CUOTAS` },
 ];
 
 const preQuery = () => /*sql*/ `
@@ -86,7 +86,7 @@ export const FormatQuery = (selects: string): string => {
 	return /*sql*/ `
 	${preQuery()}
 
-	Select * FROM [MilPagos].[dbo].[Temp_ReportACIs]  (NOLOCK)
+	Select ${selects} FROM [MilPagos].[dbo].[Temp_ReportACIs]  (NOLOCK)
 
     UNION ALL
 
