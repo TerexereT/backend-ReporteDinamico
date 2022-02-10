@@ -10,17 +10,17 @@ interface select {
 
 export const selects: select[] = [
 	{ key: 'ACINOMBRES', query: `ACINOMBRES` },
-	{ key: 'CLIENNOMBRE', query: `CLIENTNOMBRES` },
+	{ key: 'CLIENTNOMBRES', query: `CLIENTNOMBRES` },
 	{ key: 'DIRECCION', query: `DIRECCION` },
 	{ key: 'NUMEROS', query: `NUMEROS` },
 	{ key: 'TERMINAL', query: `TERMINAL` },
 	{ key: 'AFILIADO', query: `AFILIADO` },
 	{ key: 'MONTO', query: `MONTO` },
 	{ key: 'IVA', query: `IVA` },
-	{ key: 'MONTO_TOTAL', query: `MONTOTOTAL` },
+	{ key: 'MONTOTOTAL', query: `MONTOTOTAL` },
 	{ key: 'ESTATUS', query: `ESTATUS` },
-	{ key: 'MONTO_TOTAL_BS', query: `MONTOTOTAL_BS` },
-	{ key: 'CANT_TRANSACCION', query: `CANT_CUOTAS` },
+	{ key: 'MONTOTOTAL_BS', query: `MONTOTOTAL_BS` },
+	{ key: 'CANT_CUOTAS', query: `CANT_CUOTAS` },
 ];
 
 const preQuery = () => /*sql*/ `
