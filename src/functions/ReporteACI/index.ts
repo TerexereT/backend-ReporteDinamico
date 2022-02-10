@@ -9,18 +9,18 @@ interface select {
 }
 
 export const selects: select[] = [
-	{ key: 'NOMBRE_ACIs', query: `aci_nombre` },
-	{ key: 'NOMBRE_CLI', query: `cli_nombre` },
-	{ key: 'NUMEROS', query: `numeros` },
-	{ key: 'DIRECCION', query: `direccion` },
-	{ key: 'AFILIADO', query: `afiliado` },
-	{ key: 'TERMINAL', query: `aboTerminal` },
-	{ key: 'IVA', query: `iva` },
-	{ key: 'MONTO', query: `monto` },
-	{ key: 'ESTATUS', query: `estatus` },
-	{ key: 'MONTO_TOTAL', query: `mont_total` },
-	{ key: 'CANT_TRANSACCION', query: `CANT_TRANSACCION` },
-	{ key: 'MONTO_TOTAL_BS', query: `monto_total_bs` },
+	{ key: 'ACINOMBRES', query: `ACINOMBRES` },
+	{ key: 'CLIENNOMBRE', query: `CLIENTNOMBRES` },
+	{ key: 'DIRECCION', query: `DIRECCION` },
+	{ key: 'NUMEROS', query: `NUMEROS` },
+	{ key: 'TERMINAL', query: `TERMINAL` },
+	{ key: 'AFILIADO', query: `AFILIADO` },
+	{ key: 'MONTO', query: `MONTO` },
+	{ key: 'IVA', query: `IVA` },
+	{ key: 'MONTO_TOTAL', query: `MONTOTOTAL` },
+	{ key: 'ESTATUS', query: `ESTATUS` },
+	{ key: 'MONTO_TOTAL_BS', query: `MONTOTOTAL_BS` },
+	{ key: 'CANT_TRANSACCION', query: `CANT_CUOTAS` },
 ];
 
 const preQuery = () => /*sql*/ `
