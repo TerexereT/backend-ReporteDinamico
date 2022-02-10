@@ -5,6 +5,7 @@ import CancelarCuotas from './controller/CancelarCuotas';
 import cuotas_resumidas from './controller/CuotasVencidas/cuotas_resumidas';
 import cuotas_vencidas from './controller/CuotasVencidas/cuotas_vencidas';
 import History from './controller/history';
+import LibrePago from './controller/LibrePago';
 import plan_comi_inactivo from './controller/mantenimiento/plan_comision_inactivo';
 import plan_man_inactivo from './controller/mantenimiento/plan_mantenimiento_inactivo';
 import sin_comision from './controller/mantenimiento/sin_comision';
@@ -143,5 +144,17 @@ export const Routes: any[] = [
 		route: '/reporte_aci',
 		controller: ReporteACI,
 		action: 'all',
+	},
+	{
+		method: 'post',
+		route: '/libre-pago',
+		controller: LibrePago,
+		action: 'allHistory',
+	},
+	{
+		method: 'get',
+		route: '/libre-pago/keys',
+		controller: LibrePago,
+		action: 'keys',
 	},
 ];
