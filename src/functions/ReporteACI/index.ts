@@ -9,28 +9,18 @@ interface select {
 }
 
 export const selects: select[] = [
-	{ key: 'ACINOMBRES', query: `CONCAT(d.aliNombres,' ' ,d.aliApellidos ) AS ACINOMBRES` },
-	{ key: 'CLIENTNOMBRES', query: `c.comerDesc AS CLIENTNOMBRES` },
-	{ key: 'TERMINAL', query: `aboterminal as TERMINAL` },
-	{ key: 'AFILIADO', query: `aboCodAfi as AFILIADO` },
-	{ key: 'MONTO', query: `Format(Sum(montoTotal) , 'N2', 'es-es') as MONTO` },
-	{ key: 'IVA', query: `Format((Sum(montoTotal) * 0.16) , 'N2', 'es-es') as IVA` },
-	{ key: 'MONTOTOTAL', query: `Format((Sum(montoTotal) * 1.16) , 'N2', 'es-es') as MONTOTOTAL` },
-	{
-		key: 'MONTOTOTAL_BS',
-		query: `
-		Format(((Sum(montoTotal) * 1.16) * (SELECT * FROM OPENQUERY([7019], 'SELECT TOP 1 valorVenta
-        FROM (
-        SELECT TOP 2 valorVenta 
-        FROM [rep_post_dia].[dbo].[tasas_dicom]
-        
-        ORDER BY id DESC
-        ) sub
-        ORDER BY valorVenta desc'))) , 'N2', 'es-es') as MONTOTOTAL_BS
-        `,
-	},
-	{ key: 'CANT_CUOTAS', query: `COUNT(aboterminal) as CANT_CUOTAS` },
-	{ key: 'ESTATUS', query: `descripcion as ESTATUS` },
+	{ key: 'NOMBRE_ACIs', query: `aci_nombre` },
+	{ key: 'NOMBRE_CLI', query: `cli_nombre` },
+	{ key: 'NUMEROS', query: `numeros` },
+	{ key: 'DIRECCION', query: `direccion` },
+	{ key: 'AFILIADO', query: `afiliado` },
+	{ key: 'TERMINAL', query: `aboTerminal` },
+	{ key: 'IVA', query: `iva` },
+	{ key: 'MONTO', query: `monto` },
+	{ key: 'ESTATUS', query: `estatus` },
+	{ key: 'MONTO_TOTAL', query: `mont_total` },
+	{ key: 'CANT_TRANSACCION', query: `CANT_TRANSACCION` },
+	{ key: 'MONTO_TOTAL_BS', query: `monto_total_bs` },
 ];
 
 const preQuery = () => /*sql*/ `
@@ -96,7 +86,7 @@ export const FormatQuery = (selects: string): string => {
 	return /*sql*/ `
 	${preQuery()}
 
-	Select * FROM [MilPagos].[dbo].[Temp_ReportACIs]  (NOLOCK)
+	Select ${selects} FROM [MilPagos].[dbo].[Temp_ReportACIs]  (NOLOCK)
 
     UNION ALL
 
