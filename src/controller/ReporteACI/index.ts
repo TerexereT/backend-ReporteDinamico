@@ -45,8 +45,8 @@ export default class ReporteACI {
 			const info = await getConnection().query(sql);
 			for (let index = 0; index < info.length; index++) {
 				const {
-					aci_nombre,
 					cli_nombre,
+					aci_nombre,
 					aboTerminal,
 					afiliado,
 					monto,
