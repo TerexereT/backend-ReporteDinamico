@@ -40,7 +40,9 @@ Format(Sum(montoTotal) , 'N2', 'es-es') as MONTO,
 Format((Sum(montoTotal) * 0.16) , 'N2', 'es-es') as IVA,
 Format((Sum(montoTotal) * 1.16) , 'N2', 'es-es') as MONTOTOTAL ,
 descripcion as ESTATUS,
-Format(((Sum(montoTotal) * 1.16) * (SELECT * FROM OPENQUERY([POSTILION_7019], 'SELECT TOP 1 valorVenta
+Format(((Sum(montoTotal) * 1.16) * (SELECT * FROM OPENQUERY([${
+	NODE_ENV === 'prod' ? 'POSTILION_7019' : 'POSTILION_DESA'
+}], 'SELECT TOP 1 valorVenta
 FROM (
   SELECT TOP 2 valorVenta 
   FROM [rep_post_dia].[dbo].[tasas_dicom]
