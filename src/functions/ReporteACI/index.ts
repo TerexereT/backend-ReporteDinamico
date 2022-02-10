@@ -32,7 +32,7 @@ const preQuery = () => /*sql*/ `
 select 
 CONCAT(d.aliNombres,' ' ,d.aliApellidos ) AS ACINOMBRES,
 c.comerDesc AS CLIENTNOMBRES,
-c.comerDesc as direccion,
+c.comerDireccion as direccion,
 CONCAT(m.contTelefLoc,' - ' ,m.contTelefMov ) AS numero,
 aboterminal as TERMINAL,
 aboCodAfi as AFILIADO, 
@@ -61,7 +61,7 @@ COUNT(aboterminal) as CANT_CUOTAS
                              --INNER JOIN Abonos AS b ON aboTerminal = b.aboTerminal 
 
                 where estatusId in ('25','26') and fechaProceso <= GETDATE()
-group by aboTerminal, aboCodAfi, descripcion, tasaValor, aliNombres, aliApellidos, comerDesc, contTelefLoc, contTelefMov, comerDesc
+group by aboTerminal, aboCodAfi, descripcion, tasaValor, aliNombres, aliApellidos, comerDesc, contTelefLoc, contTelefMov, comerDireccion
 
 
 order by ACINOMBRES
