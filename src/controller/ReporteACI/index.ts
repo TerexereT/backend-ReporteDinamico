@@ -55,6 +55,7 @@ export default class ReporteACI {
 					estatus,
 					monto_total_bs,
 					CANT_TRANSACCION,
+					...rest
 				} = info[index];
 
 				if (cli_nombre === 'CLIENTES') {
@@ -69,6 +70,7 @@ export default class ReporteACI {
 						MONTOTOTAL: mont_total,
 						MONTOTOTAL_BS: monto_total_bs,
 						ESTATUS: estatus,
+						...rest,
 					};
 				} else {
 					info[index] = {
@@ -82,6 +84,7 @@ export default class ReporteACI {
 						MONTOTOTAL: mont_total,
 						MONTOTOTAL_BS: monto_total_bs,
 						ESTATUS: estatus,
+						...rest,
 					};
 				}
 				// formateando con key names
