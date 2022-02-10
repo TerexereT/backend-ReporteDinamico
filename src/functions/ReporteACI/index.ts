@@ -86,7 +86,7 @@ export const FormatQuery = (selects: string): string => {
 	return /*sql*/ `
 	${preQuery()}
 
-	Select ${selects} FROM [MilPagos].[dbo].[Temp_ReportACIs]  (NOLOCK)
+	Select * FROM [MilPagos].[dbo].[Temp_ReportACIs]  (NOLOCK)
 
     UNION ALL
 
