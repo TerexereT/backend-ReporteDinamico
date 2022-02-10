@@ -11,8 +11,8 @@ interface select {
 export const selects: select[] = [
 	{ key: 'ACINOMBRES', query: `ACINOMBRES` },
 	{ key: 'CLIENTNOMBRES', query: `CLIENTNOMBRES` },
-	{ key: 'DIRECCION', query: `DIRECCION` },
-	{ key: 'NUMEROS', query: `NUMEROS` },
+	{ key: 'DIRECCION', query: `direccion` },
+	{ key: 'NUMEROS', query: `numeros` },
 	{ key: 'TERMINAL', query: `TERMINAL` },
 	{ key: 'AFILIADO', query: `AFILIADO` },
 	{ key: 'MONTO', query: `MONTO` },
@@ -32,8 +32,8 @@ const preQuery = () => /*sql*/ `
 select 
 CONCAT(d.aliNombres,' ' ,d.aliApellidos ) AS ACINOMBRES,
 c.comerDesc AS CLIENTNOMBRES,
-c.comerDesc as DIRECCION,
-CONCAT(m.contTelefLoc,' - ' ,m.contTelefMov ) AS NUMEROS,
+c.comerDesc as direccion,
+CONCAT(m.contTelefLoc,' - ' ,m.contTelefMov ) AS numero,
 aboterminal as TERMINAL,
 aboCodAfi as AFILIADO, 
 Format(Sum(montoTotal) , 'N2', 'es-es') as MONTO,
