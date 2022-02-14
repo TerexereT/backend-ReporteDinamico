@@ -140,16 +140,24 @@ export const FormatQuery = (dateRang: any, terminales: string): string => {
 	const { init, end } = dateRang;
 	console.log('librePago', { init, end }, terminales);
 
-	return /* sql */ `
-
-    declare @StartDate varchar(30)
-	declare @EndDate varchar(30)
-	declare @Terminal varchar(255)
-
+	/* 
 	set @StartDate = '${init}' 
 	set @EndDate = '${end}'
 	set @Terminal = ${terminales}
+	59019629
+	*/
 
+	return /* sql */ `
+
+    SELECT * FROM  OPENQUERY ([${process.env.NODE_ENV === 'prod' ? '' : 'PRUEBA_7218'}], '
+
+	declare @StartDate datetime
+	declare @EndDate datetime
+	declare @Terminal varchar(255)
+
+	set @StartDate  = ''${init} 00:00:00''
+	set @EndDate  = ''${end} 23:59:59''
+	set @Terminal = ${terminales}
 
 	Select 
 	Fecha,
@@ -176,24 +184,24 @@ export const FormatQuery = (dateRang: any, terminales: string): string => {
 		when ( in_rev is not null) 
 				then
 						CONVERT(varchar, in_rev, 1)
-		else 'faltaFecha'
+		else ''faltaFecha''
 	end  as Fecha,
 	--Metodo
-	case msg_type when '512' then 'Compra ' when '1312' then 'Cierre_Lote'  when '1056' then 'Reverso ' end  as Metodo, 
+	case msg_type when ''512'' then ''Compra'' when ''1312'' then ''Cierre_Lote''  when ''1056'' then ''Reverso'' end  as Metodo, 
 	--Origen
 	case 
-		when ( sink_node = 'sktandem') 
+		when ( sink_node = ''sktandem'') 
 				then
-						'Crédito'
-		else 'Débito'
+						''Crédito''
+		else ''Débito''
 	end  as Origen,
 
 	--Estatus
 	case 
-		when ( rsp_code_req_rsp = '00') 
+		when ( rsp_code_req_rsp = ''00'') 
 				then
-						'Aprobada'
-		else 'Rechazada'
+						''Aprobada''
+		else ''Rechazada''
 	end  as Estatus,
 	count(*) as Cantidad
 
@@ -215,7 +223,7 @@ export const FormatQuery = (dateRang: any, terminales: string): string => {
 	union all
 
 	Select 
-	'Total',
+	''Total'',
 	Estatus, 
 	Metodo, 
 	Origen,
@@ -239,24 +247,24 @@ export const FormatQuery = (dateRang: any, terminales: string): string => {
 		when ( in_rev is not null) 
 				then
 						CONVERT(varchar, in_rev, 1)
-		else 'faltaFecha'
+		else ''faltaFecha''
 	end  as Fecha,
 	--Metodo
-	case msg_type when '512' then 'Compra ' when '1312' then 'Cierre_Lote '  when '1056' then 'Reverso ' end  as Metodo, 
+	case msg_type when ''512'' then ''Compra'' when ''1312'' then ''Cierre_Lote''  when ''1056'' then ''Reverso'' end  as Metodo, 
 	--Origen
 	case 
-		when ( sink_node = 'sktandem') 
+		when ( sink_node = ''sktandem'') 
 				then
-						'Crédito'
-		else 'Débito'
+						''Crédito''
+		else ''Débito''
 	end  as Origen,
 
 	--Estatus
 	case 
-		when ( rsp_code_req_rsp = '00') 
+		when ( rsp_code_req_rsp = ''00'') 
 				then
-						'Aprobada'
-		else 'Rechazada'
+						''Aprobada''
+		else ''Rechazada''
 	end  as Estatus,
 	count(*) as Cantidad
 
@@ -279,10 +287,10 @@ export const FormatQuery = (dateRang: any, terminales: string): string => {
 
 
 	select
-	'TotalMonto',
-	' ',
-	' ',
-	' ',
+	''TotalMonto'',
+	'' '',
+	'' '',
+	'' '',
 	count(*) as Cantidad
 
 
@@ -296,6 +304,7 @@ export const FormatQuery = (dateRang: any, terminales: string): string => {
 
 	order by Fecha, Origen, Cantidad asc
 
-	
-	 `;
+
+	')
+`;
 };
