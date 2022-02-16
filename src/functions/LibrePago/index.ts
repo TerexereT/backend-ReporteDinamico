@@ -138,26 +138,20 @@ export const dateRang = (init: string, end: string): any => {
 
 export const FormatQuery = (dateRang: any, terminales: string): string => {
 	const { init, end } = dateRang;
-	console.log('librePago', { init, end }, terminales);
-
-	/* 
-	set @StartDate = '${init}' 
-	set @EndDate = '${end}'
-	set @Terminal = ${terminales}
-	59019629
-	*/
+	// console.log('librePago', { init, end }, { terminales });
 
 	return /* sql */ `
 
-    SELECT * FROM  OPENQUERY ([${process.env.NODE_ENV === 'prod' ? '' : 'PRUEBA_7218'}], '
+	DECLARE @OPENQUERY nvarchar(4000), @TSQL nvarchar(4000), @LinkedServer nvarchar(4000), @Terminal varchar(255), @StartDate varchar(255), @EndDate varchar(255), @StartHorus nvarchar(4000), @EndHorus nvarchar(4000)
+	SET @LinkedServer = '[${process.env.NODE_ENV === 'prod' ? '' : 'PRUEBA_7218'}]'
+	SET @Terminal = '${terminales}'
+	SET @StartDate = '${init}'
+	SET @EndDate =   '${end}'
+	SET @StartHorus = '00:00:00'
+	SET @EndHorus = '23:59:59'
+	SET @OPENQUERY = 'SELECT * FROM OPENQUERY('+ @LinkedServer + ','''
+	SET @TSQL = '
 
-	declare @StartDate datetime
-	declare @EndDate datetime
-	declare @Terminal varchar(255)
-
-	set @StartDate  = ''${init} 00:00:00''
-	set @EndDate  = ''${end} 23:59:59''
-	set @Terminal = ${terminales}
 
 	Select 
 	Fecha,
@@ -184,24 +178,24 @@ export const FormatQuery = (dateRang: any, terminales: string): string => {
 		when ( in_rev is not null) 
 				then
 						CONVERT(varchar, in_rev, 1)
-		else ''faltaFecha''
+		else ''''faltaFecha''''
 	end  as Fecha,
 	--Metodo
-	case msg_type when ''512'' then ''Compra'' when ''1312'' then ''Cierre_Lote''  when ''1056'' then ''Reverso'' end  as Metodo, 
+	case msg_type when ''''512'''' then ''''Compra'''' when ''''1312'''' then ''''Cierre_Lote''''  when ''''1056'''' then ''''Reverso'''' end  as Metodo, 
 	--Origen
 	case 
-		when ( sink_node = ''sktandem'') 
+		when ( sink_node = ''''sktandem'''') 
 				then
-						''Crédito''
-		else ''Débito''
+						''''Credito''''
+		else ''''Debito''''
 	end  as Origen,
 
 	--Estatus
 	case 
-		when ( rsp_code_req_rsp = ''00'') 
+		when ( rsp_code_req_rsp = ''''00'''') 
 				then
-						''Aprobada''
-		else ''Rechazada''
+						''''Aprobada''''
+		else ''''Rechazada''''
 	end  as Estatus,
 	count(*) as Cantidad
 
@@ -210,11 +204,11 @@ export const FormatQuery = (dateRang: any, terminales: string): string => {
 
 	from [tm_trans_base].[dbo].[tm_trans] (nolock)  
 
-		where card_acceptor_term_id in ( @Terminal )
-		and (in_req between @StartDate and @EndDate
-		or in_adv between @StartDate and @EndDate
-		or in_rev between @StartDate and @EndDate
-		or in_recon_adv between @StartDate and @EndDate )
+		where card_acceptor_term_id in ('+@Terminal+')
+		and (in_req between '''''+@StartDate+' 00:00:00'''' and '''''+@EndDate+' 23:59:00''''
+		or in_adv between '''''+@StartDate+' 00:00:00'''' and '''''+@EndDate+' 23:59:00''''
+		or in_rev between '''''+@StartDate+' 00:00:00'''' and '''''+@EndDate+' 23:59:00''''
+		or in_recon_adv between'''''+@StartDate+' 00:00:00'''' and '''''+@EndDate+' 23:59:00'''' )
 
 	group by msg_type, rsp_code_req_rsp, sink_node, in_req, in_adv, in_recon_adv, in_rev) as g
 
@@ -223,7 +217,7 @@ export const FormatQuery = (dateRang: any, terminales: string): string => {
 	union all
 
 	Select 
-	''Total'',
+	''''Total'''',
 	Estatus, 
 	Metodo, 
 	Origen,
@@ -247,24 +241,24 @@ export const FormatQuery = (dateRang: any, terminales: string): string => {
 		when ( in_rev is not null) 
 				then
 						CONVERT(varchar, in_rev, 1)
-		else ''faltaFecha''
+		else ''''faltaFecha''''
 	end  as Fecha,
 	--Metodo
-	case msg_type when ''512'' then ''Compra'' when ''1312'' then ''Cierre_Lote''  when ''1056'' then ''Reverso'' end  as Metodo, 
+	case msg_type when ''''512'''' then ''''Compra'''' when ''''1312'''' then ''''Cierre_Lote''''  when ''''1056'''' then ''''Reverso'''' end  as Metodo, 
 	--Origen
 	case 
-		when ( sink_node = ''sktandem'') 
+		when ( sink_node = ''''sktandem'''') 
 				then
-						''Crédito''
-		else ''Débito''
+						''''Credito''''
+		else ''''Debito''''
 	end  as Origen,
 
 	--Estatus
 	case 
-		when ( rsp_code_req_rsp = ''00'') 
+		when ( rsp_code_req_rsp = ''''00'''') 
 				then
-						''Aprobada''
-		else ''Rechazada''
+						''''Aprobada''''
+		else ''''Rechazada''''
 	end  as Estatus,
 	count(*) as Cantidad
 
@@ -273,11 +267,11 @@ export const FormatQuery = (dateRang: any, terminales: string): string => {
 
 	from [tm_trans_base].[dbo].[tm_trans] (nolock)  
 
-		where card_acceptor_term_id in ( @Terminal )
-		and (in_req between @StartDate and @EndDate
-		or in_adv between @StartDate and @EndDate
-		or in_rev between @StartDate and @EndDate
-		or in_recon_adv between @StartDate and @EndDate )
+		where card_acceptor_term_id in ('+@Terminal+')
+		and (in_req between '''''+@StartDate+' 00:00:00'''' and '''''+@EndDate+' 23:59:00''''
+		or in_adv between '''''+@StartDate+' 00:00:00'''' and '''''+@EndDate+' 23:59:00''''
+		or in_rev between '''''+@StartDate+' 00:00:00'''' and '''''+@EndDate+' 23:59:00''''
+		or in_recon_adv between'''''+@StartDate+' 00:00:00'''' and '''''+@EndDate+' 23:59:00'''' )
 
 	group by msg_type, rsp_code_req_rsp, sink_node, in_req, in_adv, in_recon_adv, in_rev) as g
 
@@ -287,24 +281,25 @@ export const FormatQuery = (dateRang: any, terminales: string): string => {
 
 
 	select
-	''TotalMonto'',
-	'' '',
-	'' '',
-	'' '',
+	''''TotalMonto'''',
+	'''' '''',
+	'''' '''',
+	'''' '''',
 	count(*) as Cantidad
 
 
 	from [tm_trans_base].[dbo].[tm_trans](nolock)  
 
-		where card_acceptor_term_id in (@Terminal)
-		and (in_req between @StartDate and @EndDate
-		or in_adv between @StartDate and @EndDate
-		or in_rev between @StartDate and @EndDate
-		or in_recon_adv between @StartDate and @EndDate )
+		where card_acceptor_term_id in ('+@Terminal+')
+		and (in_req between '''''+@StartDate+' 00:00:00'''' and '''''+@EndDate+' 23:59:00''''
+		or in_adv between '''''+@StartDate+' 00:00:00'''' and '''''+@EndDate+' 23:59:00''''
+		or in_rev between '''''+@StartDate+' 00:00:00'''' and '''''+@EndDate+' 23:59:00''''
+		or in_recon_adv between'''''+@StartDate+' 00:00:00'''' and '''''+@EndDate+' 23:59:00'''' )
 
 	order by Fecha, Origen, Cantidad asc
+	'')'
 
-
-	')
+	SET @StartHorus = convert(nvarchar(4000),@TSQL)
+	EXEC (@OPENQUERY+@StartHorus)
 `;
 };
