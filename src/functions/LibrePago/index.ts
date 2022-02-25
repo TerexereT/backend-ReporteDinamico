@@ -138,6 +138,7 @@ export const dateRang = (init: string, end: string): any => {
 
 export const FormatQuery = (dateRang: any, terminales: string): string => {
 	const { init, end } = dateRang;
+	console.log('libre Pago', process.env.NODE_ENV);
 	// console.log('librePago', { init, end }, { terminales });
 
 	return /* sql */ `
