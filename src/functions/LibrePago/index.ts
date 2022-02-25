@@ -282,8 +282,8 @@ export const FormatQuery = (dateRang: any, terminales: string): string => {
 
 
 	select
-	''''TotalMonto'''',
-	'''' '''',
+	''''Cantidad Total'''',
+	''''${terminales}'''',
 	'''' '''',
 	'''' '''',
 	count(*) as Cantidad
