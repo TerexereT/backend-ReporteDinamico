@@ -138,12 +138,13 @@ export const dateRang = (init: string, end: string): any => {
 
 export const FormatQuery = (dateRang: any, terminales: string): string => {
 	const { init, end } = dateRang;
+	console.log('libre Pago', process.env.NODE_ENV);
 	// console.log('librePago', { init, end }, { terminales });
 
 	return /* sql */ `
 
 	DECLARE @OPENQUERY nvarchar(4000), @TSQL nvarchar(4000), @LinkedServer nvarchar(4000), @Terminal varchar(255), @StartDate varchar(255), @EndDate varchar(255), @StartHorus nvarchar(4000), @EndHorus nvarchar(4000)
-	SET @LinkedServer = '[${process.env.NODE_ENV === 'prod' ? '' : 'PRUEBA_7218'}]'
+	SET @LinkedServer = '[${process.env.NODE_ENV === 'prod' ? 'POSTILION_7018' : 'PRUEBA_7218'}]'
 	SET @Terminal = '${terminales}'
 	SET @StartDate = '${init}'
 	SET @EndDate =   '${end}'
