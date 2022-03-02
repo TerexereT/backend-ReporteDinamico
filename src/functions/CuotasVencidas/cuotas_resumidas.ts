@@ -27,7 +27,7 @@ export const selects: select[] = [
 		query: `
 		Format(((Sum(montoTotal) * 1.16) * (SELECT * FROM OPENQUERY([${
 			NODE_ENV === 'prod' ? 'POSTILION_7019' : 'POSTILION_DESA'
-					}], 'SELECT TOP 1 valorVenta
+		}], 'SELECT TOP 1 valorVenta
 			FROM (
 			SELECT TOP 2 valorVenta 
 			FROM [rep_post_dia].[dbo].[tasas_dicom]
@@ -62,7 +62,7 @@ export const FormatQuery = (selects: string): string => {
 	return /*sql*/ `
     select ${selects} from PlanCuota
     left outer join Estatus as e ON estatusId = e.id
-    where estatusId in ('25','26') and fechaProceso <= GETDATE()
+    where estatusId in ('26') and fechaProceso <= GETDATE()
     group by aboTerminal, aboCodAfi, descripcion, tasaValor
 
     order by TERMINAL
