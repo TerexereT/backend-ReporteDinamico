@@ -62,7 +62,7 @@ export const FormatQuery = (selects: string): string => {
 	return /*sql*/ `
     select ${selects} from PlanCuota
     left outer join Estatus as e ON estatusId = e.id
-    where estatusId in ('26') and fechaProceso <= GETDATE()
+    where estatusId in ('25','26') and fechaProceso <= GETDATE()
     group by aboTerminal, aboCodAfi, descripcion, tasaValor
 
     order by TERMINAL
