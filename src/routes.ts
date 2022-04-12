@@ -10,6 +10,7 @@ import plan_comi_inactivo from './controller/mantenimiento/plan_comision_inactiv
 import plan_man_inactivo from './controller/mantenimiento/plan_mantenimiento_inactivo';
 import sin_comision from './controller/mantenimiento/sin_comision';
 import sin_plan from './controller/mantenimiento/sin_plan';
+import PagoCuota from './controller/PagoCuota';
 import ReporteACI from './controller/ReporteACI';
 
 export const Routes: any[] = [
@@ -156,5 +157,17 @@ export const Routes: any[] = [
 		route: '/libre-pago/keys',
 		controller: LibrePago,
 		action: 'keys',
+	},
+	{
+		method: 'get',
+		route: '/pago-cuotas/keys',
+		controller: PagoCuota,
+		action: 'keys',
+	},
+	{
+		method: 'post',
+		route: '/pago-cuota',
+		controller: PagoCuota,
+		action: 'allHistory',
 	},
 ];
