@@ -28,6 +28,14 @@ export const selects: select[] = [
 		key: 'FECHA_PAGO',
 		query: 'a.fechaPago as FECHA_PAGO',
 	},
+	{
+		key: 'LOGINd',
+		query: 'd.email as LOGINd',
+	},
+	{
+		key: 'OBSERVACIONES',
+		query: 'd.descript as OBSERVACIONES',
+	},
 ];
 
 const preQuery = (init, end) => /*sql*/ ``;
@@ -47,13 +55,15 @@ export const FormatQuery = (dateRang: any, terminales: string): string => {
 	const { init, end } = dateRang;
 
 	return /* sql */ `
-    select  a.aboterminal as TERMINAL, c.comerDesc as COMERCIO,  COUNT(CASE a.estatusId  WHEN '27' THEN 'cuota' END) as CANTIDAD_PAGADAS, 
-	sum(a.montoComision + a.montoIVA) as MONTO_PAGADO, a.fechaPago as FECHA_PAGO from PlanCuota as a 
+	select  a.aboterminal as TERMINAL, c.comerDesc as COMERCIO,  COUNT(CASE a.estatusId  WHEN '27' THEN 'cuota' END) as CANTIDAD_PAGADAS, 
+	REPLACE(sum(a.montoComision + a.montoIVA),'.',',') as MONTO_PAGADO, left(a.fechaPago, 11) AS FECHA_PAGO, d.email as LOGINd, d.descript as OBSERVACIONES 
+	from PlanCuota as a 
 	join Abonos b on b.aboTerminal=a.aboTerminal
 	join comercios  c on c.comerCod=b.abocodcomercio
-	where a.estatusId='27' AND a.fechaProcesoLoteCerrado IS NULL 
+	join general_logs d on  d.descript like '%'+a.aboTerminal+'%'
+	where a.estatusId='27' AND a.fechaProcesoLoteCerrado IS NULL and d.id_origin_logs='8'
 	and a.fechaPago between '${init}' and '${end}'
-	GROUP BY a.aboTerminal, c.comerDesc,a.estatusId, a.montoComision + a.montoIVA, a.fechaPago
-	ORDER BY 5
+	GROUP BY a.aboTerminal, c.comerDesc,a.estatusId, a.montoComision + a.montoIVA, a.fechaPago ,d.email,d.descript
+	ORDER BY 5 
 `;
 };
