@@ -53,7 +53,7 @@ export const FormatQuery = (dateRang: any, terminales: string): string => {
 	return /* sql */ `
 	select  a.aboterminal as TERMINAL, c.comerDesc as COMERCIO,  COUNT(CASE a.estatusId  WHEN '27' THEN 'cuota' END) as CANTIDAD_PAGADAS, 
 	REPLACE(sum(a.montoComision + a.montoIVA),'.',',') as MONTO_PAGADO, left(a.fechaPago, 11) AS FECHA_PAGO,
-	a.tasaValor TASA
+	left(a.tasaValor,5) as TASA
 	from PlanCuota as a 
 	join Abonos b on b.aboTerminal=a.aboTerminal
 	join comercios  c on c.comerCod=b.abocodcomercio
