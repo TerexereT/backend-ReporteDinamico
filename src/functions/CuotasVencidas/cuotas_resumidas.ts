@@ -38,7 +38,10 @@ export const selects: select[] = [
         `,
 	},
 	{ key: 'CANT_CUOTAS', query: `COUNT(aboterminal) as CANT_CUOTAS` },
-	{ key: 'ESTATUS', query: `descripcion as ESTATUS` },
+	{
+		key: 'ESTATUS',
+		query: `case estatusId when '25' then 'Vencida' when '26' then 'Vencida' end 'ESTATUS'`,
+	},
 ];
 
 export const selectQuery = (keys: string[]) => {
@@ -61,9 +64,8 @@ export const FormatQuery = (selects: string): string => {
 
 	return /*sql*/ `
     select ${selects} from PlanCuota
-    left outer join Estatus as e ON estatusId = e.id
     where estatusId in ('25','26') and fechaProceso <= GETDATE()
-    group by aboTerminal, aboCodAfi, descripcion, tasaValor
+    group by aboTerminal, aboCodAfi, estatusId, tasaValor,fechaProceso 
 
     order by TERMINAL
 
