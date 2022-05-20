@@ -40,7 +40,7 @@ export const selects: select[] = [
 	{ key: 'CANT_CUOTAS', query: `COUNT(aboterminal) as CANT_CUOTAS` },
 	{
 		key: 'ESTATUS',
-		query: `case estatusId when '25' then 'Vencida' when '26' then 'Vencida' end 'ESTATUS'`,
+		query: `'VENCIDA' as ESTATUS`,
 	},
 ];
 
@@ -63,9 +63,10 @@ export const FormatQuery = (selects: string): string => {
 	const today: string = DateTime.local().toFormat('yyyy-MM-dd');
 
 	return /*sql*/ `
-    select ${selects} from PlanCuota
+    select ${selects}
+	from PlanCuota
     where estatusId in ('25','26') and fechaProceso <= GETDATE()
-    group by aboTerminal, aboCodAfi, estatusId, tasaValor,fechaProceso 
+	group by aboTerminal, aboCodAfi, tasaValor
 
     order by TERMINAL
 
