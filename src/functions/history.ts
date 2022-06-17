@@ -34,6 +34,10 @@ export const selects: select[] = [
 		query: `CONCAT('A-',[N_AFILIADO] ) as [N_AFILIADO]`,
 	},
 	{
+		key: 'SPONSOR_BANK',
+		query: `SPONSOR_BANK`,
+	},
+	{
 		key: 'TERMINAL',
 		query: `CONCAT('T-',TERMINAL ) as TERMINAL`,
 	},
@@ -251,7 +255,7 @@ export const dateRang = (init: string, end: string): any => {
 	return { init: DateTime.fromFormat(init, 'YYYY-MM-DD'), end: DateTime.fromFormat(end, 'YYYY-MM-DD') };
 };
 
-export const FormatQuery = (dateRang: any, selects: string): string => {
+export const FormatQuery = (dateRang: any, selects: string, sponsor?: number): string => {
 	const { init, end } = dateRang;
 	console.log({ init, end });
 
@@ -263,7 +267,8 @@ export const FormatQuery = (dateRang: any, selects: string): string => {
 	from (
 		Select 
 		a.aboCodAfi as [N_AFILIADO],
-		a.aboTerminal AS TERMINAL, 	
+		case  when a.aboCodAfi LIKE '%000000720%' then 'BVC' else 'PLAZA' END as 'SPONSOR_BANK', 
+		a.aboTerminal AS TERMINAL,	
 		d.aliNombres AS NOMBRES,
 		d.aliApellidos AS APELLIDOS,
 		c.comerRif AS [CEDULA_RIF], 
@@ -341,7 +346,9 @@ export const FormatQuery = (dateRang: any, selects: string): string => {
 	
 	 
 	
-	WHERE   hisFechaEjecucion BETWEEN  '${init}' and '${end}' GROUP BY hisFechaEjecucion, aboTerminal,hisFechaProceso,aboCodAfi, hisLote ) AS a INNER JOIN
+	WHERE   hisFechaEjecucion BETWEEN  '${init}' and '${end}' ${
+		sponsor ? `and SUBSTRING(aboCodAfi, 7, 3)='${sponsor}'` : ''
+	}  GROUP BY hisFechaEjecucion, aboTerminal,hisFechaProceso,aboCodAfi, hisLote ) AS a INNER JOIN
 	
 	Abonos AS b ON a.aboTerminal = b.aboTerminal INNER JOIN
 	
@@ -375,7 +382,7 @@ export const FormatQuery = (dateRang: any, selects: string): string => {
 	
 	TASA, TIPO_DE_CARTERA, N_AFILIADO, CEDULA_RIF, COMERCIO, DIRECCION, COD_COMERCIO, N_CUENTA, FechaPreceso, FechaEjec, MontoBrutoTDD
 	
-	,MontoBrutoTDC, MontoBrutoVisaElectro ,monto_comision_tdd, CANT_TRANSACCION, NOMBRES, APELLIDOS
+	,MontoBrutoTDC, MontoBrutoVisaElectro ,monto_comision_tdd, CANT_TRANSACCION, NOMBRES, APELLIDOS, SPONSOR_BANK
 	
 	 
 	

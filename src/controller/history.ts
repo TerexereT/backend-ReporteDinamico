@@ -24,12 +24,13 @@ export default class History {
 
 			// console.log('req.', req.query);
 
-			const { init, end }: any = req.query;
+			const { init, end, sponsor }: any = req.query;
+			console.log('sponsor', sponsor);
 
 			// formateamos la data
 			const Dates = dateRang(init, end);
 			const selects = selectQuery(keys);
-			const query = FormatQuery({ init, end }, selects);
+			const query = FormatQuery({ init, end }, selects, sponsor);
 
 			// console.log('query', query);
 
