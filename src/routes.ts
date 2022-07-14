@@ -12,6 +12,7 @@ import sin_comision from './controller/mantenimiento/sin_comision';
 import sin_plan from './controller/mantenimiento/sin_plan';
 import PagoCuota from './controller/PagoCuota';
 import ReporteACI from './controller/ReporteACI';
+import Transaccional from './controller/Transaccional';
 
 export const Routes: any[] = [
 	{
@@ -169,5 +170,29 @@ export const Routes: any[] = [
 		route: '/pago-cuota',
 		controller: PagoCuota,
 		action: 'allHistory',
+	},
+	{
+		method: 'get',
+		route: '/transaccional/keys',
+		controller: Transaccional,
+		action: 'keys',
+	},
+	{
+		method: 'get',
+		route: '/transaccional/options',
+		controller: Transaccional,
+		action: 'options',
+	},
+	{
+		method: 'get',
+		route: '/transaccional/transType',
+		controller: Transaccional,
+		action: 'transType',
+	},
+	{
+		method: 'post',
+		route: '/transaccional',
+		controller: Transaccional,
+		action: 'all',
 	},
 ];
