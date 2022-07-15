@@ -1,5 +1,5 @@
 // modules
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 import list from './list';
 const Key: string = process.env.SECRET!;
@@ -15,7 +15,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
 		// use
 
-		console.log('ruta:', req.baseUrl, '/', result);
+		// console.log('ruta:', req.baseUrl, '/', result);
 		if (result) {
 			if (req.headers['authorization']) {
 				const token: string = req.headers['authorization'];
