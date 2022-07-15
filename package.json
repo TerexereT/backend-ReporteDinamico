@@ -5,9 +5,13 @@
 	"devDependencies": {
 		"@types/cors": "^2.8.12",
 		"@types/express": "^4.17.13",
+		"@types/jsonwebtoken": "^8.5.8",
+		"@types/ldap-authentication": "^2.2.0",
 		"@types/luxon": "^2.0.3",
+		"@types/multer": "^1.4.7",
 		"@types/node": "^8.10.66",
 		"@types/numeral": "^2.0.1",
+		"@types/uuid": "^8.3.4",
 		"ts-node": "^10.2.1",
 		"typescript": "3.3.3333"
 	},
@@ -16,13 +20,20 @@
 		"cors": "^2.8.5",
 		"dotenv": "^10.0.0",
 		"express": "^4.15.4",
+		"express-fileupload": "^1.4.0",
+		"jimp": "^0.16.1",
+		"jsonwebtoken": "^8.5.1",
+		"ldap-authentication": "^2.2.9",
 		"luxon": "^2.0.2",
 		"mssql": "^4.0.4",
 		"multer": "^1.4.3",
 		"nodemon": "^2.0.12",
 		"numeral": "^2.0.6",
+		"path": "^0.12.7",
 		"reflect-metadata": "^0.1.10",
-		"typeorm": "0.2.37"
+		"typeorm": "0.2.37",
+		"uuid": "^8.3.2",
+		"xlsx": "^0.18.5"
 	},
 	"scripts": {
 		"start": "ts-node src/index.ts",

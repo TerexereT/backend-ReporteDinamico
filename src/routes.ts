@@ -1,19 +1,29 @@
 // import {UserController} from "./controller/UserController";
 
 import Aboterminal from './controller/aboterminal';
+import Auth from './controller/auth';
 import CancelarCuotas from './controller/CancelarCuotas';
 import cuotas_resumidas from './controller/CuotasVencidas/cuotas_resumidas';
 import cuotas_vencidas from './controller/CuotasVencidas/cuotas_vencidas';
 import History from './controller/history';
 import LibrePago from './controller/LibrePago';
+import upExcel from './controller/Lote1000pagos/upExcel';
 import plan_comi_inactivo from './controller/mantenimiento/plan_comision_inactivo';
 import plan_man_inactivo from './controller/mantenimiento/plan_mantenimiento_inactivo';
 import sin_comision from './controller/mantenimiento/sin_comision';
 import sin_plan from './controller/mantenimiento/sin_plan';
 import PagoCuota from './controller/PagoCuota';
 import ReporteACI from './controller/ReporteACI';
+import Transaccional from './controller/Transaccional';
 
 export const Routes: any[] = [
+	{
+		method: 'post',
+		route: '/auth/login',
+		controller: Auth,
+		action: 'login',
+	},
+	{ method: 'get', route: '/auth/user', controller: Auth, action: 'getLogin' },
 	{
 		method: 'post',
 		route: '/history',
@@ -169,5 +179,35 @@ export const Routes: any[] = [
 		route: '/pago-cuota',
 		controller: PagoCuota,
 		action: 'allHistory',
+	},
+	{
+		method: 'post',
+		route: '/1000pagos/up/leto',
+		controller: upExcel,
+		action: 'upFile',
+	},
+	{
+		method: 'get',
+		route: '/transaccional/keys',
+		controller: Transaccional,
+		action: 'keys',
+	},
+	{
+		method: 'get',
+		route: '/transaccional/options',
+		controller: Transaccional,
+		action: 'options',
+	},
+	{
+		method: 'get',
+		route: '/transaccional/transType',
+		controller: Transaccional,
+		action: 'transType',
+	},
+	{
+		method: 'post',
+		route: '/transaccional',
+		controller: Transaccional,
+		action: 'all',
 	},
 ];

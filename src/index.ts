@@ -6,6 +6,9 @@ import { Routes } from './routes';
 import { preRoutes, posRoutes } from './Middlewares/index';
 require('dotenv').config();
 
+//
+var fileupload = require('express-fileupload');
+
 const { HOST, USER, PASS, DB } = process.env;
 
 createConnection()
@@ -16,6 +19,9 @@ createConnection()
 		app.use(express.json());
 
 		preRoutes(app);
+
+		app.use(fileupload());
+		app.use(express.urlencoded({ extended: true }));
 
 		// register express routes from defined application routes
 		Routes.forEach((route) => {
