@@ -9,7 +9,7 @@ interface body {
 
 interface Querys {
 	transOption: number;
-	monthoption: number;
+	monthoption: string;
 }
 
 interface msg {
