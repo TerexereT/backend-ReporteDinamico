@@ -45,9 +45,9 @@ createConnection()
 
 		app.listen(app.get('port'), () => {
 			console.log(`app corriendo en el puerto http://localhost:${app.get('port')} `);
-			// console.log('            ()_()');
-			// console.log(`            (o.o)`);
-			// console.log('            (|_|)*');
+			console.log('            ()_()');
+			console.log(`            (o.o)`);
+			console.log('            (|_|)*');
 			console.log('DB OK');
 		});
 		/*
