@@ -1,9 +1,9 @@
-import 'reflect-metadata';
-import { createConnection, getConnection } from 'typeorm';
 import * as express from 'express';
 import { Request, Response } from 'express';
+import 'reflect-metadata';
+import { createConnection } from 'typeorm';
+import { posRoutes, preRoutes } from './Middlewares/index';
 import { Routes } from './routes';
-import { preRoutes, posRoutes } from './Middlewares/index';
 require('dotenv').config();
 
 //
