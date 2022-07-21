@@ -25,7 +25,7 @@ export default class History {
 			// console.log('req.', req.query);
 
 			const { init, end, sponsor }: any = req.query;
-			console.log('sponsor', sponsor);
+			// console.log('sponsor', sponsor);
 
 			// formateamos la data
 			const Dates = dateRang(init, end);
