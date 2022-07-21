@@ -257,7 +257,7 @@ export const dateRang = (init: string, end: string): any => {
 
 export const FormatQuery = (dateRang: any, selects: string, sponsor?: number): string => {
 	const { init, end } = dateRang;
-	console.log({ init, end });
+	// console.log({ init, end });
 
 	return /* sql */ `
 	${preQuery(init, end)}
@@ -346,9 +346,10 @@ export const FormatQuery = (dateRang: any, selects: string, sponsor?: number): s
 	
 	 
 	
-	WHERE   hisFechaEjecucion BETWEEN  '${init}' and '${end}' ${
-		sponsor ? `and SUBSTRING(aboCodAfi, 7, 3)='${sponsor}'` : ''
-	}  GROUP BY hisFechaEjecucion, aboTerminal,hisFechaProceso,aboCodAfi, hisLote ) AS a INNER JOIN
+	WHERE   hisFechaEjecucion BETWEEN  '${init}' and '${end}' 
+	and hisFechaEjecucion <> hisFechaProceso
+	${sponsor ? `and SUBSTRING(aboCodAfi, 7, 3)='${sponsor}'` : ''}
+	GROUP BY hisFechaEjecucion, aboTerminal,hisFechaProceso,aboCodAfi, hisLote ) AS a INNER JOIN
 	
 	Abonos AS b ON a.aboTerminal = b.aboTerminal INNER JOIN
 	
