@@ -56,7 +56,28 @@ export default class Auth {
 			//save in log
 			await saveLogs(resUser.email, 'POST', '/auth/login', `Login de Usuario`);
 
-			res.status(200).json({ message: 'login', user: resUser, access_token: token });
+			const userRes = {
+				login: resUser.login,
+				name: resUser.nombre,
+				id_department: {
+					name: 'prueba',
+					id: 1,
+					active: 1,
+				},
+				id_rol: {
+					name: 'prueba',
+					id: 1,
+					active: 1,
+				},
+			};
+
+			const info = {
+				user: userRes,
+				views: {},
+				permiss: [],
+			};
+
+			res.status(200).json({ message: 'login', ...info, access_token: token });
 		} catch (err) {
 			console.log(err);
 			res.status(400).json(err);
