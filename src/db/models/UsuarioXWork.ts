@@ -3,9 +3,6 @@ import {
 	CreateDateColumn,
 	Entity,
 	JoinColumn,
-	JoinTable,
-	ManyToMany,
-	OneToMany,
 	OneToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
@@ -14,7 +11,7 @@ import Department from './Department';
 import Roles from './Roles';
 import Usuarios from './Usuarios';
 
-@Entity('usuario_x_work')
+@Entity('Usuario_Work')
 export default class UsuarioXWork {
 	@PrimaryGeneratedColumn()
 	id?: number;

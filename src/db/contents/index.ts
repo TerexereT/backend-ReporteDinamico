@@ -24,5 +24,4 @@ createConnection().then(async () => {
 	console.log(6);
 	await permissions();
 	console.log('Listo');
-	return 0;
 });

@@ -1,5 +1,6 @@
 import { getRepository } from 'typeorm';
 import ViewsXDepartment from '../models/ViewsXDepartment';
+import { listViews } from './views';
 
 const access_views = async (): Promise<void> => {
 	let data: ViewsXDepartment[] = [
@@ -8,6 +9,13 @@ const access_views = async (): Promise<void> => {
 			id_views: 1,
 		},
 	];
+
+	listViews.forEach((element, index) => {
+		data.push({
+			id_department: 2,
+			id_views: index + 1,
+		});
+	});
 
 	//
 	const valid = await getRepository(ViewsXDepartment).find({ where: data });

@@ -2,6 +2,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 import list from './list';
+require('dotenv').config();
 const Key: string = process.env.SECRET!;
 
 /** this middleware is for convert json web token in Objet format */
@@ -15,12 +16,16 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
 		// use
 
-		// console.log('ruta:', req.baseUrl, '/', result);
+		console.log('ruta:', req.path, '/', result);
 		if (result) {
 			if (req.headers['authorization']) {
 				const token: string = req.headers['authorization'];
 
+				console.log(Key);
+
 				const Resp: any = verify(token, Key);
+
+				console.log(Resp);
 
 				req.headers.token = Resp;
 				req.headers.token_text = token;
@@ -32,6 +37,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 			next();
 		}
 	} catch (err) {
+		console.log('error token', err);
 		res.status(400).json(err);
 	}
 };

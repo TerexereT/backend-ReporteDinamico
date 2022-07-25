@@ -2,9 +2,9 @@ import { Entity, PrimaryGeneratedColumn, JoinColumn, ManyToOne, Column, Index } 
 import fm_department from './Department';
 import Views from './Views';
 
-@Entity('views_x_department')
+@Entity('ViewsXDep')
 @Index(['id_department', 'id_views'], { unique: true })
-export default class ViewsXDepartment {
+export default class ViewsXDep {
 	@PrimaryGeneratedColumn()
 	id?: number;
 

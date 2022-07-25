@@ -8,9 +8,48 @@ export const listViews: Views[] = [
 		root: 'home',
 	},
 	{
-		//1
-		name: 'Reporte 1',
-		root: 'reporte',
+		name: 'Inicio',
+		root: 'baseUrl',
+	},
+	{
+		name: 'Cancelar Cuotas',
+		root: 'cancelarCuotas',
+	},
+	{
+		name: 'Cuotas Vencidas',
+		root: 'cuotas',
+	},
+	{
+		name: 'Cuotas Resumidas',
+		root: 'cuotasR',
+	},
+	{
+		name: 'Libre Pago',
+		root: 'librePago',
+	},
+	{
+		name: 'Mantenimiento',
+		root: 'mantenimientos',
+	},
+	{
+		name: 'Movimientos',
+		root: 'movimientos',
+	},
+	{
+		name: 'Pago Cuota',
+		root: 'pagoCuota',
+	},
+	{
+		name: 'Mantenimiento por ACI',
+		root: 'reportexaci',
+	},
+	{
+		name: 'Transaccional',
+		root: 'transaccional',
+	},
+	{
+		name: 'Cargar Neto',
+		root: 'loadExcel',
 	},
 ];
 
