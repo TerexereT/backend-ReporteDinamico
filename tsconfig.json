@@ -1,13 +1,15 @@
 {
 	"compilerOptions": {
-		"types": ["node"],
-		"lib": ["es5", "es6"],
 		"target": "es5",
 		"module": "commonjs",
+		"types": ["node"],
+		"lib": ["es5", "es6"],
 		"moduleResolution": "node",
 		"outDir": "./build",
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"sourceMap": true
-	}
+	},
+	"include": ["./src/**/*.tsx", "./src/**/*.ts"],
+	"exclude": ["node_modules"]
 }
