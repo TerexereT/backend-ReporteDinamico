@@ -21,16 +21,21 @@ export default (req: Request, res: Response, next: NextFunction) => {
 			if (req.headers['authorization']) {
 				const token: string = req.headers['authorization'];
 
-				console.log(Key);
+				//console.log(Key);
 
-				const Resp: any = verify(token, Key);
+				try {
+					const Resp: any = verify(token, Key);
 
-				console.log(Resp);
+					console.log(Resp);
 
-				req.headers.token = Resp;
-				req.headers.token_text = token;
+					req.headers.token = Resp;
+					req.headers.token_text = token;
 
-				next();
+					next();
+				} catch (err) {
+					res.status(401).json({ ...err, code: 401 });
+				}
+
 				//
 			} else throw { status: false, message: 'JWT es requerido', code: 400 };
 		} else {
