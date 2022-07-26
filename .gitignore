@@ -6,4 +6,4 @@ tmp/
 temp/
 yarn.lock
 .env
-ormconfig.*
+#ormconfig.*
