@@ -29,6 +29,7 @@ export default class History {
 
 			// formateamos la data
 			const Dates = dateRang(init, end);
+			console.log(init, end);
 			const selects = selectQuery(keys);
 			const query = FormatQuery({ init, end }, selects, sponsor);
 

@@ -38,15 +38,25 @@ export const FormatQuery = (tipo: string, organizationOption: number, monthoptio
 	const organization = organizations[organizationOption].query;
 
 	// Formatear el rango de fecha
-	const firstDate = DateTime.fromFormat(
-		`${monthoption}-01`, // Prueba
-		// `${today.year}-${monthoption >= 10 ? monthoption : `0${monthoption}`}-01`,
-		'yyyy-MM-dd'
-	).toFormat(`yyyy-MM-dd 00:00:00.000`);
-	const lastDay = DateTime.fromFormat(firstDate, 'yyyy-MM-dd 00:00:00.000')
+	console.log(monthoption);
+
+	const firstDate: string = `${monthoption}-01 00:00:00.000`; // Prueba
+	//).toFormat(`yyyy-MM-dd 00:00:00.000`);
+
+	const date = new Date(firstDate); //date
+	//
+	const last_date = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+	//console.log(last_date);
+	//por ahora
+	const lastDay = `${last_date.getFullYear()}-${last_date.getMonth() + 1}-${last_date.getDate()} 23:59:59.999`;
+	//console.log(firstDate, lastDay);
+	//antes
+	/*
+	const lastDay: string = DateTime.fromFormat(firstDate, 'yyyy-MM-dd 00:00:00.000')
 		.plus({ months: 1 })
 		.minus({ days: 1 })
 		.toFormat(`yyyy-MM-dd 23:59:59.999`);
+	*/
 
 	return /* sql */ /*sql*/ `
 	EXEC ${
