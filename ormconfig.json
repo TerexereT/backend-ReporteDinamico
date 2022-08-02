@@ -1,11 +1,11 @@
 {
 	"type": "mssql",
-	"host": "10.198.72.60",
+	"host": "10.198.72.31",
 	"username": "amendoza",
 	"password": "Am1523246.",
 	"database": "milpagos",
 	"options": {
-		"encrypt": true,
+		"encrypt": false,
 		"trustServerCertificate": true,
 		"cancelTimeout": 15000
 	},
