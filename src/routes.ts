@@ -14,6 +14,7 @@ import sin_comision from './controller/mantenimiento/sin_comision';
 import sin_plan from './controller/mantenimiento/sin_plan';
 import PagoCuota from './controller/PagoCuota';
 import ReporteACI from './controller/ReporteACI';
+import Seguridad from './controller/Seguridad';
 import Transaccional from './controller/Transaccional';
 
 export const Routes: any[] = [
@@ -209,5 +210,23 @@ export const Routes: any[] = [
 		route: '/transaccional',
 		controller: Transaccional,
 		action: 'all',
+	},
+	{
+		method: 'get',
+		route: '/seguridad/worker/all',
+		controller: Seguridad,
+		action: 'allWorker',
+	},
+	{
+		method: 'get',
+		route: '/seguridad/department/all',
+		controller: Seguridad,
+		action: 'allDepartment',
+	},
+	{
+		method: 'get',
+		route: '/seguridad/roles/all',
+		controller: Seguridad,
+		action: 'allRoles',
 	},
 ];

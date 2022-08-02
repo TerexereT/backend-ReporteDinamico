@@ -39,14 +39,15 @@ export default class sin_plan {
 
 			// formateamos la data
 			const query = FormatQuery(tipo[0], transOption, monthoption);
+			//console.log('query', query);
 
 			// ejecucion del querys ya formateado
 			// const resp: any = await getConnection().query(query);
 			const info: any = await getConnection().query(query);
-
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {
+			//console.log(err);
 			res.status(400).json(err);
 		}
 	}
@@ -75,6 +76,7 @@ export default class sin_plan {
 
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {
+			console.log(err);
 			res.status(400).json(err);
 		}
 	}
@@ -94,6 +96,7 @@ export default class sin_plan {
 
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {
+			console.log(err);
 			res.status(400).json(err);
 		}
 	}
