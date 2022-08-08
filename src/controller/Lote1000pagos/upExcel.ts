@@ -30,31 +30,39 @@ export default class upExcel {
 		try {
 			if (!req.body.lote) throw { message: 'No se encontro ningun lote' };
 
-			const lote = JSON.parse(req.body.lote);
+			const lote: any[] = JSON.parse(req.body.lote);
 
-			//console.log(lote);
+			if (!lote.length) throw { message: 'No se encontro ningun lote' };
 
-			lote.forEach(async (item: Lote, index: number) => {
-				const terminal = await getRepository(Historico_Contracargo).findOne({ TERMINAL: item.Terminal });
-				if (terminal) {
-					//update
-					let suma = terminal.MONTO_COBRA + item['Monto de Cuota ($)'];
+			//let newLote: Historico_Contracargo[] = [];
 
-					//console.log(item.Terminal, 'sumar: ', terminal.MONTO_COBRA, '+', item['Monto de Cuota ($)'], ':', suma);
-					await getRepository(Historico_Contracargo).update(terminal.ID, {
-						MONTO_COBRA: suma,
-					});
-				} else {
-					//save
+			for (let i = 0; i < lote.length; i++) {
+				let item = lote[i];
+				//console.log('item', item);
+				let term = item[Object.keys(item)[0]];
+				let monto: number = item[Object.keys(item)[1]];
+				if (term) {
+					const terminal = await getRepository(Historico_Contracargo).findOne({ TERMINAL: term });
+					if (terminal) {
+						//update
+						let suma = terminal.MONTO_COBRA + monto;
 
-					//console.log('save', item.Terminal, '/', item['Monto de Cuota ($)']);
-					await getRepository(Historico_Contracargo).save({
-						TERMINAL: item.Terminal,
-						MONTO_COBRA: item['Monto de Cuota ($)'],
-					});
+						//console.log(item.Terminal, 'sumar: ', terminal.MONTO_COBRA, '+', item['Monto de Cuota ($)'], ':', suma);
+						await getRepository(Historico_Contracargo).update(terminal.ID, {
+							MONTO_COBRA: suma,
+						});
+					} else {
+						//save
+						//console.log('newlote', term);
+						let newLote = {
+							TERMINAL: term,
+							MONTO_COBRA: monto,
+							MONTO_PAGO: 0,
+						};
+						await getRepository(Historico_Contracargo).save(newLote);
+					}
 				}
-				//console.log(index, item);
-			});
+			}
 
 			res.status(200).json({ message: 'File Saved' });
 		} catch (err) {

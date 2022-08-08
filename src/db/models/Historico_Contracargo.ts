@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('HISTORICO_CONTRACARGO', { synchronize: false })
 export default class Historico_Contracargo {
 	@PrimaryGeneratedColumn()
-	ID!: number;
+	ID?: number;
 
 	@Column({ nullable: false })
 	TERMINAL!: string;
