@@ -52,13 +52,12 @@ export default class upExcel {
 							MONTO_COBRA: suma,
 						});
 					} else {
-						//save
-						//console.log('newlote', term);
 						let newLote = {
 							TERMINAL: term,
 							MONTO_COBRA: monto,
 							MONTO_PAGO: 0,
 						};
+						//
 						await getRepository(Historico_Contracargo).save(newLote);
 					}
 				}
