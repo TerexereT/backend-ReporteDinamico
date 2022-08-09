@@ -8,9 +8,9 @@ export default class Historico_Contracargo {
 	@Column({ nullable: false })
 	TERMINAL!: string;
 
-	@Column({ nullable: false })
+	@Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
 	MONTO_COBRA!: number;
 
-	@Column({ nullable: false })
+	@Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
 	MONTO_PAGO!: number;
 }
