@@ -10,6 +10,10 @@ export const listDeparment: Department[] = [
 		//2
 		name: 'Operaciones',
 	},
+	{
+		//2
+		name: 'Seguridad',
+	},
 ];
 
 const department = async (): Promise<void> => {

@@ -219,7 +219,7 @@ export const Routes: any[] = [
 	},
 	{
 		method: 'get',
-		route: '/seguridad/department/all',
+		route: '/seguridad/departments/all',
 		controller: Seguridad,
 		action: 'allDepartment',
 	},
@@ -229,4 +229,12 @@ export const Routes: any[] = [
 		controller: Seguridad,
 		action: 'allRoles',
 	},
+	/*
+	{
+		method: 'get',
+		route: 'seguridad/worker/:id',
+		controller: Seguridad,
+		action: 'dataUser',
+	},
+	*/
 ];
