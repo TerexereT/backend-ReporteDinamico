@@ -48,8 +48,12 @@ export const listViews: Views[] = [
 		root: 'transaccional',
 	},
 	{
-		name: 'Cargar Neto',
-		root: 'loadExcel',
+		name: 'Archivo ContraCargo',
+		root: 'contraCargo',
+	},
+	{
+		name: 'Gestion de Seguridad',
+		root: 'Gestion de Seguridad',
 	},
 ];
 

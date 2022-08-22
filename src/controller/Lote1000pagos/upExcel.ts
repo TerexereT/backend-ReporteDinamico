@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import * as path from 'path';
 //
 import { getRepository } from 'typeorm';
+import ContraCargo from '../../db/models/ContraCargo';
 import Historico_Contracargo from '../../db/models/Historico_Contracargo';
 
 interface Lote {
@@ -28,7 +29,8 @@ export const base: string = path.resolve('static');
 export default class upExcel {
 	async upFile(req: Request<body>, res: Response<msg>) {
 		try {
-			if (!req.body.lote) throw { message: 'No se encontro ningun lote' };
+			console.log(req.body);
+			if (!req.body.lote && !req.body.nameFile) throw { message: 'No se encontro ningun lote' };
 
 			const lote: any[] = JSON.parse(req.body.lote);
 
@@ -62,6 +64,10 @@ export default class upExcel {
 					}
 				}
 			}
+
+			await getRepository(ContraCargo).save({
+				name: req.body.nameFile,
+			});
 
 			res.status(200).json({ message: 'File Saved' });
 		} catch (err) {
