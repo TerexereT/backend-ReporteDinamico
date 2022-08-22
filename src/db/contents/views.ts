@@ -49,11 +49,15 @@ export const listViews: Views[] = [
 	},
 	{
 		name: 'Archivo ContraCargo',
-		root: 'contraCargo',
+		root: 'contraCargoUp',
 	},
 	{
 		name: 'Gestion de Seguridad',
 		root: 'Gestion de Seguridad',
+	},
+	{
+		name: 'Contracargos',
+		root: 'contracargo',
 	},
 ];
 

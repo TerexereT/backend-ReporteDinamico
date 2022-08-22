@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import * as path from 'path';
 //
-import { getRepository } from 'typeorm';
-import ContraCargo from '../../db/models/ContraCargo';
+import { getConnection, getRepository } from 'typeorm';
+import contra_cargo from '../../db/models/contra_cargo';
+import ContraCargo from '../../db/models/contra_cargo';
 import Historico_Contracargo from '../../db/models/Historico_Contracargo';
 
 interface Lote {
@@ -29,7 +30,35 @@ export const base: string = path.resolve('static');
 export default class upExcel {
 	async upFile(req: Request<body>, res: Response<msg>) {
 		try {
-			console.log(req.body);
+			//console.log(req.body);
+			const date = new Date();
+
+			//console.log(`${date.}-${date.getMonth}-${date.getDate}`);
+			const iso = date.toISOString().split('T')[0];
+
+			console.log(date);
+			console.log(date.toISOString());
+			console.log(iso);
+
+			const dateCargo = await getRepository(contra_cargo).findOne({
+				where: { createdAt: iso },
+			});
+
+			if (dateCargo) {
+				console.log('existe archivo -> ', dateCargo.name);
+			}
+
+			/*
+			const dateFile = await getConnection()
+				.createQueryBuilder(contra_cargo, 'contracargo')
+				.where(`DATE_TRUNC('day', "datetime") = :date`, {
+					date: `${date.getFullYear}-${date.getMonth}-${date.getDate}`,
+				})
+				.getMany();
+				*/
+
+			throw { message: 'ok' };
+
 			if (!req.body.lote && !req.body.nameFile) throw { message: 'No se encontro ningun lote' };
 
 			const lote: any[] = JSON.parse(req.body.lote);
