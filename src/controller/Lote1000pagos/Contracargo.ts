@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import * as path from 'path';
 //
-import { getRepository } from 'typeorm';
+import { getConnection, getRepository } from 'typeorm';
 import ContraCargo from '../../db/models/ContraCargo';
 import Historico_Contracargo from '../../db/models/Historico_Contracargo';
+import { FormatQuery, selects } from '../../functions/Lote1000pagos/Contracargo';
 
 interface Lote {
 	Terminal: string;
@@ -21,12 +22,12 @@ interface Querys {
 
 interface msg {
 	message: string;
-	//info: any;
+	info?: any;
 }
 
 export const base: string = path.resolve('static');
 
-export default class upExcel {
+export default class Contracargo {
 	async upFile(req: Request<body>, res: Response<msg>) {
 		try {
 			console.log(req.body);
@@ -76,19 +77,39 @@ export default class upExcel {
 		}
 	}
 
-	/*
+	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
+		try {
+			const { init, end } = req.query;
+
+			// formatear SP a ejecutar
+			const sql = FormatQuery(init, end);
+
+			// ejecucion del querys ya formateado
+			const info = await getConnection().query(sql);
+			// retornar data al cliente
+			res.status(200).json({ message: 'reporte exitoso', info });
+		} catch (err) {
+			console.log('err', err);
+			res.status(400).json(err);
+		}
+	}
+
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
-			let info: any = {};
+			let keys: any = {};
 			selects.forEach((item: any) => {
 				const { key }: any = item;
 
-				info[key] = true;
+				keys[key] = key === 'TERMINAL';
 			});
-			res.status(200).json({ message: 'keys devueltas', info });
+
+			const { TERMINAL, ...resto } = keys;
+
+			const info: any = { TERMINAL, ...resto };
+
+			res.status(200).json({ message: 'columnas enviadas', info });
 		} catch (err) {
 			res.status(400).json(err);
 		}
 	}
-  */
 }
