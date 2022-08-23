@@ -12,9 +12,9 @@ export default class contra_cargo {
 	@Column({ default: 1 })
 	active?: number;
 
-	@CreateDateColumn()
+	@CreateDateColumn({ type: 'date' })
 	createdAt?: Date;
 
-	@UpdateDateColumn()
+	@UpdateDateColumn({ type: 'date' })
 	updatedAt?: Date;
 }

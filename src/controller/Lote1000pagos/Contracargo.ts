@@ -30,42 +30,32 @@ export const base: string = path.resolve('static');
 export default class Contracargo {
 	async upFile(req: Request<body>, res: Response<msg>) {
 		try {
-			//console.log(req.body);
-			const date = new Date();
+			if (!req.body.lote && !req.body.nameFile) throw { message: 'No se encontro ningun lote' };
 
-			//console.log(`${date.}-${date.getMonth}-${date.getDate}`);
-			const iso = date.toISOString().split('T')[0];
+			const lote: any[] = JSON.parse(req.body.lote);
 
-			console.log(date);
-			console.log(date.toISOString());
-			console.log(iso);
+			if (!lote.length) throw { message: 'No se encontro ningun lote' };
+			const iso = new Date().toISOString().split('T')[0];
 
 			const dateCargo = await getRepository(contra_cargo).findOne({
 				where: { createdAt: iso },
 			});
 
 			if (dateCargo) {
-				console.log('existe archivo -> ', dateCargo.name);
+				throw { message: 'El dia de hoy ya se cargo un archivo de ContraCargo' };
 			}
 
-			/*
-			const dateFile = await getConnection()
-				.createQueryBuilder(contra_cargo, 'contracargo')
-				.where(`DATE_TRUNC('day', "datetime") = :date`, {
-					date: `${date.getFullYear}-${date.getMonth}-${date.getDate}`,
-				})
-				.getMany();
-				*/
-
-			throw { message: 'ok' };
-
-			if (!req.body.lote && !req.body.nameFile) throw { message: 'No se encontro ningun lote' };
-
-			const lote: any[] = JSON.parse(req.body.lote);
-
-			if (!lote.length) throw { message: 'No se encontro ningun lote' };
-
-			//let newLote: Historico_Contracargo[] = [];
+			lote.forEach((item: any, index: number) => {
+				let term = item[Object.keys(item)[0]];
+				let monto: number = item[Object.keys(item)[1]];
+				console.log(term, monto);
+				if (term.length !== 8) {
+					throw { message: `Tamaño del terminal ${term} invalido, registro ${index + 2}` };
+				}
+				if (!monto) {
+					throw { message: `Terminal: ${term} el monto es 0 o esta vacio, registro ${index + 2}` };
+				}
+			});
 
 			for (let i = 0; i < lote.length; i++) {
 				let item = lote[i];
