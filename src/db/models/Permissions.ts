@@ -13,7 +13,7 @@ import fm_actions from './Actions';
 import fm_roles from './Roles';
 
 @Entity()
-@Index(['id_department', 'id_rol', 'id_action'], { unique: true })
+@Index()
 export default class fm_permissions {
 	@PrimaryGeneratedColumn()
 	id?: number;

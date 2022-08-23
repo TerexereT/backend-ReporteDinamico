@@ -1,24 +1,26 @@
 import { getRepository } from 'typeorm';
 import Actions from '../models/Actions';
-
-export const listActions: Actions[] = [
-	{
-		name: 'base', //se va a utilizar para solo consultar
-		id_views: 1,
-		description: 'No hace nada',
-	},
-	//Acciones en vista 1
-	{
-		name: 'Ver reporte', //se va a utilizar para solo consultar
-		id_views: 2,
-		description: 'Ve los reportes de ...',
-	},
-];
+import { listViews } from './views';
 
 const actions = async (): Promise<void> => {
+	const data = [];
+	listViews.forEach((item: any, index: number) => {
+		if (index !== 10 && index !== 11) {
+			data.push({
+				name: 'Generar reporte', //se va a utilizar para solo consultar
+				id_views: index + 1,
+				description: 'Generar los reporte',
+			});
+		}
+	});
+	data.push({
+		name: 'Cargar Reporte', //se va a utilizar para solo consultar
+		id_views: 10,
+		description: 'Cargar reporte contracargo',
+	});
 	//
-	const valid = await getRepository(Actions).find({ where: listActions });
-	if (!valid.length) await getRepository(Actions).save(listActions);
+	const valid = await getRepository(Actions).find({ where: data });
+	if (!valid.length) await getRepository(Actions).save(data);
 };
 
 export default actions;

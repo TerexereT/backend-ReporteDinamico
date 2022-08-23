@@ -31,6 +31,7 @@ export const listViews: Views[] = [
 		root: 'movimientos',
 	},
 	{
+		//8
 		name: 'Pago Cuota',
 		root: 'pagoCuota',
 	},
@@ -43,10 +44,12 @@ export const listViews: Views[] = [
 		root: 'transaccional',
 	},
 	{
+		//11
 		name: 'Archivo ContraCargo',
 		root: 'contraCargoUp',
 	},
 	{
+		//12
 		name: 'Gestion de Seguridad',
 		root: 'Gestion de Seguridad',
 	},

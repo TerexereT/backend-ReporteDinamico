@@ -1,8 +1,6 @@
 import { getRepository } from 'typeorm';
 import Permissions from '../models/Permissions';
 //
-import { listActions } from './actions';
-import { listRoles } from './roles';
 
 const permissions = async (): Promise<void> => {
 	let data: Permissions[] = [
