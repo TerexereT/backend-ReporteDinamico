@@ -7,7 +7,7 @@ import cuotas_resumidas from './controller/CuotasVencidas/cuotas_resumidas';
 import cuotas_vencidas from './controller/CuotasVencidas/cuotas_vencidas';
 import History from './controller/history';
 import LibrePago from './controller/LibrePago';
-import upExcel from './controller/Lote1000pagos/upExcel';
+import Contracargo from './controller/Lote1000pagos/Contracargo';
 import plan_comi_inactivo from './controller/mantenimiento/plan_comision_inactivo';
 import plan_man_inactivo from './controller/mantenimiento/plan_mantenimiento_inactivo';
 import sin_comision from './controller/mantenimiento/sin_comision';
@@ -184,8 +184,20 @@ export const Routes: any[] = [
 	{
 		method: 'post',
 		route: '/1000pagos/up/leto',
-		controller: upExcel,
+		controller: Contracargo,
 		action: 'upFile',
+	},
+	{
+		method: 'get',
+		route: '/contracargo/keys',
+		controller: Contracargo,
+		action: 'keys',
+	},
+	{
+		method: 'get',
+		route: '/contracargo',
+		controller: Contracargo,
+		action: 'all',
 	},
 	{
 		method: 'get',
