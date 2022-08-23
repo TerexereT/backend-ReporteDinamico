@@ -3,11 +3,6 @@ import { getRepository } from 'typeorm';
 
 export const listViews: Views[] = [
 	{
-		//1
-		name: 'Inicio',
-		root: 'home',
-	},
-	{
 		name: 'Inicio',
 		root: 'baseUrl',
 	},
