@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateCol
 
 @Entity()
 @Index(['name'], { unique: true })
-export default class ContraCargo {
+export default class contra_cargo {
 	@PrimaryGeneratedColumn()
 	id?: number;
 
