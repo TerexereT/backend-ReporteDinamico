@@ -5,7 +5,7 @@ import Department from '../../db/models/Department';
 import Permissions from '../../db/models/Permissions';
 import Roles from '../../db/models/Roles';
 import Usuarios from '../../db/models/Usuarios';
-import UsuarioXWork from '../../db/models/UsuarioXWork';
+import UsuarioXWork from '../../db/models/Usuario_Work';
 import Views from '../../db/models/Views';
 import ViewsXDepartment from '../../db/models/ViewsXDepartment';
 import { FormatQuery, selects } from '../../functions/Transaccional';
@@ -124,8 +124,7 @@ export const dataUserData = async (req: Request<any, msg, body, Querys>, res: Re
 
 export const updateUserData = async (req: Request<any, msg, body, Querys>, res: Response<msg>): Promise<void> => {
 	try {
-		const idUser = req.params;
-		console.log(idUser);
+		const { id: idUser } = req.params;
 		const { id_rol, id_department, block }: any = req.body;
 
 		if (!id_rol || !id_department) throw { message: 'Faltan departamento o rol' };
@@ -138,7 +137,6 @@ export const updateUserData = async (req: Request<any, msg, body, Querys>, res: 
 
 		if (user) {
 			//update
-
 			await getRepository(UsuarioXWork).update(user.id, {
 				id_rol: id_rol,
 				id_department: id_department,
@@ -146,9 +144,10 @@ export const updateUserData = async (req: Request<any, msg, body, Querys>, res: 
 			});
 		} else {
 			//save
+			console.log(idUser, id_rol, id_department, block);
 			await getRepository(UsuarioXWork).save({
 				id_usuario: idUser,
-				id_rol: id_rol,
+				id_rol,
 				id_department: id_department,
 				active: block ? 0 : 1,
 			});
@@ -157,6 +156,7 @@ export const updateUserData = async (req: Request<any, msg, body, Querys>, res: 
 		//
 		res.status(200).json({ message: 'update user' });
 	} catch (err) {
+		console.log(err);
 		res.status(400).json(err);
 	}
 };

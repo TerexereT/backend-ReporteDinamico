@@ -2,7 +2,9 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	Index,
 	JoinColumn,
+	ManyToOne,
 	OneToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
@@ -12,7 +14,7 @@ import Roles from './Roles';
 import Usuarios from './Usuarios';
 
 @Entity('Usuario_Work')
-export default class UsuarioXWork {
+export default class Usuario_Work {
 	@PrimaryGeneratedColumn()
 	id?: number;
 
@@ -20,13 +22,15 @@ export default class UsuarioXWork {
 	@JoinColumn({ name: 'id_usuario' })
 	id_usuario!: number;
 
-	@OneToOne(() => Roles)
+	@Column({ nullable: false, default: 1 })
+	@ManyToOne(() => Roles)
 	@JoinColumn({ name: 'id_rol' })
-	id_rol!: number;
+	id_rol?: number;
 
-	@OneToOne(() => Department)
+	@Column({ nullable: false, default: 1 })
+	@ManyToOne(() => Department)
 	@JoinColumn({ name: 'id_department' })
-	id_department!: number;
+	id_department?: number;
 
 	@Column({ default: 1 })
 	active?: number;
