@@ -57,6 +57,11 @@ export const listViews: Views[] = [
 		name: 'Contracargos',
 		root: 'contracargo',
 	},
+	{
+		//14
+		name: 'Ejecutar Contracargos',
+		root: 'exec-contracargo',
+	},
 ];
 
 const views = async (): Promise<void> => {

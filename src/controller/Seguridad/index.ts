@@ -173,6 +173,12 @@ export const createDepartment = async (
 		const newDep = await getRepository(Department).save({
 			name: nameDep,
 		});
+
+		const vistToHome = await getRepository(ViewsXDepartment).save({
+			id_department: newDep.id,
+			id_views: 1,
+		});
+
 		//
 		res.status(200).json({ message: 'Departamento creado', info: newDep });
 	} catch (err) {

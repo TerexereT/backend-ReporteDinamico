@@ -201,6 +201,12 @@ export const Routes: any[] = [
 	},
 	{
 		method: 'get',
+		route: '/contracargo/exec',
+		controller: Contracargo,
+		action: 'execContracargo',
+	},
+	{
+		method: 'get',
 		route: '/transaccional/keys',
 		controller: Transaccional,
 		action: 'keys',

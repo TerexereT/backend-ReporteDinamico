@@ -130,4 +130,18 @@ export default class Contracargo {
 			res.status(400).json(err);
 		}
 	}
+
+	async execContracargo(req: Request<any, msg, body, Querys>, res: Response<msg>) {
+		try {
+			const date = new Date().toISOString().split('T')[0];
+			const { id, email }: any = req.headers.token;
+			console.log(id, email);
+
+			console.log('ejecutar contracargo el dia', date);
+
+			res.status(200).json({ message: 'contracargo ejecutado', info: { ok: true, line: 11 } });
+		} catch (err) {
+			res.status(400).json(err);
+		}
+	}
 }
