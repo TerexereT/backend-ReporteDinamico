@@ -3,6 +3,7 @@ import * as path from 'path';
 //
 import { getConnection, getRepository } from 'typeorm';
 import contra_cargo from '../../db/models/contra_cargo';
+import ejecutado_contracargo from '../../db/models/Ejecutado_Contracargo';
 import Historico_Contracargo from '../../db/models/Historico_Contracargo';
 import { FormatQuery, selects } from '../../functions/Lote1000pagos/Contracargo';
 
@@ -48,7 +49,7 @@ export default class Contracargo {
 			lote.forEach((item: any, index: number) => {
 				let term = item[Object.keys(item)[0]];
 				let monto: number = item[Object.keys(item)[1]];
-				console.log(term, monto);
+				//console.log(term, monto);
 				if (term.length !== 8) {
 					throw { message: `Tamaño del terminal ${term} invalido, registro ${index + 2}` };
 				}
@@ -135,9 +136,20 @@ export default class Contracargo {
 		try {
 			const date = new Date().toISOString().split('T')[0];
 			const { id, email }: any = req.headers.token;
-			console.log(id, email);
+			//console.log(id, email);
 
-			console.log('ejecutar contracargo el dia', date);
+			console.log('Ejecutar contracargo el dia ', date);
+			//const SP_contracargo: any = await getConnection().query(`EXEC sp_contracargos '${date}'`);
+			const SP_contracargo: any = await getConnection().query(`EXEC sp_contracargos '2022-08-08'`);
+
+			console.log('Respuesta sp -> ', SP_contracargo);
+
+			/*
+			//gurdar contrargo ejecutado
+			await getRepository(ejecutado_contracargo).save({
+				id_usuario: id,
+			});
+			*/
 
 			res.status(200).json({ message: 'contracargo ejecutado', info: { ok: true, line: 11 } });
 		} catch (err) {
