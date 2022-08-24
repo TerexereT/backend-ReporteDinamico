@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import { posRoutes, preRoutes } from './Middlewares/index';
+import Routex from './router';
 import { Routes } from './routes';
 require('dotenv').config();
 
@@ -22,6 +23,8 @@ createConnection()
 
 		app.use(fileupload());
 		app.use(express.urlencoded({ extended: true }));
+
+		Routex(app);
 
 		// register express routes from defined application routes
 		Routes.forEach((route) => {

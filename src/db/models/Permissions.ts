@@ -8,25 +8,24 @@ import {
 	CreateDateColumn,
 	UpdateDateColumn,
 } from 'typeorm';
-import fm_department from './Department';
-import fm_actions from './Actions';
-import fm_roles from './Roles';
+import department from './Department';
+import actions from './Actions';
+import roles from './Roles';
 
 @Entity()
-@Index(['id_department', 'id_rol', 'id_action'], { unique: true })
-export default class fm_permissions {
+export default class Permissions {
 	@PrimaryGeneratedColumn()
 	id?: number;
 
-	@ManyToOne(() => fm_department, (fm_department) => fm_department.permissions)
+	@ManyToOne(() => department, (department) => department.permissions)
 	@JoinColumn({ name: 'id_department' })
 	id_department!: number;
 
-	@ManyToOne(() => fm_roles, (fm_roles) => fm_roles.permissions)
+	@ManyToOne(() => roles, (roles) => roles.permissions)
 	@JoinColumn({ name: 'id_rol' })
 	id_rol!: number;
 
-	@ManyToOne(() => fm_actions, (fm_actions) => fm_actions.permissions)
+	@ManyToOne(() => actions, (actions) => actions.permissions)
 	@JoinColumn({ name: 'id_action' })
 	id_action!: number;
 

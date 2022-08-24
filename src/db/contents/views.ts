@@ -3,11 +3,6 @@ import { getRepository } from 'typeorm';
 
 export const listViews: Views[] = [
 	{
-		//1
-		name: 'Inicio',
-		root: 'home',
-	},
-	{
 		name: 'Inicio',
 		root: 'baseUrl',
 	},
@@ -36,6 +31,7 @@ export const listViews: Views[] = [
 		root: 'movimientos',
 	},
 	{
+		//8
 		name: 'Pago Cuota',
 		root: 'pagoCuota',
 	},
@@ -48,8 +44,23 @@ export const listViews: Views[] = [
 		root: 'transaccional',
 	},
 	{
-		name: 'Cargar Neto',
-		root: 'loadExcel',
+		//11
+		name: 'Archivo ContraCargo',
+		root: 'contraCargoUp',
+	},
+	{
+		//12
+		name: 'Gestion de Seguridad',
+		root: 'Gestion de Seguridad',
+	},
+	{
+		name: 'Contracargos',
+		root: 'contracargo',
+	},
+	{
+		//14
+		name: 'Ejecutar Contracargos',
+		root: 'exec-contracargo',
 	},
 ];
 
