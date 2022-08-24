@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class pool41661355335055 implements MigrationInterface {
-    name = 'pool41661355335055'
+export class Pool81661358604381 implements MigrationInterface {
+    name = 'Pool81661358604381'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "milpagos".."views" ("id" int NOT NULL IDENTITY(1,1), "name" nvarchar(255), "root" nvarchar(255), "active" int NOT NULL CONSTRAINT "DF_a5d821bd12a20c9e7bcd8fe5678" DEFAULT 1, "createdAt" datetime2 NOT NULL CONSTRAINT "DF_a8b7f725007cb9ddd8098a71813" DEFAULT getdate(), "updatedAt" datetime2 NOT NULL CONSTRAINT "DF_04f7f71efc2398d52010a4ab30e" DEFAULT getdate(), CONSTRAINT "PK_ae7537f375649a618fff0fb2cb6" PRIMARY KEY ("id"))`);
@@ -17,10 +17,8 @@ export class pool41661355335055 implements MigrationInterface {
         await queryRunner.query(`CREATE UNIQUE INDEX "IDX_65cada11aceb02caf4726b7b5a" ON "milpagos".."contra_cargo" ("name") `);
         await queryRunner.query(`CREATE TABLE "milpagos".."ejecutado_contracargo" ("id" int NOT NULL IDENTITY(1,1), "active" int NOT NULL CONSTRAINT "DF_b0781dae11117aacdc0abb6e899" DEFAULT 1, "createdAt" date NOT NULL CONSTRAINT "DF_c2e71568259f8af982c98c25db1" DEFAULT getdate(), "createdAtFull" datetime NOT NULL CONSTRAINT "DF_6255f74d55eb3383155172e2b4c" DEFAULT getdate(), "updatedAt" date NOT NULL CONSTRAINT "DF_288cdf22c5bf025931bf11e1a23" DEFAULT getdate(), "id_usuario" int, CONSTRAINT "PK_fd625de358dc82e05bc550a4787" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE UNIQUE INDEX "REL_803f0d64b1606c50350471d944" ON "milpagos".."ejecutado_contracargo" ("id_usuario") WHERE "id_usuario" IS NOT NULL`);
-        await queryRunner.query(`CREATE TABLE "milpagos".."Usuario_Work" ("id" int NOT NULL IDENTITY(1,1), "active" int NOT NULL CONSTRAINT "DF_85e1c52593395bb9306eb22fcc3" DEFAULT 1, "createdAt" datetime2 NOT NULL CONSTRAINT "DF_35de4ca069bb5fb3a0b405c9294" DEFAULT getdate(), "updatedAt" datetime2 NOT NULL CONSTRAINT "DF_86aaf9a29ce372a6cf7e973d512" DEFAULT getdate(), "id_usuario" int, "id_rol" int, "id_department" int, CONSTRAINT "PK_e722302ed16fc3721466debef53" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "milpagos".."Usuario_Work" ("id" int NOT NULL IDENTITY(1,1), "id_rol" int NOT NULL CONSTRAINT "DF_77fadfb068301c4b22f4a717f78" DEFAULT 1, "id_department" int NOT NULL CONSTRAINT "DF_8ef0ac2857b72c9009cc4f9d15b" DEFAULT 1, "active" int NOT NULL CONSTRAINT "DF_85e1c52593395bb9306eb22fcc3" DEFAULT 1, "createdAt" datetime2 NOT NULL CONSTRAINT "DF_35de4ca069bb5fb3a0b405c9294" DEFAULT getdate(), "updatedAt" datetime2 NOT NULL CONSTRAINT "DF_86aaf9a29ce372a6cf7e973d512" DEFAULT getdate(), "id_usuario" int, CONSTRAINT "PK_e722302ed16fc3721466debef53" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE UNIQUE INDEX "REL_e645dc23f907f0385201325f78" ON "milpagos".."Usuario_Work" ("id_usuario") WHERE "id_usuario" IS NOT NULL`);
-        await queryRunner.query(`CREATE UNIQUE INDEX "REL_77fadfb068301c4b22f4a717f7" ON "milpagos".."Usuario_Work" ("id_rol") WHERE "id_rol" IS NOT NULL`);
-        await queryRunner.query(`CREATE UNIQUE INDEX "REL_8ef0ac2857b72c9009cc4f9d15" ON "milpagos".."Usuario_Work" ("id_department") WHERE "id_department" IS NOT NULL`);
         await queryRunner.query(`ALTER TABLE "milpagos".."ViewsXDep" ADD CONSTRAINT "FK_30a19887dcd8877d2e28f4c195a" FOREIGN KEY ("id_department") REFERENCES "milpagos".."department"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "milpagos".."ViewsXDep" ADD CONSTRAINT "FK_f744ae54b4f4832dc8df7053a89" FOREIGN KEY ("id_views") REFERENCES "milpagos".."views"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "milpagos".."permissions" ADD CONSTRAINT "FK_e01dd64da531ed8c8a5abab9590" FOREIGN KEY ("id_department") REFERENCES "milpagos".."department"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
@@ -44,8 +42,6 @@ export class pool41661355335055 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "milpagos".."permissions" DROP CONSTRAINT "FK_e01dd64da531ed8c8a5abab9590"`);
         await queryRunner.query(`ALTER TABLE "milpagos".."ViewsXDep" DROP CONSTRAINT "FK_f744ae54b4f4832dc8df7053a89"`);
         await queryRunner.query(`ALTER TABLE "milpagos".."ViewsXDep" DROP CONSTRAINT "FK_30a19887dcd8877d2e28f4c195a"`);
-        await queryRunner.query(`DROP INDEX "REL_8ef0ac2857b72c9009cc4f9d15" ON "milpagos".."Usuario_Work"`);
-        await queryRunner.query(`DROP INDEX "REL_77fadfb068301c4b22f4a717f7" ON "milpagos".."Usuario_Work"`);
         await queryRunner.query(`DROP INDEX "REL_e645dc23f907f0385201325f78" ON "milpagos".."Usuario_Work"`);
         await queryRunner.query(`DROP TABLE "milpagos".."Usuario_Work"`);
         await queryRunner.query(`DROP INDEX "REL_803f0d64b1606c50350471d944" ON "milpagos".."ejecutado_contracargo"`);

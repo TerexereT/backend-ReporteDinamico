@@ -5,7 +5,7 @@ import Usuarios from '../../db/models/Usuarios';
 import { exec } from 'child_process';
 import saveLogs from '../logs';
 import createToken from '../token';
-import UsuarioXWork from '../../db/models/UsuarioXWork';
+import UsuarioXWork from '../../db/models/Usuario_Work';
 import { getPermiss, getViews } from './formatData';
 import Permissions from '../../db/models/Permissions';
 //import { authenticate } from 'ldap-authentication';

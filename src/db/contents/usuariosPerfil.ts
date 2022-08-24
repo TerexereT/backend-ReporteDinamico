@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import UsuariosXPerfil from '../models/UsuarioXWork';
+import UsuariosXPerfil from '../models/Usuario_Work';
 
 export const prePerfilesUsuario: UsuariosXPerfil[] = [
 	{
