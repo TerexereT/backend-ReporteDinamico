@@ -9,6 +9,7 @@ import UsuarioXWork from '../../db/models/Usuario_Work';
 import Views from '../../db/models/Views';
 import ViewsXDepartment from '../../db/models/ViewsXDepartment';
 import { FormatQuery, selects } from '../../functions/Transaccional';
+import saveLogs from '../logs';
 // @ts-ignore
 
 interface body {
@@ -114,7 +115,7 @@ export const dataUserData = async (req: Request<any, msg, body, Querys>, res: Re
 			};
 		}
 
-		console.log(info);
+		//console.log(info);
 
 		res.status(200).json({ message: 'user', info });
 	} catch (err) {
@@ -153,6 +154,9 @@ export const updateUserData = async (req: Request<any, msg, body, Querys>, res: 
 			});
 		}
 
+		const { email }: any = req.headers.token;
+		await saveLogs(email, 'POST', req.url, `Modifico el usuario: [${idUser}], Perfil [${user.id}]`);
+
 		//
 		res.status(200).json({ message: 'update user' });
 	} catch (err) {
@@ -178,6 +182,9 @@ export const createDepartment = async (
 			id_department: newDep.id,
 			id_views: 1,
 		});
+
+		const { email }: any = req.headers.token;
+		await saveLogs(email, 'POST', req.url, `Creo el departamento: ${nameDep}`);
 
 		//
 		res.status(200).json({ message: 'Departamento creado', info: newDep });
@@ -317,9 +324,8 @@ export const updatePermissions = async (req: Request<any>, res: Response<msg>): 
 
 		//console.log(perm);
 
-		//logs
-		//const { id: id_user }: any = req.headers.token;
-		//await saveLogs(id_user, 'POST', req.url, `Cambio los permisos del departamento:${id_dep}/rol:${id_rol}`);
+		const { email }: any = req.headers.token;
+		await saveLogs(email, 'POST', req.url, `Edito los permisos dep: ${id_dep}, Rol:${id_rol}`);
 
 		res.status(200).json({ message: 'updated permisses' });
 	} catch (err) {
@@ -412,8 +418,8 @@ export const updateViews = async (req: Request<any, msg, body, Querys>, res: Res
 				}
 			}
 
-			//console.log('existente', listUpdate);
-			//console.log('crear', listSave);
+			const { email }: any = req.headers.token;
+			await saveLogs(email, 'POST', req.url, `Edito las vistas dep: ${id_dep}`);
 
 			//if (listUpdate.length) await getRepository(fm_permissions).update(listUpdate, listUpdate);
 			if (listSave.length) await getRepository(ViewsXDepartment).save(listSave);
@@ -422,8 +428,8 @@ export const updateViews = async (req: Request<any, msg, body, Querys>, res: Res
 		await saveListViews(accessList, newViews);
 
 		//logs
-		//const { id }: any = req.headers.token;
-		//await saveLogs(id, 'POST', req.url, `Cambio de vistas al dep: ${id_dep} `);
+		const { email }: any = req.headers.token;
+		await saveLogs(email, 'POST', req.url, `Cambio de vistas al dep: ${id_dep} `);
 
 		res.status(200).json({ message: 'updated view' });
 	} catch (err) {

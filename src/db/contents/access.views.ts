@@ -17,7 +17,7 @@ const access_views = async (): Promise<void> => {
 	listViews.forEach((element, index) => {
 		if (index !== 0)
 			data.push({
-				id_department: 2,
+				id_department: 3,
 				id_views: index + 1,
 			});
 	});
