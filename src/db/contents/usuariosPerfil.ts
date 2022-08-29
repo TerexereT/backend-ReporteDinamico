@@ -5,7 +5,7 @@ export const prePerfilesUsuario: UsuariosXPerfil[] = [
 	{
 		id_usuario: 162, //kpolo
 		id_rol: 2, //work
-		id_department: 2, //;
+		id_department: 3, //;
 	},
 ];
 
