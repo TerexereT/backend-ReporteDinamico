@@ -12,7 +12,7 @@ import department from './Department';
 import actions from './Actions';
 import roles from './Roles';
 
-@Entity({ synchronize: true })
+@Entity()
 export default class Permissions {
 	@PrimaryGeneratedColumn()
 	id?: number;
