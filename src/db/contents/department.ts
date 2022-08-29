@@ -11,7 +11,7 @@ export const listDeparment: Department[] = [
 		name: 'Operaciones',
 	},
 	{
-		//2
+		//3
 		name: 'Seguridad',
 	},
 ];
