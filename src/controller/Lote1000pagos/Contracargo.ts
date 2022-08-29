@@ -142,7 +142,7 @@ export default class Contracargo {
 
 			console.log('Ejecutar contracargo el dia ', date);
 			//const SP_contracargo: any = await getConnection().query(`EXEC sp_contracargos '${date}'`);
-			const SP_contracargo: any = await getConnection().query(`EXEC sp_contracargos '2022-08-08'`);
+			const SP_contracargo: any = await getConnection().query(`EXEC sp_contracargos '${date}'`);
 
 			//console.log('Respuesta sp -> ', SP_contracargo);
 
@@ -151,6 +151,7 @@ export default class Contracargo {
 
 			res.status(200).json({ message: 'contracargo ejecutado', info: { ok: true, line: 11 } });
 		} catch (err) {
+			console.log(err);
 			res.status(400).json(err);
 		}
 	}
