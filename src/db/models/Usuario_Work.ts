@@ -13,7 +13,7 @@ import Department from './Department';
 import Roles from './Roles';
 import Usuarios from './Usuarios';
 
-@Entity('Usuario_Work')
+@Entity('Usuario_Work', { synchronize: true })
 export default class Usuario_Work {
 	@PrimaryGeneratedColumn()
 	id?: number;

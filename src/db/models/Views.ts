@@ -12,7 +12,7 @@ import {
 import ViewsXDepartment from './ViewsXDepartment';
 import Actions from './Actions';
 
-@Entity()
+@Entity({ synchronize: true })
 @Index(['name', 'root'], { unique: true })
 export default class Views {
 	@PrimaryGeneratedColumn()

@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import Permissions from './Permissions';
 
-@Entity()
+@Entity({ synchronize: true })
 export default class Roles {
 	@PrimaryGeneratedColumn()
 	id?: number;
