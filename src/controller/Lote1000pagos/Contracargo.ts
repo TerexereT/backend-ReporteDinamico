@@ -6,6 +6,7 @@ import contra_cargo from '../../db/models/contra_cargo';
 import ejecutado_contracargo from '../../db/models/Ejecutado_Contracargo';
 import Historico_Contracargo from '../../db/models/Historico_Contracargo';
 import { FormatQuery, selects } from '../../functions/Lote1000pagos/Contracargo';
+import saveLogs from '../logs';
 
 interface Lote {
 	Terminal: string;
@@ -85,9 +86,12 @@ export default class Contracargo {
 				}
 			}
 
-			await getRepository(contra_cargo).save({
+			const fileContracargo = await getRepository(contra_cargo).save({
 				name: req.body.nameFile,
 			});
+
+			const { email }: any = req.headers.token;
+			await saveLogs(email, 'POST', req.url, `Subio un archivo de contracardo id: [${fileContracargo.id}]`);
 
 			res.status(200).json({ message: 'File Saved' });
 		} catch (err) {
@@ -135,21 +139,15 @@ export default class Contracargo {
 	async execContracargo(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			const date = new Date().toISOString().split('T')[0];
-			const { id, email }: any = req.headers.token;
-			//console.log(id, email);
 
 			console.log('Ejecutar contracargo el dia ', date);
 			//const SP_contracargo: any = await getConnection().query(`EXEC sp_contracargos '${date}'`);
 			const SP_contracargo: any = await getConnection().query(`EXEC sp_contracargos '2022-08-08'`);
 
-			console.log('Respuesta sp -> ', SP_contracargo);
+			//console.log('Respuesta sp -> ', SP_contracargo);
 
-			/*
-			//gurdar contrargo ejecutado
-			await getRepository(ejecutado_contracargo).save({
-				id_usuario: id,
-			});
-			*/
+			const { email }: any = req.headers.token;
+			await saveLogs(email, 'GET', req.url, `Ejecuto contracargo`);
 
 			res.status(200).json({ message: 'contracargo ejecutado', info: { ok: true, line: 11 } });
 		} catch (err) {

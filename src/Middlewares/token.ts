@@ -26,7 +26,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 				try {
 					const Resp: any = verify(token, Key);
 
-					console.log(Resp);
+					//console.log(Resp);
 
 					req.headers.token = Resp;
 					req.headers.token_text = token;
