@@ -3,7 +3,7 @@ import UsuariosXPerfil from '../models/Usuario_Work';
 
 export const prePerfilesUsuario: UsuariosXPerfil[] = [
 	{
-		id_usuario: 12, //kpolo
+		id_usuario: 162, //kpolo
 		id_rol: 2, //work
 		id_department: 2, //;
 	},
