@@ -1,19 +1,18 @@
 import {
-	Entity,
-	PrimaryGeneratedColumn,
 	Column,
-	UpdateDateColumn,
-	OneToMany,
-	JoinColumn,
 	CreateDateColumn,
+	Entity,
 	Index,
-	ManyToOne,
+	JoinColumn,
+	OneToMany,
+	PrimaryGeneratedColumn,
+	UpdateDateColumn,
 } from 'typeorm';
-import ViewsXDepartment from './ViewsXDepartment';
 import Actions from './Actions';
+import ViewsXDepartment from './ViewsXDepartment';
 
 @Entity()
-@Index(['name', 'root'], { unique: true })
+@Index(['name', 'root', 'key'], { unique: true })
 export default class Views {
 	@PrimaryGeneratedColumn()
 	id?: number;
@@ -23,6 +22,9 @@ export default class Views {
 
 	@Column({ nullable: true })
 	root!: string;
+
+	@Column({ nullable: false })
+	key!: number;
 
 	@OneToMany(() => Actions, (Actions) => Actions.id_views)
 	@JoinColumn({ name: 'actions' })
