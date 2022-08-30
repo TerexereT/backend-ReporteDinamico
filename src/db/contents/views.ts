@@ -54,7 +54,7 @@ export const listViews: Views[] = [
 		root: 'Gestion de Seguridad',
 	},
 	{
-		name: 'Contracargos',
+		name: 'Contracargo Descontado',
 		root: 'contracargo',
 	},
 	{
