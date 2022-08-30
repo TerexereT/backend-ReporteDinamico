@@ -61,7 +61,7 @@ export const listViews: Views[] = [
 		key: 11,
 	},
 	{
-		name: 'Contracargos',
+		name: 'Contracargo Descontado',
 		root: 'contracargo',
 		key: 12,
 	},
