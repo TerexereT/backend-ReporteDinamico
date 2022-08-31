@@ -86,10 +86,10 @@ export default class Auth {
 
 				//console.log(permiss);
 			} else {
-				console.log('usuario no posee nigun deparmento');
+				//console.log('usuario no posee nigun deparmento');
 			}
 
-			console.log('rol:', id_rol, 'dep:', id_department);
+			//console.log('rol:', id_rol, 'dep:', id_department);
 
 			const token: string = createToken(resUser.id, resUser.email, id_department.id, id_rol.id);
 
@@ -157,10 +157,10 @@ export default class Auth {
 
 				//console.log(permiss);
 			} else {
-				console.log('usuario no posee nigun deparmento');
+				//console.log('usuario no posee nigun deparmento');
 			}
 
-			console.log('rol:', id_rol, 'dep:', id_department);
+			//console.log('rol:', id_rol, 'dep:', id_department);
 
 			const userRes = {
 				login: resUser.login,

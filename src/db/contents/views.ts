@@ -4,7 +4,7 @@ import Views from '../models/Views';
 export const listViews: Views[] = [
 	{
 		name: 'Inicio',
-		root: 'baseUrl',
+		root: '',
 		key: 1,
 	},
 	{
@@ -19,28 +19,28 @@ export const listViews: Views[] = [
 	},
 	{
 		name: 'Cuotas Resumidas',
-		root: 'cuotasR',
+		root: 'cuotas-resumen',
 		key: 4,
 	},
 	{
 		name: 'Mantenimiento',
-		root: 'mantenimientos',
+		root: 'mantenimiento',
 		key: 5,
 	},
 	{
 		name: 'Mantenimiento por ACI',
-		root: 'reportexaci',
+		root: 'mantenimiento-aci',
 		key: 6,
 	},
 	{
 		name: 'Libre Pago',
-		root: 'librePago',
+		root: 'libre-pago',
 		key: 7,
 	},
 	{
 		//8
 		name: 'Pago Cuota',
-		root: 'pagoCuota',
+		root: 'pago-cuota',
 		key: 8,
 	},
 	{
@@ -51,13 +51,13 @@ export const listViews: Views[] = [
 	{
 		//11
 		name: 'Archivo ContraCargo',
-		root: 'contraCargoUp',
+		root: 'contracargo-up',
 		key: 10,
 	},
 	{
 		//12
 		name: 'Gestion de Seguridad',
-		root: 'Gestion de Seguridad',
+		root: 'seguridad',
 		key: 11,
 	},
 	{
