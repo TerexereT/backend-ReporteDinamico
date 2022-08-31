@@ -3,7 +3,6 @@ import * as path from 'path';
 //
 import { getConnection, getRepository } from 'typeorm';
 import contra_cargo from '../../db/models/contra_cargo';
-import ejecutado_contracargo from '../../db/models/Ejecutado_Contracargo';
 import Historico_Contracargo from '../../db/models/Historico_Contracargo';
 import { FormatQuery, selects } from '../../functions/Lote1000pagos/Contracargo';
 import saveLogs from '../logs';
@@ -75,13 +74,11 @@ export default class Contracargo {
 							MONTO_COBRA: suma,
 						});
 					} else {
-						let newLote = {
+						await getRepository(Historico_Contracargo).save({
 							TERMINAL: term,
 							MONTO_COBRA: monto,
 							MONTO_PAGO: 0,
-						};
-						//
-						await getRepository(Historico_Contracargo).save(newLote);
+						});
 					}
 				}
 			}
@@ -147,7 +144,7 @@ export default class Contracargo {
 			//console.log('Respuesta sp -> ', SP_contracargo);
 
 			const { email }: any = req.headers.token;
-			await saveLogs(email, 'GET', req.url, `Ejecuto contracargo`);
+			await saveLogs(email, 'GET', req.url, `Ejecutado contracargo`);
 
 			res.status(200).json({ message: 'contracargo ejecutado', info: { ok: true, line: 11 } });
 		} catch (err) {
