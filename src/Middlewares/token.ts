@@ -16,18 +16,18 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
 		// use
 
-		console.log('ruta:', req.path, '--', result);
+		// console.log('ruta:', req.path, '--', result);
 		if (result) {
 			if (req.headers['authorization']) {
 				const token: string = req.headers['authorization'];
 
 				//console.log(Key);
-				console.log(token);
+				// console.log(token);
 
 				try {
 					const Resp: any = verify(token, Key);
 
-					console.log('xd', Resp);
+					// console.log('xd', Resp);
 
 					req.headers.token = Resp;
 					req.headers.token_text = token;
