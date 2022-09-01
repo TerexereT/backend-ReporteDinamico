@@ -130,7 +130,7 @@ export const updateUserData = async (req: Request<any, msg, body, Querys>, res: 
 
 		if (!id_rol || !id_department) throw { message: 'Faltan departamento o rol' };
 
-		const user: any = await getRepository(UsuarioXWork).findOne({
+		let user: any = await getRepository(UsuarioXWork).findOne({
 			where: {
 				id_usuario: idUser,
 			},
@@ -146,7 +146,7 @@ export const updateUserData = async (req: Request<any, msg, body, Querys>, res: 
 		} else {
 			//save
 			//console.log(idUser, id_rol, id_department, block);
-			await getRepository(UsuarioXWork).save({
+			user = await getRepository(UsuarioXWork).save({
 				id_usuario: idUser,
 				id_rol,
 				id_department: id_department,
