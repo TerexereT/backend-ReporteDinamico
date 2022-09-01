@@ -1,5 +1,5 @@
-import { DateTime } from 'luxon';
-import { organizations } from './../../controller/Transaccional/index';
+import { options } from '../../controller/Transaccional';
+
 require('dotenv').config();
 
 const { NODE_ENV } = process.env;
@@ -31,36 +31,16 @@ export const selects: select[] = [
 	{ key: 'Cantidad', query: `count(*) as Cantidad` },
 ];
 
-export const FormatQuery = (tipo: string, organizationOption: number, monthoption: string): string => {
-	const today = DateTime.now();
-	const keys = selects.map((select) => select.query).join(', ');
-	//Formatear por tipo (Aprobada, Rechazada, Reverso, CierreDeLote)
-	const organization = organizations[organizationOption].query;
-
-	// Formatear el rango de fecha
-	console.log(monthoption);
-
-	const firstDate: string = `${monthoption}-01 00:00:00.000`; // Prueba
-	//).toFormat(`yyyy-MM-dd 00:00:00.000`);
-
+export const FormatQuery = (tipo: string, organizationOption: string, monthoption: string): string => {
+	const tipoSol = options.findIndex((val) => val === tipo) + 1;
+	const firstDate: string = `${monthoption}-01 00:00:00.000`;
 	const date = new Date(firstDate); //date
-	//
 	const last_date = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-	//console.log(last_date);
-	//por ahora
 	const lastDay = `${last_date.getFullYear()}-${last_date.getMonth() + 1}-${last_date.getDate()} 23:59:59.999`;
-	//console.log(firstDate, lastDay);
-	//antes
-	/*
-	const lastDay: string = DateTime.fromFormat(firstDate, 'yyyy-MM-dd 00:00:00.000')
-		.plus({ months: 1 })
-		.minus({ days: 1 })
-		.toFormat(`yyyy-MM-dd 23:59:59.999`);
-	*/
 
 	return /* sql */ /*sql*/ `
 	EXEC ${
 		NODE_ENV === 'prod' ? 'POSTILION_7018' : 'PRUEBA_7218'
-	}.rep_post_dia.dbo.SP_RD_transaccion '${tipo}', '${firstDate}', '${lastDay}', '${organization}'
+	}.rep_post_dia.dbo.SP_RD_transaccion '${firstDate}', '${lastDay}', '${organizationOption}', '${tipoSol}'
         `;
 };
