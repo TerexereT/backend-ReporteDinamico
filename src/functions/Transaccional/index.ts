@@ -41,6 +41,6 @@ export const FormatQuery = (tipo: string, organizationOption: string, monthoptio
 	return /* sql */ /*sql*/ `
 	EXEC ${
 		NODE_ENV === 'prod' ? 'POSTILION_7018' : 'PRUEBA_7218'
-	}.rep_post_dia.dbo.SP_RD_transaccion '${firstDate}', '${lastDay}', '${organizationOption}', '${tipoSol}'
+	}.tm_trans_base.dbo.SP_RD_transaccion '${firstDate}', '${lastDay}', '${organizationOption}', '${tipoSol}'
         `;
 };
