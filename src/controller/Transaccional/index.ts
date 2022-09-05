@@ -8,7 +8,7 @@ interface body {
 }
 
 interface Querys {
-	transOption: number;
+	transOption: string;
 	monthoption: string;
 }
 
@@ -20,11 +20,11 @@ interface msg {
 export const options = ['Aprobados', 'Rechazos', 'CierreDeLote', 'Reversos'];
 
 export const organizations = [
-	{ name: 'BVC', value: 0, query: '720%' },
-	{ name: 'BNC', value: 1, query: '860%' },
-	{ name: 'BPlaza', value: 2, query: '722%' },
-	// { name: '1000Pagos BVC', value: 3 },
-	// { name: '1000Pagos BPlaza', value: 4 },
+	{ name: 'Venezolano Cred.', value: 'BVC' },
+	{ name: 'Nacional Cred.', value: 'BNC' },
+	{ name: 'Plaza', value: 'PLZ' },
+	{ name: 'Milpagos', value: 'MPG' },
+	{ name: 'Carropago', value: 'CPG' },
 ];
 
 export default class sin_plan {
@@ -35,14 +35,11 @@ export default class sin_plan {
 			const { transType } = req.body;
 			const tipo = Object.entries(transType)
 				.filter(([key, value]) => value)
-				.map(([key, value]): string => key);
+				.map(([key, value]): string => key)[0];
 
 			// formateamos la data
-			const query = FormatQuery(tipo[0], transOption, monthoption);
-			//console.log('query', query);
-
+			const query = FormatQuery(tipo, transOption, monthoption);
 			// ejecucion del querys ya formateado
-			// const resp: any = await getConnection().query(query);
 			const info: any = await getConnection().query(query);
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });

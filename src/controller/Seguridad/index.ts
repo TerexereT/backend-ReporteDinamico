@@ -43,7 +43,7 @@ export default class Seguridad {
 				return data;
 			});
 
-			console.log(info);
+			//console.log(info);
 
 			res.status(200).json({ message: 'data del usuario', info });
 		} catch (err) {
@@ -74,8 +74,8 @@ export default class Seguridad {
 
 	async dataUser(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
-			console.log('entreeee');
-			console.log(req.params);
+			//console.log('entreeee');
+			//console.log(req.params);
 			//const info = await getRepository(Roles).find();
 
 			res.status(200).json({ message: 'user', info: {} });
@@ -130,7 +130,7 @@ export const updateUserData = async (req: Request<any, msg, body, Querys>, res: 
 
 		if (!id_rol || !id_department) throw { message: 'Faltan departamento o rol' };
 
-		const user: any = await getRepository(UsuarioXWork).findOne({
+		let user: any = await getRepository(UsuarioXWork).findOne({
 			where: {
 				id_usuario: idUser,
 			},
@@ -145,8 +145,8 @@ export const updateUserData = async (req: Request<any, msg, body, Querys>, res: 
 			});
 		} else {
 			//save
-			console.log(idUser, id_rol, id_department, block);
-			await getRepository(UsuarioXWork).save({
+			//console.log(idUser, id_rol, id_department, block);
+			user = await getRepository(UsuarioXWork).save({
 				id_usuario: idUser,
 				id_rol,
 				id_department: id_department,
