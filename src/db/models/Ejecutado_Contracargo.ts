@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import Usuarios from './Usuarios';
 
-@Entity('ejecutado_contracargo')
+@Entity('contracargo_ejecutado')
 export default class ejecutado_contracargo {
 	@PrimaryGeneratedColumn()
 	id?: number;

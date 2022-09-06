@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as path from 'path';
 //
-import { getConnection, getRepository } from 'typeorm';
+import { getConnection, getRepository, LockNotSupportedOnGivenDriverError } from 'typeorm';
 import contra_cargo from '../../db/models/contra_cargo';
 import Historico_Contracargo from '../../db/models/Historico_Contracargo';
 import { FormatQuery, selects } from '../../functions/Lote1000pagos/Contracargo';
@@ -14,6 +14,10 @@ interface Lote {
 
 interface body {
 	lote: string;
+}
+
+interface bodyContra {
+	fecha: string;
 }
 
 interface Querys {
@@ -133,11 +137,15 @@ export default class Contracargo {
 		}
 	}
 
-	async execContracargo(req: Request<any, msg, body, Querys>, res: Response<msg>) {
+	async execContracargo(req: Request<any, msg, bodyContra, Querys>, res: Response<msg>) {
 		try {
-			const date = new Date().toISOString().split('T')[0];
+			if (!req.body.fecha) throw { message: 'fecha invalida' };
+			const { fecha } = req.body;
+			//console.log(fecha);
 
-			console.log('Ejecutar contracargo el dia ', date);
+			const date = new Date(fecha).toISOString().split('T')[0];
+
+			//console.log('Ejecutar contracargo el dia ', date);
 			//const SP_contracargo: any = await getConnection().query(`EXEC sp_contracargos '${date}'`);
 			const SP_contracargo: any = await getConnection().query(`EXEC sp_contracargos '${date}'`);
 
@@ -146,7 +154,7 @@ export default class Contracargo {
 			const { email }: any = req.headers.token;
 			await saveLogs(email, 'GET', req.url, `Ejecutado contracargo`);
 
-			res.status(200).json({ message: 'contracargo ejecutado', info: { ok: true, line: 11 } });
+			res.status(200).json({ message: 'contracargo ejecutado', info: { ok: true, line: 11, fecha: date } });
 		} catch (err) {
 			console.log(err);
 			res.status(400).json(err);
