@@ -200,7 +200,7 @@ export const Routes: any[] = [
 		action: 'all',
 	},
 	{
-		method: 'get',
+		method: 'post',
 		route: '/contracargo/exec',
 		controller: Contracargo,
 		action: 'execContracargo',
