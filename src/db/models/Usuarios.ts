@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn } from 't
 @Entity({ synchronize: false })
 export default class Usuarios {
 	@PrimaryGeneratedColumn()
-	id!: number;
+	id?: number;
 
 	@Column({ nullable: false })
 	login!: string;
@@ -30,10 +30,10 @@ export default class Usuarios {
 	fechaCreacion!: Date;
 
 	@Column({ nullable: false })
-	fechaExpira!: Date;
+	fechaExpira?: Date;
 
 	@Column({ nullable: false })
-	ultimoAcceso!: Date;
+	ultimoAcceso?: Date;
 
 	@Column({ nullable: false })
 	estatus!: number;
