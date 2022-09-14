@@ -163,6 +163,10 @@ export const selects: select[] = [
 		query: `Format([COMISION_BANCARIA_1_50_USO], 'N2', 'es-es') as [COMISION_BANCARIA_1_50_USO]`,
 	},
 	{
+		key: 'CONTRACARGO',
+		query: `Format(Contracargo, 'N2', 'es-es') as CONTRACARGO`,
+	},
+	{
 		key: 'MONTO_ABONAR',
 		query: `Format([MONTO_ABONAR], 'N2', 'es-es') as [MONTO_ABONAR]`,
 	},
@@ -289,6 +293,7 @@ export const FormatQuery = (dateRang: any, selects: string, sponsor?: number): s
 		a.monto_comision_tdd as monto_comision_tdd,
 		a.comision_servicio as [COMISION_MANTENIMIENTO],
 		a.comision_bacaria_1_50 as [COMISION_BANCARIA_1_50_USO],
+		a.contracargo as Contracargo,
 		a.monto_por_servicio as [IVA] ,
 		(a.monto_abono) AS [MONTO_ABONAR], 
 		te.hisTasaBCV AS [TASA],
@@ -336,8 +341,10 @@ export const FormatQuery = (dateRang: any, selects: string, sponsor?: number): s
 
 				Sum(hisAmountTDCImpuesto) as Monto_afilia_tdc,
 
-				Sum(hisComisionBancaria) as comision_bacaria_1_50
-	
+				Sum(hisComisionBancaria) as comision_bacaria_1_50,
+				
+				Sum(hisDebitoContraCargo) as contracargo
+
 	FROM    
 	
 	 
@@ -369,7 +376,7 @@ export const FormatQuery = (dateRang: any, selects: string, sponsor?: number): s
 	
 	 
 	
-	Group by  a.aboTerminal, a.hisLote, MONTO_NETO_TDC,Monto_Neto_tdd, Monto_afilia_tdc,a.comision_servicio,
+	Group by  a.aboTerminal, a.hisLote, MONTO_NETO_TDC,Monto_Neto_tdd, Monto_afilia_tdc,a.comision_servicio, a.contracargo,
 	
 	comision_bacaria_1_50, monto_por_servicio, monto_abono, hisTasaBCV, Nombre_Org, a.aboCodAfi, c.comerRif, c.comerDesc, c.comerDireccion, c.comerCod,
 	
@@ -381,7 +388,7 @@ export const FormatQuery = (dateRang: any, selects: string, sponsor?: number): s
 	
 	group by mm.Terminal, mm.Lote, mm.Monto_neto_tdc,Monto_Neto_tdd,Monto_afilia_tdc, COMISION_MANTENIMIENTO, COMISION_BANCARIA_1_50_USO, IVA, MONTO_ABONAR,
 	
-	TASA, TIPO_DE_CARTERA, N_AFILIADO, CEDULA_RIF, COMERCIO, DIRECCION, COD_COMERCIO, N_CUENTA, FechaPreceso, FechaEjec, MontoBrutoTDD
+	TASA, TIPO_DE_CARTERA, N_AFILIADO, CEDULA_RIF, COMERCIO, DIRECCION, COD_COMERCIO, N_CUENTA, FechaPreceso, FechaEjec, MontoBrutoTDD, mm.Contracargo
 	
 	,MontoBrutoTDC, MontoBrutoVisaElectro ,monto_comision_tdd, CANT_TRANSACCION, NOMBRES, APELLIDOS, SPONSOR_BANK
 	
