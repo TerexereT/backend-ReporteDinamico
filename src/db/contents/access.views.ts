@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+import { MilpagosDS } from '../config/DataSource';
 import ViewsXDepartment from '../models/ViewsXDepartment';
 import { listDeparment } from './department';
 import { listViews } from './views';
@@ -23,8 +23,8 @@ const access_views = async (): Promise<void> => {
 	});
 
 	//
-	const valid = await getRepository(ViewsXDepartment).find({ where: data });
-	if (!valid.length) await getRepository(ViewsXDepartment).save(data);
+	const valid = await MilpagosDS.getRepository(ViewsXDepartment).find({ where: data });
+	if (!valid.length) await MilpagosDS.getRepository(ViewsXDepartment).save(data);
 };
 
 export default access_views;

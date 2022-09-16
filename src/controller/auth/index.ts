@@ -1,13 +1,13 @@
+import { exec } from 'child_process';
 import { Request, Response } from 'express';
 import * as path from 'path';
-import { getRepository } from 'typeorm';
+import Permissions from '../../db/models/Permissions';
 import Usuarios from '../../db/models/Usuarios';
-import { exec } from 'child_process';
+import UsuarioXWork from '../../db/models/Usuario_Work';
 import saveLogs from '../logs';
 import createToken from '../token';
-import UsuarioXWork from '../../db/models/Usuario_Work';
+import { MilpagosDS } from './../../db/config/DataSource';
 import { getPermiss, getViews } from './formatData';
-import Permissions from '../../db/models/Permissions';
 //import { authenticate } from 'ldap-authentication';
 
 function execCommand(cmd: string, password: string) {
@@ -44,16 +44,18 @@ export default class Auth {
 
 			//console.log('pass', encriptPass);
 
-			const resUser = await getRepository(Usuarios).findOne({
-				where: {
-					login: user,
-					contrasena: encriptPass,
-				},
+			const resUser = await MilpagosDS.getRepository(Usuarios).findOne({
+				where: [
+					{
+						login: user,
+						contrasena: encriptPass as string,
+					},
+				],
 			});
 
 			if (!resUser) throw { message: 'Correo o Contraseña incorrecta', code: 401 };
 
-			const resWork = await getRepository(UsuarioXWork).findOne({
+			const resWork = await MilpagosDS.getRepository(UsuarioXWork).findOne({
 				where: { id_usuario: resUser.id },
 				relations: [
 					'id_department',
@@ -76,7 +78,7 @@ export default class Auth {
 
 			//buscar permisos
 			if (id_department.id !== 1) {
-				const resPermiss = await getRepository(Permissions).find({
+				const resPermiss = await MilpagosDS.getRepository(Permissions).find({
 					where: { id_department: id_department.id, id_rol: id_rol.id },
 					relations: ['id_action'],
 				});
@@ -120,11 +122,11 @@ export default class Auth {
 		try {
 			const { id, email }: any = req.headers.token;
 
-			const resUser = await getRepository(Usuarios).findOne(id);
+			const resUser = await MilpagosDS.getRepository(Usuarios).findOne(id);
 
 			if (!resUser) throw { message: 'Usuario no existe' };
 
-			const resWork = await getRepository(UsuarioXWork).findOne({
+			const resWork = await MilpagosDS.getRepository(UsuarioXWork).findOne({
 				where: { id_usuario: resUser.id },
 				relations: [
 					'id_department',
@@ -147,7 +149,7 @@ export default class Auth {
 
 			//buscar permisos
 			if (id_department.id !== 1) {
-				const resPermiss = await getRepository(Permissions).find({
+				const resPermiss = await MilpagosDS.getRepository(Permissions).find({
 					where: { id_department: id_department.id, id_rol: id_rol.id },
 					relations: ['id_action'],
 				});
