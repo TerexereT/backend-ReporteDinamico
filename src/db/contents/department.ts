@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+import { MilpagosDS } from '../config/DataSource';
 import Department from '../models/Department';
 
 export const listDeparment: Department[] = [
@@ -18,8 +18,8 @@ export const listDeparment: Department[] = [
 
 const department = async (): Promise<void> => {
 	//
-	const valid = await getRepository(Department).find({ where: listDeparment });
-	if (!valid.length) await getRepository(Department).save(listDeparment);
+	const valid = await MilpagosDS.getRepository(Department).find({ where: listDeparment });
+	if (!valid.length) await MilpagosDS.getRepository(Department).save(listDeparment);
 };
 
 export default department;

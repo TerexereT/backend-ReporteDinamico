@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+import { MilpagosDS } from '../config/DataSource';
 import Actions from '../models/Actions';
 import { listViews } from './views';
 
@@ -19,8 +19,8 @@ const actions = async (): Promise<void> => {
 		description: 'Cargar reporte contracargo',
 	});
 	//
-	const valid = await getRepository(Actions).find({ where: data });
-	if (!valid.length) await getRepository(Actions).save(data);
+	const valid = await MilpagosDS.getRepository(Actions).find({ where: data });
+	if (!valid.length) await MilpagosDS.getRepository(Actions).save(data);
 };
 
 export default actions;

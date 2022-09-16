@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+import { MilpagosDS } from '../config/DataSource';
 import Usuarios from '../models/Usuarios';
 
 export const preUsuario: Usuarios = {
@@ -17,8 +17,8 @@ export const preUsuario: Usuarios = {
 
 const preUser = async (): Promise<void> => {
 	//
-	const valid = await getRepository(Usuarios).find({ where: { login: preUsuario.login } });
-	if (!valid.length) await getRepository(Usuarios).save(preUsuario);
+	const valid = await MilpagosDS.getRepository(Usuarios).find({ where: { login: preUsuario.login } });
+	if (!valid.length) await MilpagosDS.getRepository(Usuarios).save(preUsuario);
 };
 
 export default preUser;

@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+import { MilpagosDS } from '../config/DataSource';
 import Views from '../models/Views';
 
 export const listViews: Views[] = [
@@ -75,8 +75,8 @@ export const listViews: Views[] = [
 
 const views = async (): Promise<void> => {
 	//
-	const valid = await getRepository(Views).find({ where: listViews });
-	if (!valid.length) await getRepository(Views).save(listViews);
+	const valid = await MilpagosDS.getRepository(Views).find({ where: listViews });
+	if (!valid.length) await MilpagosDS.getRepository(Views).save(listViews);
 };
 
 export default views;
