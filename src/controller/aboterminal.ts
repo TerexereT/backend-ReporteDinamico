@@ -19,7 +19,7 @@ interface msg {
 	info: any;
 }
 
-export default class Aboterminal {
+export default {
 	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			const { keys } = req.body;
@@ -40,7 +40,7 @@ export default class Aboterminal {
 			console.log('err', err);
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -61,5 +61,5 @@ export default class Aboterminal {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};

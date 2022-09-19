@@ -1,7 +1,6 @@
 // import {UserController} from "./controller/UserController";
 
 import Aboterminal from './controller/aboterminal';
-import Auth from './controller/auth';
 import CancelarCuotas from './controller/CancelarCuotas';
 import cuotas_resumidas from './controller/CuotasVencidas/cuotas_resumidas';
 import cuotas_vencidas from './controller/CuotasVencidas/cuotas_vencidas';
@@ -18,37 +17,6 @@ import Seguridad from './controller/Seguridad';
 import Transaccional from './controller/Transaccional';
 
 export const Routes: any[] = [
-	{
-		method: 'post',
-		route: '/auth/login',
-		controller: Auth,
-		action: 'login',
-	},
-	{ method: 'get', route: '/auth/user', controller: Auth, action: 'getLogin' },
-	{
-		method: 'post',
-		route: '/history',
-		controller: History,
-		action: 'allHistory',
-	},
-	{
-		method: 'get',
-		route: '/history/keys',
-		controller: History,
-		action: 'keys',
-	},
-	{
-		method: 'post',
-		route: '/aboterminal',
-		controller: Aboterminal,
-		action: 'all',
-	},
-	{
-		method: 'get',
-		route: '/aboterminal/keys',
-		controller: Aboterminal,
-		action: 'keys',
-	},
 	{
 		method: 'post',
 		route: '/mantenimiento/0',
