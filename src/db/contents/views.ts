@@ -13,7 +13,7 @@ export const listViews: Views[] = [
 		key: 2,
 	},
 	{
-		name: 'Cuotas Vencidas',
+		name: 'Cuotas',
 		root: 'cuotas',
 		key: 3,
 	},

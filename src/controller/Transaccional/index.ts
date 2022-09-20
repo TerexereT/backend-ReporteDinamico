@@ -27,7 +27,7 @@ export const organizations = [
 	{ name: 'Carropago', value: 'CPG' },
 ];
 
-export default class sin_plan {
+export default {
 	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			// definimos variables
@@ -47,7 +47,7 @@ export default class sin_plan {
 			//console.log(err);
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async options(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -55,7 +55,7 @@ export default class sin_plan {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async transType(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -76,7 +76,7 @@ export default class sin_plan {
 			console.log(err);
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -96,5 +96,5 @@ export default class sin_plan {
 			console.log(err);
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};

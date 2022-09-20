@@ -16,7 +16,7 @@ interface msg {
 	info: any;
 }
 
-export default class PagoCuota {
+export default {
 	async allHistory(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			// definimos variables
@@ -37,7 +37,7 @@ export default class PagoCuota {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -51,5 +51,5 @@ export default class PagoCuota {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};
