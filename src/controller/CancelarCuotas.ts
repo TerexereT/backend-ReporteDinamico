@@ -77,8 +77,6 @@ export default class CancelarCuotas {
 
 	async update(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
-			console.log('req.body', req.body);
-
 			const { IVA, FECHPROCESO, MONTOTOTAL, dicomSelected }: any = req.body;
 
 			const MONTOCOMISION = MONTOTOTAL * dicomSelected.valorVenta;
