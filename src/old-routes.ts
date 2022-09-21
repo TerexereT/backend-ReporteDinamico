@@ -2,7 +2,7 @@
 
 import CancelarCuotas from './controller/CancelarCuotas';
 
-export const Routes: any[] = [
+export const oldRoutes: any[] = [
 	{
 		method: 'post',
 		route: '/cancelar_cuotas',

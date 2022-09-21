@@ -7,10 +7,10 @@
 	"options": {
 		"encrypt": false,
 		"trustServerCertificate": true,
-		"cancelTimeout": 15000
+		"cancelTimeout": 30000
 	},
-	"requestTimeout": 600000,
-	"connectionTimeout": 30000,
+	"requestTimeout": 3600000,
+	"connectionTimeout": 60000,
 	"synchronize": false,
 	"migrationsRun": false,
 	"logging": false,

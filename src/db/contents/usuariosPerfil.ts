@@ -1,8 +1,9 @@
+import { DataSource } from 'typeorm';
 import { MilpagosDS } from '../config/DataSource';
 import Usuarios from '../models/Usuarios';
 import UsuariosXPerfil from '../models/Usuario_Work';
 
-const preDataUser = async (): Promise<void> => {
+const preDataUser = async (db: DataSource): Promise<void> => {
 	const user = await MilpagosDS.getRepository(Usuarios).findOne({ where: { login: 'test' } });
 
 	if (!user) {
@@ -16,8 +17,8 @@ const preDataUser = async (): Promise<void> => {
 		id_department: 3, //;
 	};
 	//
-	const valid = await MilpagosDS.getRepository(UsuariosXPerfil).find({ where: prePerfilesUsuario });
-	if (!valid.length) await MilpagosDS.getRepository(UsuariosXPerfil).save(prePerfilesUsuario);
+	const valid = await db.getRepository(UsuariosXPerfil).find({ where: prePerfilesUsuario });
+	if (!valid.length) await db.getRepository(UsuariosXPerfil).save(prePerfilesUsuario);
 };
 
 export default preDataUser;

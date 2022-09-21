@@ -1,9 +1,9 @@
-import { MilpagosDS } from '../config/DataSource';
+import { DataSource } from 'typeorm';
 import ViewsXDepartment from '../models/ViewsXDepartment';
 import { listDeparment } from './department';
 import { listViews } from './views';
 
-const access_views = async (): Promise<void> => {
+const access_views = async (db: DataSource): Promise<void> => {
 	let data: ViewsXDepartment[] = [];
 
 	//Todos tiene vista al home
@@ -23,8 +23,8 @@ const access_views = async (): Promise<void> => {
 	});
 
 	//
-	const valid = await MilpagosDS.getRepository(ViewsXDepartment).find({ where: data });
-	if (!valid.length) await MilpagosDS.getRepository(ViewsXDepartment).save(data);
+	const valid = await db.getRepository(ViewsXDepartment).find({ where: data });
+	if (!valid.length) await db.getRepository(ViewsXDepartment).save(data);
 };
 
 export default access_views;

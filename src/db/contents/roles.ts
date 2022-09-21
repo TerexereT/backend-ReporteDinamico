@@ -1,4 +1,4 @@
-import { MilpagosDS } from '../config/DataSource';
+import { DataSource } from 'typeorm';
 import Roles from '../models/Roles';
 
 export const listRoles: Roles[] = [
@@ -16,10 +16,10 @@ export const listRoles: Roles[] = [
 	},
 ];
 
-const roles = async (): Promise<void> => {
+const roles = async (db: DataSource): Promise<void> => {
 	//
-	const valid = await MilpagosDS.getRepository(Roles).find({ where: listRoles });
-	if (!valid.length) await MilpagosDS.getRepository(Roles).save(listRoles);
+	const valid = await db.getRepository(Roles).find({ where: listRoles });
+	if (!valid.length) await db.getRepository(Roles).save(listRoles);
 };
 
 export default roles;

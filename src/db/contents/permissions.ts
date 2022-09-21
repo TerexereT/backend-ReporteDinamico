@@ -1,8 +1,8 @@
-import { MilpagosDS } from '../config/DataSource';
+import { DataSource } from 'typeorm';
 import Permissions from '../models/Permissions';
 //
 
-const permissions = async (): Promise<void> => {
+const permissions = async (db: DataSource): Promise<void> => {
 	let data: Permissions[] = [
 		{
 			id_department: 2,
@@ -11,8 +11,8 @@ const permissions = async (): Promise<void> => {
 		},
 	];
 
-	const valid = await MilpagosDS.getRepository(Permissions).find({ where: data });
-	if (!valid.length) await MilpagosDS.getRepository(Permissions).save(data);
+	const valid = await db.getRepository(Permissions).find({ where: data });
+	if (!valid.length) await db.getRepository(Permissions).save(data);
 };
 
 export default permissions;

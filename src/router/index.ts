@@ -11,7 +11,7 @@ import reporteAci from './reporteAci';
 import seguridad from './seguridad';
 import transaccional from './transaccional';
 
-export default (app: Application) => {
+const Routes = (app: Application) => {
 	auth(app);
 	seguridad(app);
 	history(app);
@@ -24,3 +24,5 @@ export default (app: Application) => {
 	mantenimiento(app);
 	contracargo(app);
 };
+
+export default Routes;
