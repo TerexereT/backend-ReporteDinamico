@@ -71,6 +71,12 @@ export const listViews: Views[] = [
 		root: 'exec-contracargo',
 		key: 13,
 	},
+	{
+		//15
+		name: 'Contabilidad',
+		root: 'contabilidad',
+		key: 14,
+	},
 ];
 
 const views = async (db: DataSource): Promise<void> => {
