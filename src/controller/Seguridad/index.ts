@@ -27,7 +27,7 @@ interface msg {
 
 export const options = ['Aprobados', 'Rechazos', 'CierreDeLote', 'Reversos'];
 
-export default class Seguridad {
+export default {
 	async allWorker(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			//buscar los usuarios agregados a reporte dinamico
@@ -49,7 +49,7 @@ export default class Seguridad {
 			//console.log(err);
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async allDepartment(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -59,7 +59,7 @@ export default class Seguridad {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async allRoles(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -69,7 +69,7 @@ export default class Seguridad {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async dataUser(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -81,8 +81,8 @@ export default class Seguridad {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};
 
 export const dataUserData = async (req: Request<any, msg, body, Querys>, res: Response<msg>): Promise<void> => {
 	try {

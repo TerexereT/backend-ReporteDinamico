@@ -16,7 +16,7 @@ interface msg {
 	info: any;
 }
 
-export default class History {
+export default {
 	async allHistory(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			// definimos variables
@@ -57,7 +57,7 @@ export default class History {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -76,5 +76,5 @@ export default class History {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};

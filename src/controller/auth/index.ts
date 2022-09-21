@@ -34,15 +34,14 @@ interface msg {
 
 export const base: string = path.resolve('static');
 
-export default class Auth {
-	async login(req: Request<body>, res: Response<msg>) {
-		try {
-			const { user, password }: { user: string; password: string } = req.body;
-			if (!user || !password) throw { message: 'Debe ingresar usuario y contrasena' };
+export const login = async (req: Request<body>, res: Response<msg>) => {
+	try {
+		const { user, password }: { user: string; password: string } = req.body;
+		if (!user || !password) throw { message: 'Debe ingresar usuario y contrasena' };
 
-			const encriptPass = await execCommand(`java -jar java.encript/java.jar ${password}`, password);
+		const encriptPass = await execCommand(`java -jar java.encript/java.jar ${password}`, password);
 
-			//console.log('pass', encriptPass);
+		//console.log('pass', encriptPass);
 
 			const resUser = await MilpagosDS.getRepository(Usuarios).findOne({
 				where: [
@@ -53,7 +52,7 @@ export default class Auth {
 				],
 			});
 
-			if (!resUser) throw { message: 'Correo o Contraseña incorrecta', code: 401 };
+		if (!resUser) throw { message: 'Correo o Contraseña incorrecta', code: 401 };
 
 			const resWork = await MilpagosDS.getRepository(UsuarioXWork).findOne({
 				where: { id_usuario: resUser.id },
@@ -65,16 +64,16 @@ export default class Auth {
 				],
 			});
 
-			if (!resWork) throw { message: 'Este usuario no tiene acceso a reporte dinamico', code: 401 };
+		if (!resWork) throw { message: 'Este usuario no tiene acceso a reporte dinamico', code: 401 };
 
-			const { id_rol, id_department: dep }: any = resWork;
-			const { access_views, ...id_department }: any = dep;
+		const { id_rol, id_department: dep }: any = resWork;
+		const { access_views, ...id_department }: any = dep;
 
-			if (!id_department.active)
-				throw { message: `El departamento de ${id_department.name} esta Bloqueado`, code: 401 };
-			const views = getViews(access_views); //obtener lista de vistas
+		if (!id_department.active)
+			throw { message: `El departamento de ${id_department.name} esta Bloqueado`, code: 401 };
+		const views = getViews(access_views); //obtener lista de vistas
 
-			let permiss: any = [];
+		let permiss: any = [];
 
 			//buscar permisos
 			if (id_department.id !== 1) {
@@ -84,47 +83,47 @@ export default class Auth {
 				});
 				if (!resPermiss) throw { message: 'Error Access Permisses', code: 400 };
 
-				permiss = getPermiss(resPermiss);
+			permiss = getPermiss(resPermiss);
 
-				//console.log(permiss);
-			} else {
-				//console.log('usuario no posee nigun deparmento');
-			}
-
-			//console.log('rol:', id_rol, 'dep:', id_department);
-
-			const token: string = createToken(resUser.id, resUser.email, id_department.id, id_rol.id);
-
-			//save in log
-			await saveLogs(resUser.email, 'POST', '/auth/login', `Login de Usuario`);
-
-			const userRes = {
-				login: resUser.login,
-				name: resUser.nombre,
-				id_department,
-				id_rol,
-			};
-
-			const info = {
-				user: userRes,
-				views,
-				permiss,
-			};
-
-			res.status(200).json({ message: 'login', ...info, access_token: token });
-		} catch (err) {
-			console.log(err);
-			res.status(400).json(err);
+			//console.log(permiss);
+		} else {
+			//console.log('usuario no posee nigun deparmento');
 		}
-	}
 
-	async getLogin(req: Request<any, msg, body>, res: Response<msg>) {
-		try {
-			const { id, email }: any = req.headers.token;
+		//console.log('rol:', id_rol, 'dep:', id_department);
+
+		const token: string = createToken(resUser.id, resUser.email, id_department.id, id_rol.id);
+
+		//save in log
+		await saveLogs(resUser.email, 'POST', '/auth/login', `Login de Usuario`);
+
+		const userRes = {
+			login: resUser.login,
+			name: resUser.nombre,
+			id_department,
+			id_rol,
+		};
+
+		const info = {
+			user: userRes,
+			views,
+			permiss,
+		};
+
+		res.status(200).json({ message: 'login', ...info, access_token: token });
+	} catch (err) {
+		console.log(err);
+		res.status(400).json(err);
+	}
+};
+
+export const getLogin = async (req: Request<any, msg, body>, res: Response<msg>) => {
+	try {
+		const { id, email }: any = req.headers.token;
 
 			const resUser = await MilpagosDS.getRepository(Usuarios).findOne(id);
 
-			if (!resUser) throw { message: 'Usuario no existe' };
+		if (!resUser) throw { message: 'Usuario no existe' };
 
 			const resWork = await MilpagosDS.getRepository(UsuarioXWork).findOne({
 				where: { id_usuario: resUser.id },
@@ -141,11 +140,10 @@ export default class Auth {
 			const { id_rol, id_department: dep }: any = resWork;
 			const { access_views, ...id_department }: any = dep;
 
-			if (!id_department.active)
-				throw { message: `El departamento de ${id_department.name} esta Bloqueado`, code: 401 };
-			const views = getViews(access_views); //obtener lista de vistas
+		if (!resWork) throw { message: 'Este usuario no tiene acceso a reporte dinamico', code: 401 };
 
-			let permiss: any = [];
+		const { id_rol, id_department: dep }: any = resWork;
+		const { access_views, ...id_department }: any = dep;
 
 			//buscar permisos
 			if (id_department.id !== 1) {
@@ -155,32 +153,35 @@ export default class Auth {
 				});
 				if (!resPermiss) throw { message: 'Error Access Permisses', code: 400 };
 
-				permiss = getPermiss(resPermiss);
+		let permiss: any = [];
 
-				//console.log(permiss);
-			} else {
-				//console.log('usuario no posee nigun deparmento');
-			}
+		//buscar permisos
+		if (id_department.id !== 1) {
+			const resPermiss = await getRepository(Permissions).find({
+				where: { id_department: id_department.id, id_rol: id_rol.id },
+				relations: ['id_action'],
+			});
+			if (!resPermiss) throw { message: 'Error Access Permisses', code: 400 };
 
-			//console.log('rol:', id_rol, 'dep:', id_department);
-
-			const userRes = {
-				login: resUser.login,
-				name: resUser.nombre,
-				id_department,
-				id_rol,
-			};
-
-			const info = {
-				user: userRes,
-				views,
-				permiss,
-			};
-
-			res.status(200).json({ message: 'Usuario', ...info });
-		} catch (err) {
-			console.log(err);
-			res.status(400).json(err);
+			permiss = getPermiss(resPermiss);
 		}
+
+		const userRes = {
+			login: resUser.login,
+			name: resUser.nombre,
+			id_department,
+			id_rol,
+		};
+
+		const info = {
+			user: userRes,
+			views,
+			permiss,
+		};
+
+		res.status(200).json({ message: 'Usuario', ...info });
+	} catch (err) {
+		console.log(err);
+		res.status(400).json(err);
 	}
-}
+};

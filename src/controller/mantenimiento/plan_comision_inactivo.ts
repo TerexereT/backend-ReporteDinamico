@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
-import { selectQuery, dateRang, FormatQuery, selects } from '../../functions/mantenimineto/plan_comision_inactivo';
+import { FormatQuery, selectQuery, selects } from '../../functions/mantenimineto/plan_comision_inactivo';
 // @ts-ignore
-import numeral from 'numeral';
 import { getConnection } from 'typeorm';
 
 interface body {
@@ -18,7 +17,7 @@ interface msg {
 	info: any;
 }
 
-export default class plan_man_inactivo {
+export default {
 	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			// definimos variables
@@ -32,14 +31,12 @@ export default class plan_man_inactivo {
 			// const resp: any = await getConnection().query(query);
 			const info: any = await getConnection().query(query);
 
-		
-
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -58,5 +55,5 @@ export default class plan_man_inactivo {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};

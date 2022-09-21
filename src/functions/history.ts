@@ -163,8 +163,8 @@ export const selects: select[] = [
 		query: `Format([COMISION_BANCARIA_1_50_USO], 'N2', 'es-es') as [COMISION_BANCARIA_1_50_USO]`,
 	},
 	{
-		key: 'CONTRACARGO',
-		query: `Format(Contracargo, 'N2', 'es-es') as CONTRACARGO`,
+		key: 'DESCUENTO_CONTRACARGO',
+		query: `Format(Contracargo, 'N2', 'es-es') as [DESCUENTO_CONTRACARGO]`,
 	},
 	{
 		key: 'MONTO_ABONAR',

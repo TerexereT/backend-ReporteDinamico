@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getConnection } from 'typeorm';
-import { FormatQuery, selectQuery, selects } from '../../functions/CuotasVencidas/cuotas_resumidas';
+import { FormatQuery, selectQuery, selects } from '../../functions/CuotasResumidas';
 
 interface body {
 	keys: string[];
@@ -16,7 +16,7 @@ interface msg {
 	info: any;
 }
 
-export default class Aboterminal {
+export default {
 	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			const { keys } = req.body;
@@ -36,7 +36,7 @@ export default class Aboterminal {
 
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -57,5 +57,5 @@ export default class Aboterminal {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};

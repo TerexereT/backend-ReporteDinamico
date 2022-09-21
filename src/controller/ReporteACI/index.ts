@@ -31,22 +31,7 @@ interface ACIxClient {
 	MONTO: number;
 }
 
-/*
-ACINOMBRES: '& LINARES 2000 C.A INVERSIONES RODRIGUEZ',
-  CLIENTNOMBRES: 'LEIDY ANDREINA MARTINEZ GARCIA',
-  DIRECCION: 'LEIDY ANDREINA MARTINEZ GARCIA',
-  NUMEROS: '02128712003 - 04144669004',
-  TERMINAL: '59019248',
-  AFILIADO: '000000720008172',
-  MONTO: '167,04',
-  IVA: '26,73',
-  MONTOTOTAL: '193,77',
-  ESTATUS: 'Vencida',
-  MONTOTOTAL_BS: '870,15',
-  CANT_CUOTAS: 144
-*/
-
-export default class ReporteACI {
+export default {
 	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			const keys = selects.map((val) => {
@@ -116,7 +101,7 @@ export default class ReporteACI {
 
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -137,5 +122,5 @@ export default class ReporteACI {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};

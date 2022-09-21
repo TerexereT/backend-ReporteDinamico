@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
-import { selectQuery, dateRang, FormatQuery, selects } from '../../functions/mantenimineto/sin_comision';
+import { FormatQuery, selectQuery, selects } from '../../functions/mantenimineto/sin_comision';
 // @ts-ignore
-import numeral from 'numeral';
 import { getConnection } from 'typeorm';
 
 interface body {
@@ -18,7 +17,7 @@ interface msg {
 	info: any;
 }
 
-export default class sin_comision {
+export default {
 	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			// definimos variables
@@ -49,7 +48,7 @@ export default class sin_comision {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -68,5 +67,5 @@ export default class sin_comision {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};

@@ -32,7 +32,7 @@ interface msg {
 
 export const base: string = path.resolve('static');
 
-export default class Contracargo {
+export default {
 	async upFile(req: Request<body>, res: Response<msg>) {
 		try {
 			if (!req.body.lote && !req.body.nameFile) throw { message: 'No se encontro ningun lote' };
@@ -102,7 +102,7 @@ export default class Contracargo {
 			console.log(err);
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -119,7 +119,7 @@ export default class Contracargo {
 			console.log('err', err);
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -138,7 +138,7 @@ export default class Contracargo {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async execContracargo(req: Request<any, msg, bodyContra, Querys>, res: Response<msg>) {
 		try {
@@ -162,5 +162,5 @@ export default class Contracargo {
 			console.log(err);
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};
