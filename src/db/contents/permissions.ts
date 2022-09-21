@@ -11,7 +11,7 @@ const permissions = async (db: DataSource): Promise<void> => {
 		},
 	];
 
-	const valid = await db.getRepository(Permissions).find({ where: data });
+	const valid = await db.getRepository(Permissions).find();
 	if (!valid.length) await db.getRepository(Permissions).save(data);
 };
 

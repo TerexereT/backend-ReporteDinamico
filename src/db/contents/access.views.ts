@@ -4,7 +4,7 @@ import { listDeparment } from './department';
 import { listViews } from './views';
 
 const access_views = async (db: DataSource): Promise<void> => {
-	let data: ViewsXDepartment[] = [];
+	let data = [];
 
 	//Todos tiene vista al home
 	listDeparment.forEach((element, index) => {
@@ -23,7 +23,8 @@ const access_views = async (db: DataSource): Promise<void> => {
 	});
 
 	//
-	const valid = await db.getRepository(ViewsXDepartment).find({ where: data });
+	const valid = await db.getRepository(ViewsXDepartment).find();
+
 	if (!valid.length) await db.getRepository(ViewsXDepartment).save(data);
 };
 
