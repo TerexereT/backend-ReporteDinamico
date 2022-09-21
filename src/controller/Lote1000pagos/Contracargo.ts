@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as path from 'path';
+import { MilpagosDS } from './../../db/config/DataSource';
 //
-import { MilpagosDS } from '../../db/config/DataSource';
 import contra_cargo from '../../db/models/contra_cargo';
 import Historico_Contracargo from '../../db/models/Historico_Contracargo';
 import { FormatQuery, selects } from '../../functions/Lote1000pagos/Contracargo';
@@ -149,7 +149,7 @@ export default {
 			const date = new Date(fecha).toISOString().split('T')[0];
 
 			//console.log('Ejecutar contracargo el dia ', date);
-			//const SP_contracargo: any = await getConnection().query(`EXEC sp_contracargos '${date}'`);
+			//const SP_contracargo: any = await MilpagosDS.query(`EXEC sp_contracargos '${date}'`);
 			const SP_contracargo: any = await MilpagosDS.query(`EXEC sp_contracargos '${date}'`);
 
 			//console.log('Respuesta sp -> ', SP_contracargo);

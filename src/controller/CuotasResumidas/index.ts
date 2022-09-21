@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getConnection } from 'typeorm';
+import { MilpagosDS } from '../../db/config/DataSource';
 import { FormatQuery, selectQuery, selects } from '../../functions/CuotasResumidas';
 
 interface body {
@@ -27,7 +27,7 @@ export default {
 			const sql = FormatQuery(selects);
 
 			// ejecucion del querys ya formateado
-			const info = await getConnection().query(sql);
+			const info = await MilpagosDS.query(sql);
 
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getConnection } from 'typeorm';
+import { MilpagosDS } from '../../db/config/DataSource';
 import { FormatQuery, selectQuery, selects } from '../../functions/ReporteACI';
 
 interface body {
@@ -44,7 +44,7 @@ export default {
 			const sql = FormatQuery(selects2);
 
 			// ejecucion del querys ya formateado
-			const info = await getConnection().query(sql);
+			const info = await MilpagosDS.query(sql);
 			for (let index = 0; index < info.length; index++) {
 				const {
 					CLIENTNOMBRES,

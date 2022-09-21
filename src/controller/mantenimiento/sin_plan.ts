@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { FormatQuery, selectQuery, selects } from '../../functions/mantenimineto/sin_plan';
 // @ts-ignore
-import { getConnection } from 'typeorm';
+import { MilpagosDS } from '../../db/config/DataSource';
 
 interface body {
 	keys: string[];
@@ -28,8 +28,8 @@ export default {
 			const query = FormatQuery(selects);
 
 			// ejecucion del querys ya formateado
-			// const resp: any = await getConnection().query(query);
-			const info: any = await getConnection().query(query);
+			// const resp: any = await MilpagosDS.query(query);
+			const info: any = await MilpagosDS.query(query);
 
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });

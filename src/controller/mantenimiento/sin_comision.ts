@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { FormatQuery, selectQuery, selects } from '../../functions/mantenimineto/sin_comision';
 // @ts-ignore
-import { getConnection } from 'typeorm';
+import { MilpagosDS } from '../../db/config/DataSource';
 
 interface body {
 	keys: string[];
@@ -27,7 +27,7 @@ export default {
 			const selects = selectQuery(keys);
 			const query = FormatQuery(selects);
 			// ejecucion del querys ya formateado
-			const info: any = await getConnection().query(query);
+			const info: any = await MilpagosDS.query(query);
 
 			// if (keys.includes('TRANSACCION')) {
 			// 	const trans: any = await pool.query(transQuery);
