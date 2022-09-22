@@ -44,7 +44,7 @@ export const dateRang = (init: string, end: string): any => {
 	return { init: DateTime.fromFormat(init, 'YYYY-MM-DD'), end: DateTime.fromFormat(end, 'YYYY-MM-DD') };
 };
 
-export const FormatQuery = (dateRang: any): string => {
+export const FormatQueryDetalleXACI = (dateRang: any): string => {
 	const { init, end } = dateRang;
 	return /* sql */ `
 

@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import { MilpagosDS } from '../../db/config/DataSource';
-import { dateRang, FormatQuery, selects } from '../../functions/Contabilidad';
+import { dateRang, FormatQueryDetalleXACI, selects } from '../../functions/Contabilidad';
 
 interface body {}
 
@@ -15,7 +14,7 @@ interface msg {
 }
 
 export default {
-	async allHistory(req: Request<any, msg, body, Querys>, res: Response<msg>) {
+	async DetalleXACI(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			// definimos variables
 			const {} = req.body;
@@ -24,10 +23,11 @@ export default {
 
 			// formateamos la data
 			const Dates = dateRang(init, end);
-			const query = FormatQuery({ init, end });
+			const query = FormatQueryDetalleXACI({ init, end });
 
 			// ejecucion del querys ya formateado
-			const info: any = await MilpagosDS.query(query);
+			// const info: any = await MilpagosDS.query(query);
+			const info: any = {};
 			// const info: any = {};
 
 			// retornar data al cliente
