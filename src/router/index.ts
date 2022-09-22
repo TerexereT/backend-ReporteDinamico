@@ -1,13 +1,13 @@
 import { Application } from 'express';
 import aboTerminal from './aboTerminal';
 import auth from './auth';
+import contabilidad from './contabilidad';
 import contracargo from './contracargo';
 import cuotasResumidas from './cuotasResumidas';
 import history from './history';
 import librePago from './librePago';
 import mantenimiento from './mantenimiento';
 import pagoCuota from './pagoCuota';
-import repContabilidad from './repContabilidad';
 import reporteAci from './reporteAci';
 import seguridad from './seguridad';
 import transaccional from './transaccional';
@@ -24,7 +24,7 @@ const Routes = (app: Application) => {
 	pagoCuota(app);
 	mantenimiento(app);
 	contracargo(app);
-	repContabilidad(app);
+	contabilidad(app);
 };
 
 export default Routes;
