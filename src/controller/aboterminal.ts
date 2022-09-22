@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
-import { selectQuery, FormatQuery, selects } from '../functions/Abotermial';
+import { FormatQuery, selectQuery, selects } from '../functions/Abotermial';
 // @ts-ignore
-import numeral from 'numeral';
-import { DateTime } from 'luxon';
-import { getConnection } from 'typeorm';
+import { MilpagosDS } from '../db/config/DataSource';
 
 interface body {
 	keys: string[];
@@ -19,7 +17,7 @@ interface msg {
 	info: any;
 }
 
-export default class Aboterminal {
+export default {
 	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			const { keys } = req.body;
@@ -33,14 +31,14 @@ export default class Aboterminal {
 			const sql = FormatQuery(selects);
 
 			// ejecucion del querys ya formateado
-			const info = await getConnection().query(sql);
+			const info = await MilpagosDS.query(sql);
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {
 			console.log('err', err);
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -61,5 +59,5 @@ export default class Aboterminal {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};

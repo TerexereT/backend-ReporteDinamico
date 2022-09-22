@@ -1,8 +1,8 @@
-import { getRepository } from 'typeorm';
+import { DataSource } from 'typeorm';
 import Actions from '../models/Actions';
 import { listViews } from './views';
 
-const actions = async (): Promise<void> => {
+const actions = async (db: DataSource): Promise<void> => {
 	const data = [];
 	listViews.forEach((item: any, index: number) => {
 		if (index !== 10 && index !== 11) {
@@ -19,8 +19,8 @@ const actions = async (): Promise<void> => {
 		description: 'Cargar reporte contracargo',
 	});
 	//
-	const valid = await getRepository(Actions).find({ where: data });
-	if (!valid.length) await getRepository(Actions).save(data);
+	const valid = await db.getRepository(Actions).find({ where: data });
+	if (!valid.length) await db.getRepository(Actions).save(data);
 };
 
 export default actions;

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { getConnection } from 'typeorm';
 import { dateRang, FormatQuery, selectQuery, selects } from '../functions/history';
+import { MilpagosDS } from './../db/config/DataSource';
 
 interface body {
 	keys: string[];
@@ -16,7 +16,7 @@ interface msg {
 	info: any;
 }
 
-export default class History {
+export default {
 	async allHistory(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			// definimos variables
@@ -29,14 +29,13 @@ export default class History {
 
 			// formateamos la data
 			const Dates = dateRang(init, end);
-			console.log(init, end);
 			const selects = selectQuery(keys);
 			const query = FormatQuery({ init, end }, selects, sponsor);
 
 			// console.log('query', query);
 
 			// ejecucion del querys ya formateado
-			const info: any = await getConnection().query(query);
+			const info: any = await MilpagosDS.query(query);
 
 			// if (keys.includes('TRANSACCION')) {
 			// 	const trans: any = await pool.query(transQuery);
@@ -57,7 +56,7 @@ export default class History {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -76,5 +75,5 @@ export default class History {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};

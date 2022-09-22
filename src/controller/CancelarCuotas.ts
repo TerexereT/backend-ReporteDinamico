@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { DateTime } from 'luxon';
-import { getConnection } from 'typeorm';
+import { MilpagosDS } from '../db/config/DataSource';
 import { FormatQuery, selectQuery, selects } from '../functions/CancelarCuotas';
 require('dotenv').config();
 
@@ -31,7 +31,7 @@ export default class CancelarCuotas {
 			const sql = FormatQuery(selects, req.body.terminal);
 
 			// ejecucion del querys ya formateado
-			const info = await getConnection().query(sql);
+			const info = await MilpagosDS.query(sql);
 
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
@@ -63,7 +63,7 @@ export default class CancelarCuotas {
 	async dicom(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			// ejecucion del querys ya formateado
-			const info = await getConnection().query(
+			const info = await MilpagosDS.query(
 				`(SELECT * FROM OPENQUERY([${
 					NODE_ENV === 'prod' ? 'POSTILION_7019' : 'POSTILION_DESA'
 				}],'SELECT TOP 6 id, valorVenta FROM [rep_post_dia].[dbo].[tasas_dicom] WHERE valorVenta NOT IN (0) ORDER BY id DESC'))`
@@ -77,15 +77,13 @@ export default class CancelarCuotas {
 
 	async update(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
-			console.log('req.body', req.body);
-
 			const { IVA, FECHPROCESO, MONTOTOTAL, dicomSelected }: any = req.body;
 
 			const MONTOCOMISION = MONTOTOTAL * dicomSelected.valorVenta;
 			const montoIVA = IVA * dicomSelected.valorVenta;
 
 			// ejecucion del querys ya formateado
-			await getConnection().query(
+			await MilpagosDS.query(
 				`
 				UPDATE [dbo].[PlanCuota]
 
@@ -103,7 +101,7 @@ export default class CancelarCuotas {
 				`
 			);
 
-			await getConnection().query(/*sql*/ `
+			await MilpagosDS.query(/*sql*/ `
 				INSERT INTO [dbo].[general_logs] ([descript] ,[email] ,[id_origin_logs])
      			
 				VALUES	('[msg: ${req.body.terminal} ${DateTime.now().toSQLDate()} tasa ${

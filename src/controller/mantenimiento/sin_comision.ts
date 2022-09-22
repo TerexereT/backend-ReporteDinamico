@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
-import { selectQuery, dateRang, FormatQuery, selects } from '../../functions/mantenimineto/sin_comision';
+import { FormatQuery, selectQuery, selects } from '../../functions/mantenimineto/sin_comision';
 // @ts-ignore
-import numeral from 'numeral';
-import { getConnection } from 'typeorm';
+import { MilpagosDS } from '../../db/config/DataSource';
 
 interface body {
 	keys: string[];
@@ -18,7 +17,7 @@ interface msg {
 	info: any;
 }
 
-export default class sin_comision {
+export default {
 	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			// definimos variables
@@ -28,7 +27,7 @@ export default class sin_comision {
 			const selects = selectQuery(keys);
 			const query = FormatQuery(selects);
 			// ejecucion del querys ya formateado
-			const info: any = await getConnection().query(query);
+			const info: any = await MilpagosDS.query(query);
 
 			// if (keys.includes('TRANSACCION')) {
 			// 	const trans: any = await pool.query(transQuery);
@@ -49,7 +48,7 @@ export default class sin_comision {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -68,5 +67,5 @@ export default class sin_comision {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};

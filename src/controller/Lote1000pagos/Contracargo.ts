@@ -1,11 +1,24 @@
 import { Request, Response } from 'express';
 import * as path from 'path';
+import { MilpagosDS } from './../../db/config/DataSource';
 //
-import { getConnection, getRepository, LockNotSupportedOnGivenDriverError } from 'typeorm';
 import contra_cargo from '../../db/models/contra_cargo';
 import Historico_Contracargo from '../../db/models/Historico_Contracargo';
 import { FormatQuery, selects } from '../../functions/Lote1000pagos/Contracargo';
 import saveLogs from '../logs';
+
+interface QueryContracargo {
+	AFILIADO: string;
+	TERMINAL: string;
+	RIF: string;
+	NOMBRE: string;
+	MONTO_DISPUTA: string;
+	MONTO_TRANSADO: string;
+	MONTO_DESCONTADO: string;
+	MONTO_PENDIENTE: string;
+	MONTO_ABONAR: string;
+	FECHA_EJECUCION: string;
+}
 
 interface Lote {
 	Terminal: string;
@@ -32,7 +45,7 @@ interface msg {
 
 export const base: string = path.resolve('static');
 
-export default class Contracargo {
+export default {
 	async upFile(req: Request<body>, res: Response<msg>) {
 		try {
 			if (!req.body.lote && !req.body.nameFile) throw { message: 'No se encontro ningun lote' };
@@ -40,9 +53,10 @@ export default class Contracargo {
 			const lote: any[] = JSON.parse(req.body.lote);
 
 			if (!lote.length) throw { message: 'No se encontro ningun lote' };
-			const iso = new Date().toISOString().split('T')[0];
+			// const iso = new Date().toISOString().split('T')[0];
+			const iso = new Date();
 
-			const dateCargo = await getRepository(contra_cargo).findOne({
+			const dateCargo = await MilpagosDS.getRepository(contra_cargo).findOne({
 				where: { createdAt: iso },
 			});
 
@@ -68,17 +82,19 @@ export default class Contracargo {
 				let term = item[Object.keys(item)[0]];
 				let monto: number = item[Object.keys(item)[1]];
 				if (term) {
-					const terminal = await getRepository(Historico_Contracargo).findOne({ TERMINAL: term });
+					const terminal = await MilpagosDS.getRepository(Historico_Contracargo).findOne({
+						where: { TERMINAL: term },
+					});
 					if (terminal) {
 						//update
 						let suma = terminal.MONTO_COBRA + monto;
 
 						//console.log(item.Terminal, 'sumar: ', terminal.MONTO_COBRA, '+', item['Monto de Cuota ($)'], ':', suma);
-						await getRepository(Historico_Contracargo).update(terminal.ID, {
+						await MilpagosDS.getRepository(Historico_Contracargo).update(terminal.ID, {
 							MONTO_COBRA: suma,
 						});
 					} else {
-						await getRepository(Historico_Contracargo).save({
+						await MilpagosDS.getRepository(Historico_Contracargo).save({
 							TERMINAL: term,
 							MONTO_COBRA: monto,
 							MONTO_PAGO: 0,
@@ -87,7 +103,7 @@ export default class Contracargo {
 				}
 			}
 
-			const fileContracargo = await getRepository(contra_cargo).save({
+			const fileContracargo = await MilpagosDS.getRepository(contra_cargo).save({
 				name: req.body.nameFile,
 			});
 
@@ -99,7 +115,7 @@ export default class Contracargo {
 			console.log(err);
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -109,14 +125,16 @@ export default class Contracargo {
 			const sql = FormatQuery(init, end);
 
 			// ejecucion del querys ya formateado
-			const info = await getConnection().query(sql);
+			const info: QueryContracargo[] | [] = await MilpagosDS.query(sql);
+			//console.log(info);
+
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {
-			console.log('err', err);
+			//console.log('err', err);
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -135,7 +153,7 @@ export default class Contracargo {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async execContracargo(req: Request<any, msg, bodyContra, Querys>, res: Response<msg>) {
 		try {
@@ -146,8 +164,8 @@ export default class Contracargo {
 			const date = new Date(fecha).toISOString().split('T')[0];
 
 			//console.log('Ejecutar contracargo el dia ', date);
-			//const SP_contracargo: any = await getConnection().query(`EXEC sp_contracargos '${date}'`);
-			const SP_contracargo: any = await getConnection().query(`EXEC sp_contracargos '${date}'`);
+			//const SP_contracargo: any = await MilpagosDS.query(`EXEC sp_contracargos '${date}'`);
+			const SP_contracargo: any = await MilpagosDS.query(`EXEC sp_contracargos '${date}'`);
 
 			//console.log('Respuesta sp -> ', SP_contracargo);
 
@@ -159,5 +177,5 @@ export default class Contracargo {
 			console.log(err);
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getConnection } from 'typeorm';
+import { MilpagosDS } from '../../db/config/DataSource';
 import { dateRang, FormatQuery, selects } from '../../functions/LibrePago';
 
 interface body {
@@ -16,7 +16,7 @@ interface msg {
 	info: any;
 }
 
-export default class LibrePago {
+export default {
 	async allHistory(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			// definimos variables
@@ -29,7 +29,7 @@ export default class LibrePago {
 			const query = FormatQuery({ init, end }, terminales);
 
 			// ejecucion del querys ya formateado
-			const info: any = await getConnection().query(query);
+			const info: any = await MilpagosDS.query(query);
 			// const info: any = {};
 
 			// retornar data al cliente
@@ -37,7 +37,7 @@ export default class LibrePago {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -56,5 +56,5 @@ export default class LibrePago {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};

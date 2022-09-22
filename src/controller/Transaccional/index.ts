@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getConnection } from 'typeorm';
+import { MilpagosDS } from '../../db/config/DataSource';
 import { FormatQuery, selects } from '../../functions/Transaccional';
 // @ts-ignore
 
@@ -27,7 +27,7 @@ export const organizations = [
 	{ name: 'Carropago', value: 'CPG' },
 ];
 
-export default class sin_plan {
+export default {
 	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			// definimos variables
@@ -40,14 +40,14 @@ export default class sin_plan {
 			// formateamos la data
 			const query = FormatQuery(tipo, transOption, monthoption);
 			// ejecucion del querys ya formateado
-			const info: any = await getConnection().query(query);
+			const info: any = await MilpagosDS.query(query);
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {
 			//console.log(err);
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async options(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -55,7 +55,7 @@ export default class sin_plan {
 		} catch (err) {
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async transType(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -76,7 +76,7 @@ export default class sin_plan {
 			console.log(err);
 			res.status(400).json(err);
 		}
-	}
+	},
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
@@ -96,5 +96,5 @@ export default class sin_plan {
 			console.log(err);
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};

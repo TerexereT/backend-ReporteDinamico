@@ -1,5 +1,4 @@
-import { CorsOptions, CorsRequest } from 'cors';
-import * as cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 
 /** list the host auth */
 const white_list: Array<string> = [''];
