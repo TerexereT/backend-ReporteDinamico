@@ -7,6 +7,19 @@ import Historico_Contracargo from '../../db/models/Historico_Contracargo';
 import { FormatQuery, selects } from '../../functions/Lote1000pagos/Contracargo';
 import saveLogs from '../logs';
 
+interface QueryContracargo {
+	AFILIADO: string;
+	TERMINAL: string;
+	RIF: string;
+	NOMBRE: string;
+	MONTO_DISPUTA: string;
+	MONTO_TRANSADO: string;
+	MONTO_DESCONTADO: string;
+	MONTO_PENDIENTE: string;
+	MONTO_ABONAR: string;
+	FECHA_EJECUCION: string;
+}
+
 interface Lote {
 	Terminal: string;
 	'Monto de Cuota ($)': number;
@@ -112,11 +125,13 @@ export default {
 			const sql = FormatQuery(init, end);
 
 			// ejecucion del querys ya formateado
-			const info = await MilpagosDS.query(sql);
+			const info: QueryContracargo[] | [] = await MilpagosDS.query(sql);
+			//console.log(info);
+
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {
-			console.log('err', err);
+			//console.log('err', err);
 			res.status(400).json(err);
 		}
 	},
