@@ -73,8 +73,8 @@ export const listViews: Views[] = [
 	},
 	{
 		//15
-		name: 'Contabilidad',
-		root: 'contabilidad',
+		name: 'Contab. de ACI',
+		root: 'contabilidadACI',
 		key: 14,
 	},
 ];
