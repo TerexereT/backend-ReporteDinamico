@@ -1,3 +1,3 @@
-const list: string[] = ['user', 'seguridad', 'contracargo'];
+const list: string[] = ['login'];
 
 export default list;

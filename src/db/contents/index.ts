@@ -22,7 +22,7 @@ MilpagosDS.initialize()
 		console.log(4);
 		await access_views(MilpagosDS);
 		console.log(5);
-		await permissions(MilpagosDS);
+		//await permissions(MilpagosDS);
 		console.log(6);
 		await preUser(MilpagosDS);
 		console.log(7);

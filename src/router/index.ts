@@ -1,4 +1,5 @@
 import { Application } from 'express';
+import abonoCliente from './abonoCliente';
 import aboTerminal from './aboTerminal';
 import auth from './auth';
 import contabilidad from './contabilidad';
@@ -25,6 +26,7 @@ const Routes = (app: Application) => {
 	mantenimiento(app);
 	contracargo(app);
 	contabilidad(app);
+	abonoCliente(app);
 };
 
 export default Routes;
