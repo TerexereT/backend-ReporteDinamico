@@ -116,7 +116,7 @@ export const getLogin = async (req: Request<any, msg, body>, res: Response<msg>)
 	try {
 		const { id, email }: any = req.headers.token;
 
-		const resUser = await MilpagosDS.getRepository(Usuarios).findOne(id);
+		const resUser = await MilpagosDS.getRepository(Usuarios).findOne({ where: { id } });
 
 		if (!resUser) throw { message: 'Usuario no existe' };
 
