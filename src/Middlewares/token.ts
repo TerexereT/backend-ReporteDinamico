@@ -10,14 +10,14 @@ export default (req: Request, res: Response, next: NextFunction) => {
 	try {
 		// define array route
 
-		// valid use
+		// rutas publicas
 		const result: boolean =
 			list.includes(req.baseUrl) || list.includes(req.path.split('/')[1]) || list.includes(req.path.split('/')[2]);
 
 		// use
 
-		// console.log('ruta:', req.path, '--', result);
-		if (result) {
+		// console.log('ruta:', req.path, '--', !result);
+		if (!result) {
 			if (req.headers['authorization']) {
 				const token: string = req.headers['authorization'];
 

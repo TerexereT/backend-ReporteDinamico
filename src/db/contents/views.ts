@@ -77,6 +77,12 @@ export const listViews: Views[] = [
 		root: 'contabilidadACI',
 		key: 14,
 	},
+	{
+		//16
+		name: 'Archivo AC Rechazado',
+		root: 'abonoclientes/rechazado/up',
+		key: 15,
+	},
 ];
 
 const views = async (db: DataSource): Promise<void> => {

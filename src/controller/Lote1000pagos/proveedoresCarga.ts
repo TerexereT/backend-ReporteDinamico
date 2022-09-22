@@ -27,7 +27,7 @@ interface msg {
 
 export const base: string = path.resolve('static');
 
-export default class AbonoClienteRechazado {
+const AbonoClienteRechazado = {
 	async upFile(req: Request<body>, res: Response<msg>) {
 		try {
 			if (!req.body.lote && !req.body.nameFile) throw { message: 'No se encontro ningun lote' };
@@ -105,5 +105,7 @@ export default class AbonoClienteRechazado {
 			console.log(err);
 			res.status(400).json(err);
 		}
-	}
-}
+	},
+};
+
+export default AbonoClienteRechazado;

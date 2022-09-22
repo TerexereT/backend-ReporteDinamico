@@ -9,6 +9,6 @@ ContracargoRoutes.route('/exec').post(Contracargo.execContracargo);
 //
 ContracargoRoutes.route('/keys').get(Contracargo.keys);
 //
-ContracargoRoutes.route('/up/leto').post(Contracargo.upFile);
+ContracargoRoutes.route('/up/lote').post(Contracargo.upFile);
 
 export default ContracargoRoutes;
