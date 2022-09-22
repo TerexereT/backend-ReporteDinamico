@@ -178,7 +178,7 @@ export const createDepartment = async (
 		});
 
 		const vistToHome = await MilpagosDS.getRepository(ViewsXDepartment).save({
-			id_department: newDep.id,
+			id_department: newDep,
 			id_views: 1,
 		});
 
@@ -194,9 +194,7 @@ export const createDepartment = async (
 
 export const getPermissions = async (req: Request<any, msg, body, Querys>, res: Response<msg>): Promise<void> => {
 	try {
-		const { id_dep, id_rol }: any = req.params;
-
-		let info = [];
+		const { id_dep, id_rol }: { id_dep: number; id_rol: number } = req.params;
 
 		const viewsXdep = await MilpagosDS.getRepository(Department).findOne({
 			where: { active: 1, id: id_dep },
@@ -212,7 +210,6 @@ export const getPermissions = async (req: Request<any, msg, body, Querys>, res: 
 		let actions: any = [];
 
 		await access_views.forEach((item: any) => {
-			//console.log(...item.id_views.actions);
 			const { actions: acc, ...vis }: any = item.id_views;
 			if (item.active) {
 				item.id_views.actions.forEach((el: Actions) => {
@@ -224,8 +221,6 @@ export const getPermissions = async (req: Request<any, msg, body, Querys>, res: 
 				});
 			}
 		});
-
-		//console.log('actions', actions);
 
 		const permiss = await MilpagosDS.getRepository(Permissions).find({
 			where: { id_rol, id_department: id_dep },
@@ -260,6 +255,8 @@ export const getPermissions = async (req: Request<any, msg, body, Querys>, res: 
 			}
 			return list;
 		};
+
+		let info = [];
 
 		info = getListFormat(permiss, actions);
 
@@ -334,18 +331,20 @@ export const updatePermissions = async (req: Request<any>, res: Response<msg>): 
 
 export const getViews = async (req: Request<any, msg, body, Querys>, res: Response<msg>): Promise<void> => {
 	try {
-		const { id_dep }: any = req.params;
+		const id_dep: number = req.params.id_dep;
 
 		const views = await MilpagosDS.getRepository(Views).find({ where: { active: 1 } });
 
 		if (!views.length) throw { message: 'No existen vistas disponibles' };
 
-		console.log(id_dep);
+		const dep = await MilpagosDS.getRepository(Department).findOne({ where: { id: id_dep } });
+
+		if (!dep) throw { message: `No existe el departamento con el id:${id_dep}` };
+
 		const access = await MilpagosDS.getRepository(ViewsXDepartment).find({
-			where: { id_department: id_dep },
-			relations: ['id_views'],
+			where: { id_department: dep },
+			relations: ['id_views', 'id_department'],
 		});
-		console.log(access);
 
 		const getListFormat = (item_access: any[], item_views: any[]) => {
 			let list: any = [];

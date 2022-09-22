@@ -30,7 +30,7 @@ Conections().then(() => {
 		console.log('╚════██║██║   ██║   ██╔══██╗██╔══██║██║╚██╗██║');
 		console.log('███████║██║   ██║   ██║  ██║██║  ██║██║ ╚████║');
 		console.log('╚══════╝╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝');
-		console.log(`app corriendo en el puerto http://localhost:${PORT}`);
+		console.log(`app corriendo en el puerto: ${PORT}`);
 		console.log('');
 	});
 });
