@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+import { DataSource } from 'typeorm';
 import Views from '../models/Views';
 
 export const listViews: Views[] = [
@@ -71,12 +71,18 @@ export const listViews: Views[] = [
 		root: 'exec-contracargo',
 		key: 13,
 	},
+	{
+		//15
+		name: 'Contabilidad',
+		root: 'contabilidad',
+		key: 14,
+	},
 ];
 
-const views = async (): Promise<void> => {
+const views = async (db: DataSource): Promise<void> => {
 	//
-	const valid = await getRepository(Views).find({ where: listViews });
-	if (!valid.length) await getRepository(Views).save(listViews);
+	const valid = await db.getRepository(Views).find({ where: listViews });
+	if (!valid.length) await db.getRepository(Views).save(listViews);
 };
 
 export default views;

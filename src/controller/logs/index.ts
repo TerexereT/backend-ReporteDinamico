@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+import { MilpagosDS } from '../../db/config/DataSource';
 import general_logs from '../../db/models/general_logs';
 
 export default async function saveLogs(email: string, method: string, path: string, msg: string) {
@@ -9,7 +9,7 @@ export default async function saveLogs(email: string, method: string, path: stri
 			id_origin_logs: 9, //reportes
 		};
 
-		await getRepository(general_logs).save(log);
+		await MilpagosDS.getRepository(general_logs).save(log);
 		return;
 	} catch (err) {
 		return err;

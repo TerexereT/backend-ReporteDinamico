@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as path from 'path';
+import { MilpagosDS } from './../../db/config/DataSource';
 //
-import { getConnection, getRepository } from 'typeorm';
 import contra_cargo from '../../db/models/contra_cargo';
 import Historico_Contracargo from '../../db/models/Historico_Contracargo';
 import { FormatQuery, selects } from '../../functions/Lote1000pagos/Contracargo';
@@ -40,9 +40,10 @@ export default {
 			const lote: any[] = JSON.parse(req.body.lote);
 
 			if (!lote.length) throw { message: 'No se encontro ningun lote' };
-			const iso = new Date().toISOString().split('T')[0];
+			// const iso = new Date().toISOString().split('T')[0];
+			const iso = new Date();
 
-			const dateCargo = await getRepository(contra_cargo).findOne({
+			const dateCargo = await MilpagosDS.getRepository(contra_cargo).findOne({
 				where: { createdAt: iso },
 			});
 
@@ -68,17 +69,19 @@ export default {
 				let term = item[Object.keys(item)[0]];
 				let monto: number = item[Object.keys(item)[1]];
 				if (term) {
-					const terminal = await getRepository(Historico_Contracargo).findOne({ TERMINAL: term });
+					const terminal = await MilpagosDS.getRepository(Historico_Contracargo).findOne({
+						where: { TERMINAL: term },
+					});
 					if (terminal) {
 						//update
 						let suma = terminal.MONTO_COBRA + monto;
 
 						//console.log(item.Terminal, 'sumar: ', terminal.MONTO_COBRA, '+', item['Monto de Cuota ($)'], ':', suma);
-						await getRepository(Historico_Contracargo).update(terminal.ID, {
+						await MilpagosDS.getRepository(Historico_Contracargo).update(terminal.ID, {
 							MONTO_COBRA: suma,
 						});
 					} else {
-						await getRepository(Historico_Contracargo).save({
+						await MilpagosDS.getRepository(Historico_Contracargo).save({
 							TERMINAL: term,
 							MONTO_COBRA: monto,
 							MONTO_PAGO: 0,
@@ -87,7 +90,7 @@ export default {
 				}
 			}
 
-			const fileContracargo = await getRepository(contra_cargo).save({
+			const fileContracargo = await MilpagosDS.getRepository(contra_cargo).save({
 				name: req.body.nameFile,
 			});
 
@@ -109,7 +112,7 @@ export default {
 			const sql = FormatQuery(init, end);
 
 			// ejecucion del querys ya formateado
-			const info = await getConnection().query(sql);
+			const info = await MilpagosDS.query(sql);
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {
@@ -146,8 +149,8 @@ export default {
 			const date = new Date(fecha).toISOString().split('T')[0];
 
 			//console.log('Ejecutar contracargo el dia ', date);
-			//const SP_contracargo: any = await getConnection().query(`EXEC sp_contracargos '${date}'`);
-			const SP_contracargo: any = await getConnection().query(`EXEC sp_contracargos '${date}'`);
+			//const SP_contracargo: any = await MilpagosDS.query(`EXEC sp_contracargos '${date}'`);
+			const SP_contracargo: any = await MilpagosDS.query(`EXEC sp_contracargos '${date}'`);
 
 			//console.log('Respuesta sp -> ', SP_contracargo);
 

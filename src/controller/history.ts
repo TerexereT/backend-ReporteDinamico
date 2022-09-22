@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { getConnection } from 'typeorm';
 import { dateRang, FormatQuery, selectQuery, selects } from '../functions/history';
+import { MilpagosDS } from './../db/config/DataSource';
 
 interface body {
 	keys: string[];
@@ -29,14 +29,13 @@ export default {
 
 			// formateamos la data
 			const Dates = dateRang(init, end);
-			console.log(init, end);
 			const selects = selectQuery(keys);
 			const query = FormatQuery({ init, end }, selects, sponsor);
 
 			// console.log('query', query);
 
 			// ejecucion del querys ya formateado
-			const info: any = await getConnection().query(query);
+			const info: any = await MilpagosDS.query(query);
 
 			// if (keys.includes('TRANSACCION')) {
 			// 	const trans: any = await pool.query(transQuery);

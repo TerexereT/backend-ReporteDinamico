@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
-import { selectQuery, dateRang, FormatQuery, selects } from '../../functions/mantenimineto/sin_plan';
+import { FormatQuery, selectQuery, selects } from '../../functions/mantenimineto/sin_plan';
 // @ts-ignore
-import numeral from 'numeral';
-import { getConnection } from 'typeorm';
+import { MilpagosDS } from '../../db/config/DataSource';
 
 interface body {
 	keys: string[];
@@ -28,9 +27,8 @@ export default class plan_tarifa {
 			const selects = selectQuery(keys);
 			const query = FormatQuery(selects);
 			// ejecucion del querys ya formateado
-			const info: any = await getConnection().query(query);
+			const info: any = await MilpagosDS.query(query);
 
-			
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {

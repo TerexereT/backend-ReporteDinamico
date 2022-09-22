@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+import { DataSource } from 'typeorm';
 import Usuarios from '../models/Usuarios';
 
 export const preUsuario: Usuarios = {
@@ -15,10 +15,10 @@ export const preUsuario: Usuarios = {
 	estatus: 7,
 };
 
-const preUser = async (): Promise<void> => {
+const preUser = async (db: DataSource): Promise<void> => {
 	//
-	const valid = await getRepository(Usuarios).find({ where: { login: preUsuario.login } });
-	if (!valid.length) await getRepository(Usuarios).save(preUsuario);
+	const valid = await db.getRepository(Usuarios).find({ where: { login: preUsuario.login } });
+	if (!valid.length) await db.getRepository(Usuarios).save(preUsuario);
 };
 
 export default preUser;

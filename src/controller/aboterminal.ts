@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
-import { selectQuery, FormatQuery, selects } from '../functions/Abotermial';
+import { FormatQuery, selectQuery, selects } from '../functions/Abotermial';
 // @ts-ignore
-import numeral from 'numeral';
-import { DateTime } from 'luxon';
-import { getConnection } from 'typeorm';
+import { MilpagosDS } from '../db/config/DataSource';
 
 interface body {
 	keys: string[];
@@ -33,7 +31,7 @@ export default {
 			const sql = FormatQuery(selects);
 
 			// ejecucion del querys ya formateado
-			const info = await getConnection().query(sql);
+			const info = await MilpagosDS.query(sql);
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {

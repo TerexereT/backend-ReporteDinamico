@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getConnection } from 'typeorm';
+import { MilpagosDS } from '../../db/config/DataSource';
 import { dateRang, FormatQuery, selects } from '../../functions/PagoCuota';
 
 interface body {
@@ -29,7 +29,7 @@ export default {
 			const query = FormatQuery({ init, end }, terminales);
 
 			// ejecucion del querys ya formateado
-			const info: any = await getConnection().query(query);
+			const info: any = await MilpagosDS.query(query);
 			// const info: any = {};
 
 			// retornar data al cliente

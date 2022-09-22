@@ -1,11 +1,8 @@
 import { Request, Response } from 'express';
-import { FormatQuery, selectQuery, selects } from '../../functions/mantenimineto/sin_plan';
-// @ts-ignore
 import { MilpagosDS } from '../../db/config/DataSource';
+import { dateRang, FormatQuery, selects } from '../../functions/Contabilidad';
 
-interface body {
-	keys: string[];
-}
+interface body {}
 
 interface Querys {
 	init: string;
@@ -18,18 +15,20 @@ interface msg {
 }
 
 export default {
-	async all(req: Request<any, msg, body, Querys>, res: Response<msg>) {
+	async allHistory(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			// definimos variables
-			const { keys } = req.body;
+			const {} = req.body;
+
+			const { init, end }: any = req.query;
 
 			// formateamos la data
-			const selects = selectQuery(keys);
-			const query = FormatQuery(selects);
+			const Dates = dateRang(init, end);
+			const query = FormatQuery({ init, end });
 
 			// ejecucion del querys ya formateado
-			// const resp: any = await MilpagosDS.query(query);
 			const info: any = await MilpagosDS.query(query);
+			// const info: any = {};
 
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
@@ -40,18 +39,14 @@ export default {
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
-			let keys: any = {};
+			let info: any = {};
 			selects.forEach((item: any) => {
 				const { key }: any = item;
 
-				keys[key] = key === 'TERMINAL';
+				info[key] = true;
 			});
 
-			const { TERMINAL, ...resto } = keys;
-
-			const info: any = { TERMINAL, ...resto };
-
-			res.status(200).json({ message: 'reporte exitoso', info });
+			res.status(200).json({ message: 'keys devueltas', info });
 		} catch (err) {
 			res.status(400).json(err);
 		}

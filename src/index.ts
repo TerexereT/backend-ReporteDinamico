@@ -1,52 +1,36 @@
-import * as express from 'express';
-import { Request, Response } from 'express';
+import express, { Application } from 'express';
 import 'reflect-metadata';
-import { createConnection } from 'typeorm';
-import { posRoutes, preRoutes } from './Middlewares/index';
+import { Conections } from './db/config';
+import { posRoutes, preRoutes } from './Middlewares';
 import Routes from './router';
 require('dotenv').config();
 
 //
 var fileupload = require('express-fileupload');
 
-const { HOST, USER, PASS, DB } = process.env;
+const { HOST, USER, PASS, DB, PORT } = process.env;
 
-createConnection()
-	//
-	.then(async () => {
-		// create express app
-		const app = express();
-		app.use(express.json());
+const app: Application = express();
+app.use(express.json());
+app.use(fileupload());
+app.use(express.urlencoded({ extended: true }));
 
-		preRoutes(app);
+preRoutes(app);
 
-		app.use(fileupload());
-		app.use(express.urlencoded({ extended: true }));
+Routes(app);
 
-		Routes(app);
+posRoutes(app);
 
-		posRoutes(app);
-
-		// setup express app here
-		// ...
-
-		// start express server
-		app.set('port', process.env.PORT || 4040);
-
-		app.listen(app.get('port'), () => {
-			console.log(`app corriendo en el puerto http://localhost:${app.get('port')} `);
-			console.log('            ()_()');
-			console.log(`            (o.o)`);
-			console.log('            (|_|)*');
-			console.log('DB OK');
-		});
-		/*
-			HOST=10.198.71.45
-			USER=reportes_dinamicos
-			PASS=R1p0rt3$Din4mic0s339
-			DB=milpagos
-			PORT=4040
-				
-		*/
-	})
-	.catch((error) => console.log(error));
+Conections().then(() => {
+	app.listen(PORT, () => {
+		console.log('');
+		console.log('███████╗██╗████████╗██████╗  █████╗ ███╗   ██╗');
+		console.log('██╔════╝██║╚══██╔══╝██╔══██╗██╔══██╗████╗  ██║');
+		console.log('███████╗██║   ██║   ██████╔╝███████║██╔██╗ ██║');
+		console.log('╚════██║██║   ██║   ██╔══██╗██╔══██║██║╚██╗██║');
+		console.log('███████║██║   ██║   ██║  ██║██║  ██║██║ ╚████║');
+		console.log('╚══════╝╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝');
+		console.log(`app corriendo en el puerto http://localhost:${PORT}`);
+		console.log('');
+	});
+});

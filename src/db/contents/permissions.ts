@@ -1,8 +1,8 @@
-import { getRepository } from 'typeorm';
+import { DataSource } from 'typeorm';
 import Permissions from '../models/Permissions';
 //
 
-const permissions = async (): Promise<void> => {
+const permissions = async (db: DataSource): Promise<void> => {
 	let data: Permissions[] = [
 		{
 			id_department: 2,
@@ -11,8 +11,8 @@ const permissions = async (): Promise<void> => {
 		},
 	];
 
-	const valid = await getRepository(Permissions).find({ where: data });
-	if (!valid.length) await getRepository(Permissions).save(data);
+	const valid = await db.getRepository(Permissions).find();
+	if (!valid.length) await db.getRepository(Permissions).save(data);
 };
 
 export default permissions;

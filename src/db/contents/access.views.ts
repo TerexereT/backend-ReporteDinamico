@@ -1,10 +1,10 @@
-import { getRepository } from 'typeorm';
+import { DataSource } from 'typeorm';
 import ViewsXDepartment from '../models/ViewsXDepartment';
 import { listDeparment } from './department';
 import { listViews } from './views';
 
-const access_views = async (): Promise<void> => {
-	let data: ViewsXDepartment[] = [];
+const access_views = async (db: DataSource): Promise<void> => {
+	let data = [];
 
 	//Todos tiene vista al home
 	listDeparment.forEach((element, index) => {
@@ -23,8 +23,9 @@ const access_views = async (): Promise<void> => {
 	});
 
 	//
-	const valid = await getRepository(ViewsXDepartment).find({ where: data });
-	if (!valid.length) await getRepository(ViewsXDepartment).save(data);
+	const valid = await db.getRepository(ViewsXDepartment).find();
+
+	if (!valid.length) await db.getRepository(ViewsXDepartment).save(data);
 };
 
 export default access_views;

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as path from 'path';
 //
-import { getRepository } from 'typeorm';
+import { MilpagosDS } from '../../db/config/DataSource';
 import abono_cliente_rechazado from '../../db/models/abono_cliente_rechazado';
 import monto_pago_proveedor from '../../db/models/monto_pago_proveedor';
 import saveLogs from '../logs';
@@ -35,9 +35,10 @@ export default class AbonoClienteRechazado {
 			const lote: any[] = JSON.parse(req.body.lote);
 
 			if (!lote.length) throw { message: 'No se encontro ningun lote' };
-			const iso = new Date().toISOString().split('T')[0];
+			// const iso = new Date().toISOString().split('T')[0];
+			const iso = new Date();
 
-			const dateCargo = await getRepository(abono_cliente_rechazado).findOne({
+			const dateCargo = await MilpagosDS.getRepository(abono_cliente_rechazado).findOne({
 				where: { createdAt: iso },
 			});
 
@@ -67,17 +68,19 @@ export default class AbonoClienteRechazado {
 				let term = item[Object.keys(item)[0]];
 				let monto: number = item[Object.keys(item)[1]];
 				if (term) {
-					const terminal = await getRepository(monto_pago_proveedor).findOne({ TERMINAL: term });
+					const terminal = await MilpagosDS.getRepository(monto_pago_proveedor).findOne({
+						where: { TERMINAL: term },
+					});
 					if (terminal) {
 						//update
 						let suma = terminal.MONTO + monto;
 
 						//console.log(item.Terminal, 'sumar: ', terminal.MONTO_COBRA, '+', item['Monto de Cuota ($)'], ':', suma);
-						await getRepository(monto_pago_proveedor).update(terminal.ID, {
+						await MilpagosDS.getRepository(monto_pago_proveedor).update(terminal.ID, {
 							MONTO: suma,
 						});
 					} else {
-						await getRepository(monto_pago_proveedor).save({
+						await MilpagosDS.getRepository(monto_pago_proveedor).save({
 							TERMINAL: term,
 							MONTO: monto,
 						});
@@ -85,7 +88,7 @@ export default class AbonoClienteRechazado {
 				}
 			}
 
-			const fileAbonoClienteRechazado = await getRepository(abono_cliente_rechazado).save({
+			const fileAbonoClienteRechazado = await MilpagosDS.getRepository(abono_cliente_rechazado).save({
 				name: req.body.nameFile,
 			});
 

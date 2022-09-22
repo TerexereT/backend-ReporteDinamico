@@ -1,9 +1,10 @@
-import { getRepository } from 'typeorm';
+import { DataSource } from 'typeorm';
+import { MilpagosDS } from '../config/DataSource';
 import Usuarios from '../models/Usuarios';
 import UsuariosXPerfil from '../models/Usuario_Work';
 
-const preDataUser = async (): Promise<void> => {
-	const user = await getRepository(Usuarios).findOne({ where: { login: 'test' } });
+const preDataUser = async (db: DataSource): Promise<void> => {
+	const user = await MilpagosDS.getRepository(Usuarios).findOne({ where: { login: 'test' } });
 
 	if (!user) {
 		console.log('no existe el usuario');
@@ -16,8 +17,8 @@ const preDataUser = async (): Promise<void> => {
 		id_department: 3, //;
 	};
 	//
-	const valid = await getRepository(UsuariosXPerfil).find({ where: prePerfilesUsuario });
-	if (!valid.length) await getRepository(UsuariosXPerfil).save(prePerfilesUsuario);
+	const valid = await db.getRepository(UsuariosXPerfil).find({ where: prePerfilesUsuario });
+	if (!valid.length) await db.getRepository(UsuariosXPerfil).save(prePerfilesUsuario);
 };
 
 export default preDataUser;

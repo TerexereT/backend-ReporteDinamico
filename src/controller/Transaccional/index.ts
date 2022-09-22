@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getConnection } from 'typeorm';
+import { MilpagosDS } from '../../db/config/DataSource';
 import { FormatQuery, selects } from '../../functions/Transaccional';
 // @ts-ignore
 
@@ -40,7 +40,7 @@ export default {
 			// formateamos la data
 			const query = FormatQuery(tipo, transOption, monthoption);
 			// ejecucion del querys ya formateado
-			const info: any = await getConnection().query(query);
+			const info: any = await MilpagosDS.query(query);
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
 		} catch (err) {
