@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, JoinColumn, ManyToOne, Column, Index } from 'typeorm';
-import fm_department from './Department';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import Department from './Department';
 import Views from './Views';
 
 @Entity('ViewsXDep')
@@ -8,7 +8,7 @@ export default class ViewsXDep {
 	@PrimaryGeneratedColumn()
 	id?: number;
 
-	@ManyToOne(() => fm_department, (fm_department) => fm_department.access_views)
+	@ManyToOne(() => Department, (Department) => Department.access_views)
 	@JoinColumn({ name: 'id_department' })
 	id_department!: number;
 

@@ -338,10 +338,14 @@ export const getViews = async (req: Request<any, msg, body, Querys>, res: Respon
 
 		const views = await MilpagosDS.getRepository(Views).find({ where: { active: 1 } });
 
+		if (!views.length) throw { message: 'No existen vistas disponibles' };
+
+		console.log(id_dep);
 		const access = await MilpagosDS.getRepository(ViewsXDepartment).find({
 			where: { id_department: id_dep },
 			relations: ['id_views'],
 		});
+		console.log(access);
 
 		const getListFormat = (item_access: any[], item_views: any[]) => {
 			let list: any = [];
@@ -369,9 +373,11 @@ export const getViews = async (req: Request<any, msg, body, Querys>, res: Respon
 		};
 
 		const info = getListFormat(access, views);
+		console.log(info);
 
 		res.status(200).json({ message: 'views', info });
 	} catch (err) {
+		console.log(err);
 		res.status(400).json(err);
 	}
 };
