@@ -23,6 +23,14 @@ posRoutes(app);
 
 Conections().then(() => {
 	app.listen(PORT, () => {
-		console.log(`app corriendo en el puerto http://localhost:${PORT}`);
+		console.log('');
+		console.log('███████╗██╗████████╗██████╗  █████╗ ███╗   ██╗');
+		console.log('██╔════╝██║╚══██╔══╝██╔══██╗██╔══██╗████╗  ██║');
+		console.log('███████╗██║   ██║   ██████╔╝███████║██╔██╗ ██║');
+		console.log('╚════██║██║   ██║   ██╔══██╗██╔══██║██║╚██╗██║');
+		console.log('███████║██║   ██║   ██║  ██║██║  ██║██║ ╚████║');
+		console.log('╚══════╝╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝');
+		console.log(`app corriendo en el puerto: ${PORT}`);
+		console.log('');
 	});
 });

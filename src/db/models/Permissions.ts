@@ -19,15 +19,15 @@ export default class Permissions {
 
 	@ManyToOne(() => department, (department) => department.permissions)
 	@JoinColumn({ name: 'id_department' })
-	id_department!: number;
+	id_department!: department;
 
 	@ManyToOne(() => roles, (roles) => roles.permissions)
 	@JoinColumn({ name: 'id_rol' })
-	id_rol!: number;
+	id_rol!: roles;
 
 	@ManyToOne(() => actions, (actions) => actions.permissions)
 	@JoinColumn({ name: 'id_action' })
-	id_action!: number;
+	id_action!: actions;
 
 	@Column({ default: 1 })
 	active?: number;

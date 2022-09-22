@@ -10,7 +10,7 @@ export default class ViewsXDep {
 
 	@ManyToOne(() => Department, (Department) => Department.access_views)
 	@JoinColumn({ name: 'id_department' })
-	id_department!: number;
+	id_department!: Department;
 
 	@ManyToOne(() => Views, (Views) => Views.departmentViews)
 	@JoinColumn({ name: 'id_views' })
