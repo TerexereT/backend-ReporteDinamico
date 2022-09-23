@@ -4,6 +4,7 @@ import Seguridad, {
 	dataUserData,
 	getPermissions,
 	getViews,
+	updateDepartments,
 	updateUserData,
 	updateViews,
 } from '../../controller/Seguridad';
@@ -13,6 +14,8 @@ const Security: Router = Router();
 Security.route('/workerSecurity/:id').get(dataUserData).put(updateUserData);
 //
 Security.route('/department/create').post(createDepartment);
+
+Security.route('/departments/update').put(updateDepartments);
 //
 Security.route('/permissions/:id_dep/:id_rol').get(getPermissions); //.post(updatePermissions);
 //

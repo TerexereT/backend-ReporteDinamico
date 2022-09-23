@@ -454,3 +454,26 @@ export const updateViews = async (req: Request<any, msg, body, Querys>, res: Res
 		res.status(400).json(err);
 	}
 };
+
+export const updateDepartments = async (
+	req: Request<any, msg, body, Querys>,
+	res: Response<msg>
+): Promise<void> => {
+	try {
+		const { listDeps }: any = req.body;
+
+		listDeps.forEach(async (dep: any) => {
+			await MilpagosDS.getRepository(Department).update(dep.id, {
+				active: dep.active,
+			});
+		});
+
+		//Logs
+		const { email }: any = req.headers.token;
+		await saveLogs(email, 'POST', req.url, `Cambio de departamentos disponibles`);
+
+		res.status(200).json({ message: 'updated department' });
+	} catch (err) {
+		res.status(400).json(err);
+	}
+};
