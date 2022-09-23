@@ -124,16 +124,22 @@ export const dataUserData = async (req: Request<any, msg, body, Querys>, res: Re
 
 export const updateUserData = async (req: Request<any, msg, body, Querys>, res: Response<msg>): Promise<void> => {
 	try {
-		const { id: idUser } = req.params;
+		const idUser: number = req.params.id;
+
 		const { id_rol, id_department, block }: any = req.body;
 
-		if (!id_rol || !id_department) throw { message: 'Faltan departamento o rol' };
+		const resUser = await MilpagosDS.getRepository(Usuarios).findOne({ where: { id: idUser } });
 
+		if (!resUser) throw { message: 'Usuario no existe' };
+
+		if (!id_rol || !id_department) throw { message: 'Faltan departamento o rol' };
+		console.log('PASO 1');
 		let user: any = await MilpagosDS.getRepository(UsuarioXWork).findOne({
 			where: {
-				id_usuario: idUser,
+				id_usuario: resUser,
 			},
 		});
+		console.log('PASO');
 
 		if (user) {
 			//update
@@ -146,7 +152,7 @@ export const updateUserData = async (req: Request<any, msg, body, Querys>, res: 
 			//save
 			//console.log(idUser, id_rol, id_department, block);
 			user = await MilpagosDS.getRepository(UsuarioXWork).save({
-				id_usuario: idUser,
+				id_usuario: resUser,
 				id_rol,
 				id_department: id_department,
 				active: block ? 0 : 1,

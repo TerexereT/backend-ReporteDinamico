@@ -55,7 +55,7 @@ export const login = async (req: Request<body>, res: Response<msg>) => {
 		if (!resUser) throw { message: 'Correo o Contraseña incorrecta', code: 401 };
 
 		const resWork = await MilpagosDS.getRepository(UsuarioXWork).findOne({
-			where: { id_usuario: resUser.id },
+			where: { id_usuario: resUser },
 			relations: ['id_department', 'id_rol', 'id_department.access_views', 'id_department.access_views.id_views'],
 		});
 
@@ -121,7 +121,7 @@ export const getLogin = async (req: Request<any, msg, body>, res: Response<msg>)
 		if (!resUser) throw { message: 'Usuario no existe' };
 
 		const resWork = await MilpagosDS.getRepository(UsuarioXWork).findOne({
-			where: { id_usuario: resUser.id },
+			where: { id_usuario: resUser },
 			relations: ['id_department', 'id_rol', 'id_department.access_views', 'id_department.access_views.id_views'],
 		});
 

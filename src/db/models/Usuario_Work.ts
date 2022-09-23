@@ -2,7 +2,6 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
-	Index,
 	JoinColumn,
 	ManyToOne,
 	OneToOne,
@@ -20,7 +19,7 @@ export default class Usuario_Work {
 
 	@OneToOne(() => Usuarios)
 	@JoinColumn({ name: 'id_usuario' })
-	id_usuario!: number;
+	id_usuario!: Usuarios;
 
 	@Column({ nullable: false, default: 1 })
 	@ManyToOne(() => Roles)
