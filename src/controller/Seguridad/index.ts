@@ -396,9 +396,13 @@ export const updateViews = async (req: Request<any, msg, body, Querys>, res: Res
 		const { id_dep }: any = req.params;
 		const newViews: any = req.body;
 
+		const dep = await MilpagosDS.getRepository(Department).findOne({ where: { id: id_dep } });
+
+		if (!dep) throw { message: `No existe el departamento con el id:${id_dep}` };
+
 		const accessList = await MilpagosDS.getRepository(ViewsXDepartment).find({
-			where: { id_department: id_dep },
-			relations: ['id_views'],
+			where: { id_department: dep },
+			relations: ['id_views', 'id_department'],
 		});
 
 		//console.log(newViews);
