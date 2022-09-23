@@ -133,13 +133,11 @@ export const updateUserData = async (req: Request<any, msg, body, Querys>, res: 
 		if (!resUser) throw { message: 'Usuario no existe' };
 
 		if (!id_rol || !id_department) throw { message: 'Faltan departamento o rol' };
-		console.log('PASO 1');
 		let user: any = await MilpagosDS.getRepository(UsuarioXWork).findOne({
 			where: {
 				id_usuario: resUser,
 			},
 		});
-		console.log('PASO');
 
 		if (user) {
 			//update
