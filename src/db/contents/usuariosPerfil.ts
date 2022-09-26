@@ -12,7 +12,7 @@ const preDataUser = async (db: DataSource): Promise<void> => {
 	}
 
 	const prePerfilesUsuario: UsuariosXPerfil = {
-		id_usuario: user.id, //kpolo
+		id_usuario: user, //kpolo
 		id_rol: 2, //work
 		id_department: 3, //;
 	};
