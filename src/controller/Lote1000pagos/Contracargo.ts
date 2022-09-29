@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import * as path from 'path';
 import { MilpagosDS } from './../../db/config/DataSource';
 //
-import contra_cargo from '../../db/models/contra_cargo';
-import Historico_Contracargo from '../../db/models/Historico_Contracargo';
+import contra_cargo from '../../db/global/models/contra_cargo';
+import Historico_Contracargo from '../../db/global/models/Historico_Contracargo';
 import { FormatQuery, selects } from '../../functions/Lote1000pagos/Contracargo';
 import saveLogs from '../logs';
 

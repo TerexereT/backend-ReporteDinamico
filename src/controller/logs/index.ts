@@ -1,5 +1,5 @@
 import { MilpagosDS } from '../../db/config/DataSource';
-import general_logs from '../../db/models/general_logs';
+import general_logs from '../../db/global/models/general_logs';
 
 export default async function saveLogs(email: string, method: string, path: string, msg: string) {
 	try {

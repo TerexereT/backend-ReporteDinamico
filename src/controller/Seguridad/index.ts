@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import { MilpagosDS } from '../../db/config/DataSource';
-import Actions from '../../db/models/Actions';
-import Department from '../../db/models/Department';
-import Permissions from '../../db/models/Permissions';
-import Roles from '../../db/models/Roles';
-import Usuarios from '../../db/models/Usuarios';
-import UsuarioXWork from '../../db/models/Usuario_Work';
-import Views from '../../db/models/Views';
-import ViewsXDepartment from '../../db/models/ViewsXDepartment';
+import Actions from '../../db/global/models/Actions';
+import Department from '../../db/global/models/Department';
+import Permissions from '../../db/global/models/Permissions';
+import Roles from '../../db/global/models/Roles';
+import Usuarios from '../../db/global/models/Usuarios';
+import UsuarioXWork from '../../db/global/models/Usuario_Work';
+import Views from '../../db/global/models/Views';
+import ViewsXDepartment from '../../db/global/models/ViewsXDepartment';
 import saveLogs from '../logs';
 // @ts-ignore
 

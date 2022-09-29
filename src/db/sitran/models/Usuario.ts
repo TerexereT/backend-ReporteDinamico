@@ -1,16 +1,7 @@
-import {
-	Column,
-	CreateDateColumn,
-	Entity,
-	JoinTable,
-	ManyToMany,
-	PrimaryGeneratedColumn,
-	UpdateDateColumn,
-} from 'typeorm';
-import Agregador from './Agregador';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity()
-export default class Usuarios {
+@Entity('Usuarios')
+export default class UsuariosSitran {
 	@PrimaryGeneratedColumn()
 	id?: number;
 
@@ -43,8 +34,4 @@ export default class Usuarios {
 
 	@Column({ nullable: false })
 	estatus!: number;
-
-	@ManyToMany(() => Agregador)
-	@JoinTable()
-	agregadores?: Agregador[];
 }

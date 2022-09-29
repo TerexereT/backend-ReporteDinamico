@@ -1,6 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import orign_logs from './origin_logs';
-import Usuarios from './Usuarios';
 
 @Entity({ synchronize: false })
 export default class general_logs {

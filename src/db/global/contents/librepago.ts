@@ -1,32 +1,31 @@
-import { MilpagosDS } from '../config/DataSource';
+import { LibrepagoDS } from './../../config/DataSource';
 import access_views from './access.views';
 import actions from './actions';
 import department from './department';
-import permissions from './permissions';
 import roles from './roles';
 import preUser from './user';
 import preDataUser from './usuariosPerfil';
 import views from './views';
 // init server
 
-MilpagosDS.initialize()
+LibrepagoDS.initialize()
 	.then(async () => {
 		console.log('Running PreData');
-		await department(MilpagosDS);
+		await department(LibrepagoDS);
 		console.log(1);
-		await roles(MilpagosDS);
+		await roles(LibrepagoDS);
 		console.log(2);
-		await views(MilpagosDS);
+		await views(LibrepagoDS);
 		console.log(3);
-		await actions(MilpagosDS);
+		await actions(LibrepagoDS);
 		console.log(4);
-		await access_views(MilpagosDS);
+		await access_views(LibrepagoDS);
 		console.log(5);
-		//await permissions(MilpagosDS);
+		//await permissions(LibrepagoDS);
 		console.log(6);
-		await preUser(MilpagosDS);
+		await preUser(LibrepagoDS);
 		console.log(7);
-		await preDataUser(MilpagosDS);
+		await preDataUser(LibrepagoDS);
 		console.log('Listo');
 		process.exit();
 	})

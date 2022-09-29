@@ -1,12 +1,14 @@
 import { exec } from 'child_process';
 import { Request, Response } from 'express';
 import * as path from 'path';
-import Permissions from '../../db/models/Permissions';
-import Usuarios from '../../db/models/Usuarios';
-import UsuarioXWork from '../../db/models/Usuario_Work';
+import { DataSource } from 'typeorm';
+import Permissions from '../../db/global/models/Permissions';
+import Usuarios from '../../db/global/models/Usuarios';
+import UsuarioXWork from '../../db/global/models/Usuario_Work';
+import UsuariosSitran from '../../db/sitran/models/Usuario';
 import saveLogs from '../logs';
 import createToken from '../token';
-import { MilpagosDS } from './../../db/config/DataSource';
+import { getDatasource, MilpagosDS, SitranDS } from './../../db/config/DataSource';
 import { getPermiss, getViews } from './formatData';
 //import { authenticate } from 'ldap-authentication';
 
@@ -34,27 +36,38 @@ interface msg {
 
 export const base: string = path.resolve('static');
 
-export const login = async (req: Request<body>, res: Response<msg>) => {
+export const login = async (req: Request<body, any>, res: Response<msg>) => {
 	try {
-		const { user, password }: { user: string; password: string } = req.body;
+		const { user, password } = req.body;
 		if (!user || !password) throw { message: 'Debe ingresar usuario y contrasena' };
 
 		const encriptPass = await execCommand(`java -jar java.encript/java.jar ${password}`, password);
 
 		//console.log('pass', encriptPass);
 
-		const resUser = await MilpagosDS.getRepository(Usuarios).findOne({
+		const resUserDS = await SitranDS.getRepository(UsuariosSitran).findOne({
 			where: [
 				{
 					login: user,
-					contrasena: encriptPass as string,
+					password: encriptPass as string,
 				},
 			],
 		});
 
-		if (!resUser) throw { message: 'Correo o Contraseña incorrecta', code: 401 };
+		if (!resUserDS) throw { message: 'Correo o Contraseña incorrecta', code: 401 };
 
-		const resWork = await MilpagosDS.getRepository(UsuarioXWork).findOne({
+		const DS: DataSource = getDatasource(req.headers.key_agregador);
+
+		const resUser = await DS.getRepository(Usuarios).findOne({
+			where: [
+				{
+					login: resUserDS.login,
+					email: resUserDS.email,
+				},
+			],
+		});
+
+		const resWork = await DS.getRepository(UsuarioXWork).findOne({
 			where: { id_usuario: resUser },
 			relations: ['id_department', 'id_rol', 'id_department.access_views', 'id_department.access_views.id_views'],
 		});
@@ -72,7 +85,7 @@ export const login = async (req: Request<body>, res: Response<msg>) => {
 
 		//buscar permisos
 		if (id_department.id !== 1) {
-			const resPermiss = await MilpagosDS.getRepository(Permissions).find({
+			const resPermiss = await DS.getRepository(Permissions).find({
 				where: { id_department: id_department.id, id_rol: id_rol.id },
 				relations: ['id_action'],
 			});
@@ -93,8 +106,8 @@ export const login = async (req: Request<body>, res: Response<msg>) => {
 		await saveLogs(resUser.email, 'POST', '/auth/login', `Login de Usuario`);
 
 		const userRes = {
-			login: resUser.login,
-			name: resUser.nombre,
+			login: resUserDS.login,
+			name: resUserDS.name,
 			id_department,
 			id_rol,
 		};
