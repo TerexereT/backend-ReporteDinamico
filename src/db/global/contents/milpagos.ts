@@ -1,4 +1,4 @@
-import { CarropagoDS } from './../../config/DataSource';
+import { MilpagosDS } from '../../config/DataSource';
 import access_views from './access.views';
 import actions from './actions';
 import roles from './roles';
@@ -7,24 +7,24 @@ import preDataUser from './usuariosPerfil';
 import views from './views';
 // init server
 
-CarropagoDS.initialize()
+MilpagosDS.initialize()
 	.then(async () => {
 		console.log('Running PreData');
 		console.log(1);
-		await roles(CarropagoDS);
+		await roles(MilpagosDS);
 		console.log(2);
-		await views(CarropagoDS);
+		await views(MilpagosDS);
 		console.log(3);
-		await actions(CarropagoDS);
+		await actions(MilpagosDS);
 		console.log(4);
-		await access_views(CarropagoDS);
+		await access_views(MilpagosDS);
 		console.log(5);
-		//await permissions(CarropagoDS);
+		//await permissions(MilpagosDS);
 		console.log(6);
-		await preUser(CarropagoDS);
+		await preUser(MilpagosDS);
 		console.log(7);
-		await preDataUser(CarropagoDS);
-		console.log('Listo carropago');
+		await preDataUser(MilpagosDS);
+		console.log('Listo milpagos');
 		process.exit();
 	})
 	.catch((err) => {

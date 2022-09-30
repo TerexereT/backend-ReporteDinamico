@@ -8,7 +8,6 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
-import Department from './Department';
 import Roles from './Roles';
 import Usuarios from './Usuarios';
 
@@ -27,8 +26,6 @@ export default class Usuario_Work {
 	id_rol?: number;
 
 	@Column({ nullable: false, default: 1 })
-	@ManyToOne(() => Department)
-	@JoinColumn({ name: 'id_department' })
 	id_department?: number;
 
 	@Column({ default: 1 })

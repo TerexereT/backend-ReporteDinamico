@@ -20,7 +20,7 @@ export const MilpagosDS = new DataSource({
 	migrationsRun: false,
 	logging: false,
 	entities: ['src/db/global/models/**/*.ts'],
-	migrations: ['src/db/global/migrations/milpagos/**/*.ts'],
+	migrations: ['src/db/global/migrations/**/*.ts'],
 	subscribers: ['src/db/global/subscriber/**/*.ts'],
 });
 
@@ -40,7 +40,7 @@ export const CarropagoDS = new DataSource({
 	migrationsRun: false,
 	logging: false,
 	entities: ['src/db/global/models/**/*.ts'],
-	migrations: ['src/db/global/migrations/carropago/**/*.ts'],
+	migrations: ['src/db/global/migrations/**/*.ts'],
 	subscribers: ['src/db/global/subscriber/**/*.ts'],
 });
 
@@ -60,7 +60,7 @@ export const LibrepagoDS = new DataSource({
 	migrationsRun: false,
 	logging: false,
 	entities: ['src/db/global/models/**/*.ts'],
-	migrations: ['src/db/global/migrations/librepago/**/*.ts'],
+	migrations: ['src/db/global/migrations/**/*.ts'],
 	subscribers: ['src/db//global/subscriber/**/*.ts'],
 });
 

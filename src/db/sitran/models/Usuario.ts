@@ -1,4 +1,14 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	JoinColumn,
+	ManyToOne,
+	OneToOne,
+	PrimaryGeneratedColumn,
+	UpdateDateColumn,
+} from 'typeorm';
+import Department from './Department';
 
 @Entity('Usuarios')
 export default class UsuariosSitran {
@@ -23,8 +33,10 @@ export default class UsuariosSitran {
 	@Column({ nullable: false })
 	email!: string;
 
-	@Column({ nullable: true })
-	expireAt?: Date | null;
+	@ManyToOne(() => Department, (department) => department.usuarios)
+	department!: Department;
+
+	//falta roles
 
 	@CreateDateColumn()
 	createdAt?: Date;

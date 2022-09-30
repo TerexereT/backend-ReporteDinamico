@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { MilpagosDS } from '../../db/config/DataSource';
 import Actions from '../../db/global/models/Actions';
-import Department from '../../db/global/models/Department';
+import Department from '../../db/sitran/models/Department';
 import Permissions from '../../db/global/models/Permissions';
 import Roles from '../../db/global/models/Roles';
 import Usuarios from '../../db/global/models/Usuarios';
@@ -187,8 +187,9 @@ export const createDepartment = async (
 			name: nameDep,
 		});
 
+		//[3312]
 		const vistToHome = await MilpagosDS.getRepository(ViewsXDepartment).save({
-			id_department: newDep,
+			id_department: 1,
 			id_views: 1,
 		});
 
@@ -211,7 +212,8 @@ export const getPermissions = async (req: Request<any, msg, body, Querys>, res: 
 			relations: ['access_views', 'access_views.id_views', 'access_views.id_views.actions'],
 		});
 
-		const access_views: ViewsXDepartment[] = viewsXdep.access_views;
+		//[3312]
+		const access_views: ViewsXDepartment[] = [];
 
 		if (!access_views.length) {
 			throw { message: 'No tiene niguna vista asignada' };
@@ -236,11 +238,7 @@ export const getPermissions = async (req: Request<any, msg, body, Querys>, res: 
 			where: { id: id_rol },
 		});
 
-		const permiss = await MilpagosDS.getRepository(Permissions).find({
-			where: { id_rol: rol, id_department: viewsXdep },
-			relations: ['id_rol', 'id_department', 'id_action'],
-		});
-
+		const permiss = [];
 		const getListFormat = (perm: any[], action: any[]) => {
 			let list: any = [];
 			for (let j = 0; j < action.length; j++) {
@@ -356,7 +354,7 @@ export const getViews = async (req: Request<any, msg, body, Querys>, res: Respon
 		if (!dep) throw { message: `No existe el departamento con el id:${id_dep}` };
 
 		const access = await MilpagosDS.getRepository(ViewsXDepartment).find({
-			where: { id_department: dep },
+			where: { id_department: dep.id },
 			relations: ['id_views', 'id_department'],
 		});
 
@@ -405,7 +403,7 @@ export const updateViews = async (req: Request<any, msg, body, Querys>, res: Res
 		if (!dep) throw { message: `No existe el departamento con el id:${id_dep}` };
 
 		const accessList = await MilpagosDS.getRepository(ViewsXDepartment).find({
-			where: { id_department: dep },
+			where: { id_department: dep.id },
 			relations: ['id_views', 'id_department'],
 		});
 

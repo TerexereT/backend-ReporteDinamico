@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
+import { listDeparment } from '../../sitran/contents/department';
 import ViewsXDepartment from '../models/ViewsXDepartment';
-import { listDeparment } from './department';
 import { listViews } from './views';
 
 const access_views = async (db: DataSource): Promise<void> => {

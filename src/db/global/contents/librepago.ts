@@ -1,7 +1,6 @@
 import { LibrepagoDS } from './../../config/DataSource';
 import access_views from './access.views';
 import actions from './actions';
-import department from './department';
 import roles from './roles';
 import preUser from './user';
 import preDataUser from './usuariosPerfil';
@@ -11,7 +10,6 @@ import views from './views';
 LibrepagoDS.initialize()
 	.then(async () => {
 		console.log('Running PreData');
-		await department(LibrepagoDS);
 		console.log(1);
 		await roles(LibrepagoDS);
 		console.log(2);
@@ -26,7 +24,7 @@ LibrepagoDS.initialize()
 		await preUser(LibrepagoDS);
 		console.log(7);
 		await preDataUser(LibrepagoDS);
-		console.log('Listo');
+		console.log('Listo librepago');
 		process.exit();
 	})
 	.catch((err) => {

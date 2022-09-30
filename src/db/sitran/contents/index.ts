@@ -1,15 +1,17 @@
 import { SitranDS } from './../../config/DataSource';
 import agregadores from './agregadores';
+import department from './department';
 import user from './user';
 // init server
 
 SitranDS.initialize()
 	.then(async () => {
 		console.log('Running PreData');
-		await agregadores(SitranDS);
+		await department(SitranDS);
 		console.log(1);
-		await user(SitranDS);
+		await agregadores(SitranDS);
 		console.log(2);
+		await user(SitranDS);
 		console.log('Listo');
 		process.exit();
 	})

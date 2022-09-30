@@ -8,7 +8,6 @@ import {
 	CreateDateColumn,
 	UpdateDateColumn,
 } from 'typeorm';
-import department from './Department';
 import actions from './Actions';
 import roles from './Roles';
 
@@ -17,9 +16,8 @@ export default class Permissions {
 	@PrimaryGeneratedColumn()
 	id?: number;
 
-	@ManyToOne(() => department, (department) => department.permissions)
-	@JoinColumn({ name: 'id_department' })
-	id_department!: department;
+	@Column({ name: 'id_department' })
+	id_department!: number;
 
 	@ManyToOne(() => roles, (roles) => roles.permissions)
 	@JoinColumn({ name: 'id_rol' })
