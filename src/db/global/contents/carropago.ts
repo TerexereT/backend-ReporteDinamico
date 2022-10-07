@@ -1,7 +1,7 @@
 import { CarropagoDS } from './../../config/DataSource';
 import access_views from './access.views';
 import actions from './actions';
-import roles from './roles';
+import roles from '../../sitran/contents/roles';
 import preUser from './user';
 import preDataUser from './usuariosPerfil';
 import views from './views';

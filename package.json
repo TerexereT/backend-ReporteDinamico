@@ -29,7 +29,7 @@
 		"migrate:qa:create": "yarn milpagos:qa:create",
 		"migrate:qa:run": "yarn milpagos:qa:run && yarn carropago:qa:run && yarn librepago:qa:run && yarn sitran:qa:run",
 		"full:qa:preData": "env-cmd -f .env.development ts-node src/db/global/contents/index.ts",
-		"migrate:qa:preData": "yarn milpagos:qa:preData && yarn carropago:qa:preData && yarn librepago:qa:preData && yarn sitran:qa:preData",
+		"migrate:qa:preData": "full:qa:preData yarn sitran:qa:preData",
 		"migration:preData:prod": "env-cmd -f .env.production ts-node src/db/contents/index.ts",
 		"migration:create:prod": "env-cmd -f .env.production npx typeorm-ts-node-esm migration:generate ./src/db/base/Migration -d ./src/db/config/Milpagos_DB.ts",
 		"migration:run:prod": "env-cmd -f .env.production npx typeorm-ts-node-esm migration:run -d ./src/db/config/Milpagos_DB.ts",

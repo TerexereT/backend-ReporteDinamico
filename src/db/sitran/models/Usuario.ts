@@ -9,8 +9,9 @@ import {
 	UpdateDateColumn,
 } from 'typeorm';
 import Department from './Department';
+import Roles from './Roles';
 
-@Entity('Usuarios')
+@Entity('Usuarios', { synchronize: false })
 export default class UsuariosSitran {
 	@PrimaryGeneratedColumn()
 	id?: number;
@@ -36,7 +37,8 @@ export default class UsuariosSitran {
 	@ManyToOne(() => Department, (department) => department.usuarios)
 	department!: Department;
 
-	//falta roles
+	@ManyToOne(() => Roles, (roles) => roles.usuarios)
+	rol!: Roles;
 
 	@CreateDateColumn()
 	createdAt?: Date;

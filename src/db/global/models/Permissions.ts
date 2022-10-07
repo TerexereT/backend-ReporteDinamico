@@ -9,7 +9,7 @@ import {
 	UpdateDateColumn,
 } from 'typeorm';
 import actions from './Actions';
-import roles from './Roles';
+import roles from '../../sitran/models/Roles';
 
 @Entity()
 export default class Permissions {
@@ -19,9 +19,8 @@ export default class Permissions {
 	@Column({ name: 'id_department' })
 	id_department!: number;
 
-	@ManyToOne(() => roles, (roles) => roles.permissions)
-	@JoinColumn({ name: 'id_rol' })
-	id_rol!: roles;
+	@Column({ name: 'id_rol' })
+	id_rol!: number;
 
 	@ManyToOne(() => actions, (actions) => actions.permissions)
 	@JoinColumn({ name: 'id_action' })
