@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
 import { CarropagoDS, LibrepagoDS, MilpagosDS, SitranDS } from '../../db/config/DataSource';
 import Actions from '../../db/global/models/Actions';
-import Department from '../../db/sitran/models/Department';
 import Permissions from '../../db/global/models/Permissions';
-import Roles from '../../db/sitran/models/Roles';
 import UsuarioXWork from '../../db/global/models/Usuario_Work';
 import Views from '../../db/global/models/Views';
 import ViewsXDepartment from '../../db/global/models/ViewsXDepartment';
-import saveLogs from '../logs';
+import Department from '../../db/sitran/models/Department';
+import Roles from '../../db/sitran/models/Roles';
 import UsuariosSitran from '../../db/sitran/models/Usuario';
+import saveLogs from '../logs';
 // @ts-ignore
 
 interface body {
@@ -106,7 +106,7 @@ export const dataUserData = async (req: Request<any, msg, body, Querys>, res: Re
 
 		info = {
 			active: user.estatus,
-			id_rol: user,
+			id_rol: user.rol,
 			id_department: user.department,
 		};
 
