@@ -2,15 +2,12 @@ import { exec } from 'child_process';
 import { Request, Response } from 'express';
 import * as path from 'path';
 import { DataSource } from 'typeorm';
-import Permissions from '../../db/global/models/Permissions';
-import Usuarios from '../../db/global/models/Usuarios';
-import UsuarioXWork from '../../db/global/models/Usuario_Work';
 import ViewsXDep from '../../db/global/models/ViewsXDepartment';
 import UsuariosSitran from '../../db/sitran/models/Usuario';
 import saveLogs from '../logs';
 import createToken from '../token';
-import { getDatasource, MilpagosDS, SitranDS } from './../../db/config/DataSource';
-import { getPermiss, getViews } from './formatData';
+import { getDatasource, SitranDS } from './../../db/config/DataSource';
+import { getViews } from './formatData';
 //import { authenticate } from 'ldap-authentication';
 
 function execCommand(cmd: string, password: string) {
@@ -59,22 +56,6 @@ export const login = async (req: Request<body, any>, res: Response<msg>) => {
 		if (!resUserDS) throw { message: 'Correo o Contraseña incorrecta', code: 401 };
 
 		const DS: DataSource = getDatasource(req.headers.key_agregador);
-
-		// const resUser = await DS.getRepository(Usuarios).findOne({
-		// 	where: [
-		// 		{
-		// 			login: resUserDS.login,
-		// 			email: resUserDS.email,
-		// 		},
-		// 	],
-		// });
-
-		// const resWork = await DS.getRepository(UsuarioXWork).findOne({
-		// 	where: { id_usuario: resUser },
-		// 	relations: ['id_department', 'id_rol', 'id_department.access_views', 'id_department.access_views.id_views'],
-		// });
-
-		// if (!resWork) throw { message: 'Este usuario no tiene acceso a reporte dinamico', code: 401 };
 
 		const viewXDep = await DS.getRepository(ViewsXDep).find({
 			where: { id_department: resUserDS.department.id },
