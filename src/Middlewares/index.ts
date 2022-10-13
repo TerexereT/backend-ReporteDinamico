@@ -1,4 +1,5 @@
 import { Application } from 'express';
+import dbSwitch from './dbSwitch';
 import Err from './err';
 import err_404 from './err/err_404';
 import cors from './secure';
@@ -8,6 +9,7 @@ import token from './token';
 export const preRoutes: any = (app: Application): void => {
 	app.use(cors);
 	app.use(token);
+	app.use(dbSwitch);
 };
 
 /** Middleware PostRoutes */

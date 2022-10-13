@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import * as path from 'path';
 //
 import { MilpagosDS } from '../../db/config/DataSource';
-import abono_cliente_rechazado from '../../db/models/abono_cliente_rechazado';
-import monto_pago_proveedor from '../../db/models/monto_pago_proveedor';
+import abono_cliente_rechazado from '../../db/global/models/abono_cliente_rechazado';
+import monto_pago_proveedor from '../../db/global/models/monto_pago_proveedor';
 import saveLogs from '../logs';
 
 interface Lote {

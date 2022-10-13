@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
-import { MilpagosDS } from '../../db/config/DataSource';
-import Actions from '../../db/models/Actions';
-import Department from '../../db/models/Department';
-import Permissions from '../../db/models/Permissions';
-import Roles from '../../db/models/Roles';
-import Usuarios from '../../db/models/Usuarios';
-import UsuarioXWork from '../../db/models/Usuario_Work';
-import Views from '../../db/models/Views';
-import ViewsXDepartment from '../../db/models/ViewsXDepartment';
+import { DataSource } from 'typeorm';
+import { CarropagoDS, getDatasource, LibrepagoDS, MilpagosDS, SitranDS } from '../../db/config/DataSource';
+import Actions from '../../db/global/models/Actions';
+import Permissions from '../../db/global/models/Permissions';
+import Views from '../../db/global/models/Views';
+import { default as ViewsXDepartment } from '../../db/global/models/ViewsXDepartment';
+import Department from '../../db/sitran/models/Department';
+import Roles from '../../db/sitran/models/Roles';
+import UsuariosSitran from '../../db/sitran/models/Usuario';
 import saveLogs from '../logs';
 // @ts-ignore
 
@@ -32,11 +32,11 @@ export default {
 		try {
 			//buscar los usuarios agregados a reporte dinamico
 
-			const users1000pagos = await MilpagosDS.getRepository(Usuarios).find();
+			const sitraners = await SitranDS.getRepository(UsuariosSitran).find();
 
-			if (!users1000pagos) throw { message: 'No existen Usuario' };
+			if (!sitraners) throw { message: 'No existen Usuario' };
 
-			const info: any[] = users1000pagos.map((worker: any) => {
+			const info: any[] = sitraners.map((worker: any) => {
 				const { contrasena, ...data } = worker;
 
 				return data;
@@ -53,7 +53,7 @@ export default {
 
 	async allDepartment(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
-			const info = await MilpagosDS.getRepository(Department).find();
+			const info = await SitranDS.getRepository(Department).find();
 
 			res.status(200).json({ message: 'departments', info });
 		} catch (err) {
@@ -63,7 +63,7 @@ export default {
 
 	async allRoles(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
-			const info = await MilpagosDS.getRepository(Roles).find();
+			const info = await SitranDS.getRepository(Roles).find();
 
 			res.status(200).json({ message: 'roles', info });
 		} catch (err) {
@@ -75,7 +75,7 @@ export default {
 		try {
 			//console.log('entreeee');
 			//console.log(req.params);
-			//const info = await MilpagosDS.getRepository(Roles).find();
+			//const info = await SitranDS.getRepository(Roles).find();
 
 			res.status(200).json({ message: 'user', info: {} });
 		} catch (err) {
@@ -87,34 +87,30 @@ export default {
 export const dataUserData = async (req: Request<any, msg, body, Querys>, res: Response<msg>): Promise<void> => {
 	try {
 		//console.log('dataUserData', req.params);
-		const idUser = req.params;
-		if (!idUser) throw { message: 'No existe el usuario' };
+		const id = req.params.id;
+		if (!id) throw { message: 'No existe el usuario' };
+		console.log(id);
 
-		let user: any = await MilpagosDS.getRepository(UsuarioXWork).findOne({
+		const user = await SitranDS.getRepository(UsuariosSitran).findOne({
 			where: {
-				id_usuario: idUser,
+				id,
 			},
-			relations: ['id_rol', 'id_department'],
+			relations: ['rol', 'department'],
 		});
+
+		console.log(user);
+
+		if (!user) throw { message: 'No existe el usuario' };
 
 		let info = {};
 
-		if (!user) {
-			console.log('No tiene departmento el usuario');
-			info = {
-				active: 0,
-				id_rol: null,
-				id_department: null,
-			};
-		} else {
-			info = {
-				active: user.active,
-				id_rol: user.id_rol,
-				id_department: user.id_department,
-			};
-		}
+		info = {
+			active: user.estatus,
+			id_rol: user.rol,
+			id_department: user.department,
+		};
 
-		//console.log(info);
+		console.log(info);
 
 		res.status(200).json({ message: 'user', info });
 	} catch (err) {
@@ -124,37 +120,29 @@ export const dataUserData = async (req: Request<any, msg, body, Querys>, res: Re
 
 export const updateUserData = async (req: Request<any, msg, body, Querys>, res: Response<msg>): Promise<void> => {
 	try {
-		const { id: idUser } = req.params;
+		const idUser: number = req.params.id;
+
 		const { id_rol, id_department, block }: any = req.body;
+
+		const resUser = await SitranDS.getRepository(UsuariosSitran).findOne({ where: { id: idUser } });
+
+		if (!resUser) throw { message: 'Usuario no existe' };
 
 		if (!id_rol || !id_department) throw { message: 'Faltan departamento o rol' };
 
-		let user: any = await MilpagosDS.getRepository(UsuarioXWork).findOne({
-			where: {
-				id_usuario: idUser,
-			},
+		const rol = await SitranDS.getRepository(Roles).findOne({ where: { id: id_rol } });
+		const department = await SitranDS.getRepository(Department).findOne({ where: { id: id_department } });
+
+		if (!rol) throw { message: 'Rol no existe' };
+		if (!department) throw { message: 'Departamento no existe' };
+
+		const user = await SitranDS.getRepository(UsuariosSitran).update(resUser.id, {
+			rol,
+			department,
 		});
 
-		if (user) {
-			//update
-			await MilpagosDS.getRepository(UsuarioXWork).update(user.id, {
-				id_rol: id_rol,
-				id_department: id_department,
-				active: block ? 0 : 1,
-			});
-		} else {
-			//save
-			//console.log(idUser, id_rol, id_department, block);
-			user = await MilpagosDS.getRepository(UsuarioXWork).save({
-				id_usuario: idUser,
-				id_rol,
-				id_department: id_department,
-				active: block ? 0 : 1,
-			});
-		}
-
 		const { email }: any = req.headers.token;
-		await saveLogs(email, 'POST', req.url, `Modifico el usuario: [${idUser}], Perfil [${user.id}]`);
+		await saveLogs(email, 'POST', req.url, `Modifico el usuario: [${idUser}], Perfil [${resUser.id}]`);
 
 		//
 		res.status(200).json({ message: 'update user' });
@@ -173,18 +161,29 @@ export const createDepartment = async (
 
 		if (!nameDep || nameDep.length < 3) throw { message: 'Nombre del Departmento invalido' };
 
-		const existDep = await MilpagosDS.getRepository(Department).findOne({
+		const existDep = await SitranDS.getRepository(Department).findOne({
 			where: { name: nameDep },
 		});
 
 		if (existDep) throw { message: `Ya existe el departamento ${nameDep}` };
 
-		const newDep = await MilpagosDS.getRepository(Department).save({
+		const newDep = await SitranDS.getRepository(Department).save({
 			name: nameDep,
 		});
 
-		const vistToHome = await MilpagosDS.getRepository(ViewsXDepartment).save({
-			id_department: newDep,
+		//[3312]
+		await MilpagosDS.getRepository(ViewsXDepartment).save({
+			id_department: 1,
+			id_views: 1,
+		});
+
+		await CarropagoDS.getRepository(ViewsXDepartment).save({
+			id_department: 1,
+			id_views: 1,
+		});
+
+		await LibrepagoDS.getRepository(ViewsXDepartment).save({
+			id_department: 1,
 			id_views: 1,
 		});
 
@@ -207,7 +206,8 @@ export const getPermissions = async (req: Request<any, msg, body, Querys>, res: 
 			relations: ['access_views', 'access_views.id_views', 'access_views.id_views.actions'],
 		});
 
-		const access_views: ViewsXDepartment[] = viewsXdep.access_views;
+		//[3312]
+		const access_views: ViewsXDepartment[] = [];
 
 		if (!access_views.length) {
 			throw { message: 'No tiene niguna vista asignada' };
@@ -232,11 +232,7 @@ export const getPermissions = async (req: Request<any, msg, body, Querys>, res: 
 			where: { id: id_rol },
 		});
 
-		const permiss = await MilpagosDS.getRepository(Permissions).find({
-			where: { id_rol: rol, id_department: viewsXdep },
-			relations: ['id_rol', 'id_department', 'id_action'],
-		});
-
+		const permiss = [];
 		const getListFormat = (perm: any[], action: any[]) => {
 			let list: any = [];
 			for (let j = 0; j < action.length; j++) {
@@ -343,17 +339,19 @@ export const getViews = async (req: Request<any, msg, body, Querys>, res: Respon
 	try {
 		const id_dep: number = req.params.id_dep;
 
-		const views = await MilpagosDS.getRepository(Views).find({ where: { active: 1 } });
+		const DS: DataSource = getDatasource(req.headers.key_agregador);
+
+		const views = await DS.getRepository(Views).find({ where: { active: 1 } });
 
 		if (!views.length) throw { message: 'No existen vistas disponibles' };
 
-		const dep = await MilpagosDS.getRepository(Department).findOne({ where: { id: id_dep } });
+		const dep = await SitranDS.getRepository(Department).findOne({ where: { id: id_dep } });
 
 		if (!dep) throw { message: `No existe el departamento con el id:${id_dep}` };
 
-		const access = await MilpagosDS.getRepository(ViewsXDepartment).find({
-			where: { id_department: dep },
-			relations: ['id_views', 'id_department'],
+		const access = await DS.getRepository(ViewsXDepartment).find({
+			where: { id_department: dep.id },
+			relations: ['id_views'],
 		});
 
 		const getListFormat = (item_access: any[], item_views: any[]) => {
@@ -382,7 +380,7 @@ export const getViews = async (req: Request<any, msg, body, Querys>, res: Respon
 		};
 
 		const info = getListFormat(access, views);
-		console.log(info);
+		// console.log(info);
 
 		res.status(200).json({ message: 'views', info });
 	} catch (err) {
@@ -396,13 +394,15 @@ export const updateViews = async (req: Request<any, msg, body, Querys>, res: Res
 		const { id_dep }: any = req.params;
 		const newViews: any = req.body;
 
-		const dep = await MilpagosDS.getRepository(Department).findOne({ where: { id: id_dep } });
+		const DS: DataSource = getDatasource(req.headers.key_agregador);
+
+		const dep = await SitranDS.getRepository(Department).findOne({ where: { id: id_dep } });
 
 		if (!dep) throw { message: `No existe el departamento con el id:${id_dep}` };
 
-		const accessList = await MilpagosDS.getRepository(ViewsXDepartment).find({
-			where: { id_department: dep },
-			relations: ['id_views', 'id_department'],
+		const accessList = await DS.getRepository(ViewsXDepartment).find({
+			where: { id_department: dep.id },
+			relations: ['id_views'],
 		});
 
 		//console.log(newViews);
@@ -417,11 +417,11 @@ export const updateViews = async (req: Request<any, msg, body, Querys>, res: Res
 						flag = true;
 						listUpdate.push({
 							id: access[i].id,
-							id_deparment: id_dep,
+							id_deparment: dep.id,
 							id_views: views[j].id,
 							active: views[j].status ? 1 : 0,
 						});
-						await MilpagosDS.getRepository(ViewsXDepartment).update(access[i].id, {
+						await DS.getRepository(ViewsXDepartment).update(access[i].id, {
 							active: views[j].status ? 1 : 0,
 						});
 					}
@@ -429,7 +429,7 @@ export const updateViews = async (req: Request<any, msg, body, Querys>, res: Res
 				if (!flag) {
 					if (views[j].status)
 						listSave.push({
-							id_department: id_dep,
+							id_department: dep.id,
 							id_views: views[j].id,
 							active: views[j].status ? 1 : 0,
 						});
@@ -450,6 +450,29 @@ export const updateViews = async (req: Request<any, msg, body, Querys>, res: Res
 		await saveLogs(email, 'POST', req.url, `Cambio de vistas al dep: ${id_dep} `);
 
 		res.status(200).json({ message: 'updated view' });
+	} catch (err) {
+		res.status(400).json(err);
+	}
+};
+
+export const updateDepartments = async (
+	req: Request<any, msg, body, Querys>,
+	res: Response<msg>
+): Promise<void> => {
+	try {
+		const { listDeps }: any = req.body;
+
+		listDeps.forEach(async (dep: any) => {
+			await MilpagosDS.getRepository(Department).update(dep.id, {
+				active: dep.active,
+			});
+		});
+
+		//Logs
+		const { email }: any = req.headers.token;
+		await saveLogs(email, 'POST', req.url, `Cambio de departamentos disponibles`);
+
+		res.status(200).json({ message: 'updated department' });
 	} catch (err) {
 		res.status(400).json(err);
 	}

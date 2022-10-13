@@ -3,13 +3,12 @@ import {
 	PrimaryGeneratedColumn,
 	Column,
 	UpdateDateColumn,
-	OneToMany,
-	JoinColumn,
 	CreateDateColumn,
 	Index,
+	OneToMany,
+	JoinColumn,
 } from 'typeorm';
-import Permissions from './Permissions';
-import ViewsXDepartment from './ViewsXDepartment';
+import UsuariosSitran from './Usuario';
 
 @Entity()
 @Index(['name'], { unique: true })
@@ -20,14 +19,6 @@ export default class Department {
 	@Column({ nullable: true })
 	name!: string;
 
-	@OneToMany(() => ViewsXDepartment, (ViewsXDepartment) => ViewsXDepartment.id_department)
-	@JoinColumn({ name: 'access_views' })
-	access_views?: ViewsXDepartment[];
-
-	@OneToMany(() => Permissions, (Permissions) => Permissions.id_department)
-	@JoinColumn({ name: 'permissions' })
-	permissions?: Permissions[];
-
 	@Column({ default: 1 })
 	active?: number;
 
@@ -36,4 +27,7 @@ export default class Department {
 
 	@UpdateDateColumn({ select: false })
 	updatedAt?: Date;
+
+	@OneToMany(() => UsuariosSitran, (usuario) => usuario.department)
+	usuarios?: UsuariosSitran[];
 }

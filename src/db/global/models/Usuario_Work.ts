@@ -2,15 +2,13 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
-	Index,
 	JoinColumn,
 	ManyToOne,
 	OneToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
-import Department from './Department';
-import Roles from './Roles';
+import Roles from '../../sitran/models/Roles';
 import Usuarios from './Usuarios';
 
 @Entity('Usuario_Work')
@@ -20,16 +18,12 @@ export default class Usuario_Work {
 
 	@OneToOne(() => Usuarios)
 	@JoinColumn({ name: 'id_usuario' })
-	id_usuario!: number;
+	id_usuario!: Usuarios;
 
 	@Column({ nullable: false, default: 1 })
-	@ManyToOne(() => Roles)
-	@JoinColumn({ name: 'id_rol' })
 	id_rol?: number;
 
 	@Column({ nullable: false, default: 1 })
-	@ManyToOne(() => Department)
-	@JoinColumn({ name: 'id_department' })
 	id_department?: number;
 
 	@Column({ default: 1 })

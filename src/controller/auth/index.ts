@@ -1,13 +1,13 @@
 import { exec } from 'child_process';
 import { Request, Response } from 'express';
 import * as path from 'path';
-import Permissions from '../../db/models/Permissions';
-import Usuarios from '../../db/models/Usuarios';
-import UsuarioXWork from '../../db/models/Usuario_Work';
+import { DataSource } from 'typeorm';
+import ViewsXDep from '../../db/global/models/ViewsXDepartment';
+import UsuariosSitran from '../../db/sitran/models/Usuario';
 import saveLogs from '../logs';
 import createToken from '../token';
-import { MilpagosDS } from './../../db/config/DataSource';
-import { getPermiss, getViews } from './formatData';
+import { getDatasource, SitranDS } from './../../db/config/DataSource';
+import { getViews } from './formatData';
 //import { authenticate } from 'ldap-authentication';
 
 function execCommand(cmd: string, password: string) {
@@ -34,69 +34,71 @@ interface msg {
 
 export const base: string = path.resolve('static');
 
-export const login = async (req: Request<body>, res: Response<msg>) => {
+export const login = async (req: Request<body, any>, res: Response<msg>) => {
 	try {
-		const { user, password }: { user: string; password: string } = req.body;
+		const { user, password } = req.body;
 		if (!user || !password) throw { message: 'Debe ingresar usuario y contrasena' };
 
 		const encriptPass = await execCommand(`java -jar java.encript/java.jar ${password}`, password);
 
 		//console.log('pass', encriptPass);
 
-		const resUser = await MilpagosDS.getRepository(Usuarios).findOne({
+		const resUserDS = await SitranDS.getRepository(UsuariosSitran).findOne({
 			where: [
 				{
 					login: user,
-					contrasena: encriptPass as string,
+					password: encriptPass as string,
 				},
 			],
+			relations: ['department'],
 		});
 
-		if (!resUser) throw { message: 'Correo o Contraseña incorrecta', code: 401 };
+		if (!resUserDS) throw { message: 'Correo o Contraseña incorrecta', code: 401 };
 
-		const resWork = await MilpagosDS.getRepository(UsuarioXWork).findOne({
-			where: { id_usuario: resUser.id },
-			relations: ['id_department', 'id_rol', 'id_department.access_views', 'id_department.access_views.id_views'],
+		const DS: DataSource = getDatasource(req.headers.key_agregador);
+
+		const viewXDep = await DS.getRepository(ViewsXDep).find({
+			where: { id_department: resUserDS.department.id },
+			relations: ['id_views'],
 		});
 
-		if (!resWork) throw { message: 'Este usuario no tiene acceso a reporte dinamico', code: 401 };
+		const { department }: any = resUserDS;
+		const rol = {
+			id: 1,
+		};
 
-		const { id_rol, id_department: dep }: any = resWork;
-		const { access_views, ...id_department }: any = dep;
-
-		if (!id_department.active)
-			throw { message: `El departamento de ${id_department.name} esta Bloqueado`, code: 401 };
-		const views = getViews(access_views); //obtener lista de vistas
-
+		if (!department.active) throw { message: `El departamento de ${department.name} esta Bloqueado`, code: 401 };
+		const views = getViews(viewXDep); //obtener lista de vistas
+		//
 		let permiss: any = [];
 
 		//buscar permisos
-		if (id_department.id !== 1) {
-			const resPermiss = await MilpagosDS.getRepository(Permissions).find({
-				where: { id_department: id_department.id, id_rol: id_rol.id },
-				relations: ['id_action'],
-			});
-			if (!resPermiss) throw { message: 'Error Access Permisses', code: 400 };
+		// if (department.id !== 1) {
+		// 	const resPermiss = await DS.getRepository(Permissions).find({
+		// 		where: { id_department: department.id, id_rol: id_rol.id },
+		// 		relations: ['id_action'],
+		// 	});
+		// 	if (!resPermiss) throw { message: 'Error Access Permisses', code: 400 };
 
-			permiss = getPermiss(resPermiss);
+		// 	permiss = getPermiss(resPermiss);
 
-			//console.log(permiss);
-		} else {
-			//console.log('usuario no posee nigun deparmento');
-		}
+		// 	//console.log(permiss);
+		// } else {
+		// 	//console.log('usuario no posee nigun deparmento');
+		// }
 
 		//console.log('rol:', id_rol, 'dep:', id_department);
 
-		const token: string = createToken(resUser.id, resUser.email, id_department.id, id_rol.id);
+		const token: string = createToken(resUserDS.id, resUserDS.email, department.id, rol.id);
 
 		//save in log
-		await saveLogs(resUser.email, 'POST', '/auth/login', `Login de Usuario`);
+		await saveLogs(resUserDS.email, 'POST', '/auth/login', `Login de Usuario`);
 
 		const userRes = {
-			login: resUser.login,
-			name: resUser.nombre,
-			id_department,
-			id_rol,
+			login: resUserDS.login,
+			name: resUserDS.name,
+			id_department: department,
+			id_rol: rol,
 		};
 
 		const info = {
@@ -116,41 +118,47 @@ export const getLogin = async (req: Request<any, msg, body>, res: Response<msg>)
 	try {
 		const { id, email }: any = req.headers.token;
 
-		const resUser = await MilpagosDS.getRepository(Usuarios).findOne({ where: { id } });
-
-		if (!resUser) throw { message: 'Usuario no existe' };
-
-		const resWork = await MilpagosDS.getRepository(UsuarioXWork).findOne({
-			where: { id_usuario: resUser.id },
-			relations: ['id_department', 'id_rol', 'id_department.access_views', 'id_department.access_views.id_views'],
+		const resUser = await SitranDS.getRepository(UsuariosSitran).findOne({
+			where: { id },
+			relations: ['department'],
 		});
 
-		if (!resWork) throw { message: 'Este usuario no tiene acceso a reporte dinamico', code: 401 };
+		if (!resUser) throw { message: 'Usuario no existe en Sitran' };
 
-		const { id_rol, id_department: dep }: any = resWork;
-		const { access_views, ...id_department }: any = dep;
+		const DS: DataSource = getDatasource(req.headers.key_agregador);
+		//console.log('DS', req.headers.key_agregador);
 
-		if (!id_department.active)
-			throw { message: `El departamento de ${id_department.name} esta Bloqueado`, code: 401 };
-		const views = getViews(access_views); //obtener lista de vistas
+		const viewXDep = await DS.getRepository(ViewsXDep).find({
+			where: { id_department: resUser.department.id },
+			relations: ['id_views'],
+		});
+
+		const { department }: any = resUser;
+		const rol = {
+			id: 1,
+		};
+
+		if (!department.active) throw { message: `El departamento de ${department.name} esta Bloqueado`, code: 401 };
+		const views = getViews(viewXDep); //obtener lista de vistas
+		//
 		let permiss: any = [];
 
 		//buscar permisos
-		if (id_department.id !== 1) {
-			const resPermiss = await MilpagosDS.getRepository(Permissions).find({
-				where: { id_department: id_department.id, id_rol: id_rol.id },
-				relations: ['id_action'],
-			});
-			if (!resPermiss) throw { message: 'Error Access Permisses', code: 400 };
+		// if (id_department.id !== 1) {
+		// 	const resPermiss = await MilpagosDS.getRepository(Permissions).find({
+		// 		where: { id_department: id_department.id, id_rol: id_rol.id },
+		// 		relations: ['id_action'],
+		// 	});
+		// 	if (!resPermiss) throw { message: 'Error Access Permisses', code: 400 };
 
-			permiss = getPermiss(resPermiss);
-		}
+		// 	permiss = getPermiss(resPermiss);
+		// }
 
 		const userRes = {
 			login: resUser.login,
-			name: resUser.nombre,
-			id_department,
-			id_rol,
+			name: resUser.name,
+			id_department: department,
+			id_rol: rol,
 		};
 
 		const info = {
