@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { dateRang, FormatQuery, selectQuery, selects } from '../functions/history';
-import { MilpagosDS } from './../db/config/DataSource';
+import { DataSource } from 'typeorm';
+import { dateRang, FormatQuery, selectQuery, selects, selectsCP } from '../functions/history';
+import { getDatasource } from './../db/config/DataSource';
 
 interface body {
 	keys: string[];
@@ -21,35 +22,19 @@ export default {
 		try {
 			// definimos variables
 			const { keys } = req.body;
-
-			// console.log('req.', req.query);
-
+			const key_agr = req.headers.key_agregador as string;
+			const DS: DataSource = getDatasource(key_agr);
 			const { init, end, sponsor }: any = req.query;
-			// console.log('sponsor', sponsor);
 
 			// formateamos la data
 			const Dates = dateRang(init, end);
-			const selects = selectQuery(keys);
-			const query = FormatQuery({ init, end }, selects, sponsor);
+			const selects = selectQuery(keys, key_agr);
+			const query = FormatQuery({ init, end }, selects, key_agr, sponsor);
 
 			// console.log('query', query);
 
 			// ejecucion del querys ya formateado
-			const info: any = await MilpagosDS.query(query);
-
-			// if (keys.includes('TRANSACCION')) {
-			// 	const trans: any = await pool.query(transQuery);
-			// }
-
-			// const info: any[] = resp.map((item: any) => {
-			// 	Object.keys(item).forEach((key: any) => {
-			// 		if (typeof item[key] === 'number') {
-			// 			item[key] = 'Bs' + numeral(item[key]).format('0.0,00');
-			// 		}
-			// 	});
-
-			// 	return item;
-			// });
+			const info: any = await DS.query(query);
 
 			// retornar data al cliente
 			res.status(200).json({ message: 'reporte exitoso', info });
@@ -59,9 +44,19 @@ export default {
 	},
 
 	async keys(req: Request<any, msg, body, Querys>, res: Response<msg>) {
+		const key_agr = req.headers.key_agregador;
+		let select_Arr = [];
+		switch (key_agr) {
+			case '1':
+				select_Arr = selectsCP;
+				break;
+			default:
+				select_Arr = selects;
+				break;
+		}
 		try {
 			let keys: any = {};
-			selects.forEach((item: any) => {
+			select_Arr.forEach((item: any) => {
 				const { key }: any = item;
 
 				keys[key] = key === 'TERMINAL';
