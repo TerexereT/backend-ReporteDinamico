@@ -117,27 +117,40 @@ export const dataUserData = async (req: Request<any, msg, body, Querys>, res: Re
 	}
 };
 
-export const updateUserData = async (req: Request<any, msg, body, Querys>, res: Response<msg>): Promise<void> => {
+interface BodyUpdateUser {
+	id_rol: number;
+	id_department: number;
+	block: number;
+	id_status: number;
+}
+
+export const updateUserData = async (
+	req: Request<any, msg, BodyUpdateUser, Querys>,
+	res: Response<msg>
+): Promise<void> => {
 	try {
 		const idUser: number = req.params.id;
 
-		const { id_rol, id_department, block }: any = req.body;
+		const { id_rol, id_department, block, id_status }: BodyUpdateUser = req.body;
 
 		const resUser = await SitranDS.getRepository(UsuariosSitran).findOne({ where: { id: idUser } });
 
 		if (!resUser) throw { message: 'Usuario no existe' };
 
-		if (!id_rol || !id_department) throw { message: 'Faltan departamento o rol' };
+		if (!id_rol || !id_department || !id_status) throw { message: 'Faltan departamento, rol o estatus' };
 
 		const rol = await SitranDS.getRepository(Roles).findOne({ where: { id: id_rol } });
 		const department = await SitranDS.getRepository(Department).findOne({ where: { id: id_department } });
+		const status = await SitranDS.getRepository(Status).findOne({ where: { id: id_status } });
 
 		if (!rol) throw { message: 'Rol no existe' };
 		if (!department) throw { message: 'Departamento no existe' };
+		if (!status) throw { message: 'Estatus no existe' };
 
 		const user = await SitranDS.getRepository(UsuariosSitran).update(resUser.id, {
 			rol,
 			department,
+			status,
 		});
 
 		const { email }: any = req.headers.token;
