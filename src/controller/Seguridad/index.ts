@@ -522,12 +522,12 @@ export const createUser = async (req: Request<any>, res: Response<msg>): Promise
 		});
 		if (validIdent) throw { message: 'El documento de identidad ya existe' };
 
-		const validLogin = await SitranDS.getRepository(UsuariosSitran).find({
+		const validLogin = await SitranDS.getRepository(UsuariosSitran).findOne({
 			where: { login },
 		});
 		if (validLogin) throw { message: 'El login ya existe' };
 
-		const validMail = await SitranDS.getRepository(UsuariosSitran).find({
+		const validMail = await SitranDS.getRepository(UsuariosSitran).findOne({
 			where: { email },
 		});
 		if (validMail) throw { message: 'El correo ya existe' };
