@@ -107,6 +107,7 @@ export const dataUserData = async (req: Request<any, msg, body, Querys>, res: Re
 			active: user.estatus,
 			id_rol: user.rol,
 			id_department: user.department,
+			id_status: user.status,
 		};
 
 		console.log(info);
@@ -120,7 +121,6 @@ export const dataUserData = async (req: Request<any, msg, body, Querys>, res: Re
 interface BodyUpdateUser {
 	id_rol: number;
 	id_department: number;
-	block: number;
 	id_status: number;
 }
 
@@ -131,7 +131,7 @@ export const updateUserData = async (
 	try {
 		const idUser: number = req.params.id;
 
-		const { id_rol, id_department, block, id_status }: BodyUpdateUser = req.body;
+		const { id_rol, id_department, id_status }: BodyUpdateUser = req.body;
 
 		const resUser = await SitranDS.getRepository(UsuariosSitran).findOne({ where: { id: idUser } });
 
