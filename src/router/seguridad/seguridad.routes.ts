@@ -27,6 +27,8 @@ Security.route('/worker/all').get(Seguridad.allWorker);
 Security.route('/departments/all').get(Seguridad.allDepartment);
 
 Security.route('/roles/all').get(Seguridad.allRoles);
+
+Security.route('/status/all').get(Seguridad.allStatus);
 //
 Security.route('/create/user').post(createUser);
 

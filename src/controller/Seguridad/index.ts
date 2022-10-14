@@ -72,6 +72,16 @@ export default {
 		}
 	},
 
+	async allStatus(req: Request<any, msg, body, Querys>, res: Response<msg>) {
+		try {
+			const info = await SitranDS.getRepository(Status).find();
+
+			res.status(200).json({ message: 'Estatus', info });
+		} catch (err) {
+			res.status(400).json(err);
+		}
+	},
+
 	async dataUser(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			//console.log('entreeee');
