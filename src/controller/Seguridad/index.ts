@@ -7,6 +7,7 @@ import Views from '../../db/global/models/Views';
 import { default as ViewsXDepartment } from '../../db/global/models/ViewsXDepartment';
 import Department from '../../db/sitran/models/Department';
 import Roles from '../../db/sitran/models/Roles';
+import Status from '../../db/sitran/models/Status';
 import UsuariosSitran from '../../db/sitran/models/Usuario';
 import saveLogs from '../logs';
 // @ts-ignore
@@ -97,8 +98,6 @@ export const dataUserData = async (req: Request<any, msg, body, Querys>, res: Re
 			},
 			relations: ['rol', 'department'],
 		});
-
-		console.log(user);
 
 		if (!user) throw { message: 'No existe el usuario' };
 
@@ -474,6 +473,63 @@ export const updateDepartments = async (
 
 		res.status(200).json({ message: 'updated department' });
 	} catch (err) {
+		res.status(400).json(err);
+	}
+};
+
+interface InterfaceBody {
+	login: string;
+	name: string;
+	email: string;
+	type_doc: string;
+	doc: string;
+	rol: Roles;
+	dep: Department;
+}
+
+export const createUser = async (req: Request<any>, res: Response<msg>): Promise<void> => {
+	try {
+		const { login, name, email, type_doc, doc, rol, dep }: InterfaceBody = req.body;
+		console.log(req.body);
+
+		const validIdent = await SitranDS.getRepository(UsuariosSitran).findOne({
+			where: {
+				id_type: type_doc,
+				ident: doc,
+			},
+		});
+		if (validIdent) throw { message: 'El documento de identidad ya existe' };
+
+		const validLogin = await SitranDS.getRepository(UsuariosSitran).find({
+			where: { login },
+		});
+		if (validLogin) throw { message: 'El login ya existe' };
+
+		const validMail = await SitranDS.getRepository(UsuariosSitran).find({
+			where: { email },
+		});
+		if (validMail) throw { message: 'El correo ya existe' };
+
+		const nuevo: Status = await SitranDS.getRepository(Status).findOne({
+			where: { id: 1 },
+		});
+
+		await SitranDS.getRepository(UsuariosSitran).save({
+			login,
+			password: '',
+			name,
+			id_type: type_doc,
+			ident: doc,
+			email,
+			department: dep,
+			rol: rol,
+			status: nuevo,
+			estatus: 1,
+		});
+
+		res.status(200).json({ message: 'Usuario creado' });
+	} catch (err) {
+		console.log(err);
 		res.status(400).json(err);
 	}
 };
