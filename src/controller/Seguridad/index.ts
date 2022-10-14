@@ -100,13 +100,12 @@ export const dataUserData = async (req: Request<any, msg, body, Querys>, res: Re
 		//console.log('dataUserData', req.params);
 		const id = req.params.id;
 		if (!id) throw { message: 'No existe el usuario' };
-		console.log(id);
 
 		const user = await SitranDS.getRepository(UsuariosSitran).findOne({
 			where: {
 				id,
 			},
-			relations: ['rol', 'department'],
+			relations: ['rol', 'department', 'status'],
 		});
 
 		if (!user) throw { message: 'No existe el usuario' };
