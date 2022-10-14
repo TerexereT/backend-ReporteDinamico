@@ -2,6 +2,7 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	Index,
 	JoinColumn,
 	ManyToOne,
 	OneToOne,
@@ -10,8 +11,10 @@ import {
 } from 'typeorm';
 import Department from './Department';
 import Roles from './Roles';
+import Status from './Status';
 
-@Entity('Usuarios', { synchronize: false })
+@Entity('Usuarios', { synchronize: true })
+@Index(['id_type', 'ident'], { unique: true })
 export default class UsuariosSitran {
 	@PrimaryGeneratedColumn()
 	id?: number;
@@ -48,4 +51,7 @@ export default class UsuariosSitran {
 
 	@Column({ nullable: false })
 	estatus!: number;
+
+	@ManyToOne(() => Status, (status) => status.usuarios)
+	status!: Status;
 }

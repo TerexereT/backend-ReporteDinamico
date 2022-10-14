@@ -3,11 +3,14 @@ import { Request, Response } from 'express';
 import * as path from 'path';
 import { DataSource } from 'typeorm';
 import ViewsXDep from '../../db/global/models/ViewsXDepartment';
+import Department from '../../db/sitran/models/Department';
 import UsuariosSitran from '../../db/sitran/models/Usuario';
 import saveLogs from '../logs';
 import createToken from '../token';
 import { getDatasource, SitranDS } from './../../db/config/DataSource';
 import { getViews } from './formatData';
+import bcrypt from 'bcrypt';
+import Status from '../../db/sitran/models/Status';
 //import { authenticate } from 'ldap-authentication';
 
 function execCommand(cmd: string, password: string) {
@@ -39,21 +42,48 @@ export const login = async (req: Request<body, any>, res: Response<msg>) => {
 		const { user, password } = req.body;
 		if (!user || !password) throw { message: 'Debe ingresar usuario y contrasena' };
 
-		const encriptPass = await execCommand(`java -jar java.encript/java.jar ${password}`, password);
+		// const encriptPass = await execCommand(`java -jar java.encript/java.jar ${password}`, password);
 
 		//console.log('pass', encriptPass);
+
+		const salt: string = await bcrypt.genSalt(10);
+		const passEncript = await bcrypt.hash(password, salt);
 
 		const resUserDS = await SitranDS.getRepository(UsuariosSitran).findOne({
 			where: [
 				{
 					login: user,
-					password: encriptPass as string,
 				},
 			],
-			relations: ['department'],
+			relations: ['department', 'status'],
 		});
 
+		//console.log('aqui', resUserDS.status);
+
 		if (!resUserDS) throw { message: 'Correo o Contraseña incorrecta', code: 401 };
+
+		switch (resUserDS.status.id) {
+			case 1: //Nuevo
+				const activo = await SitranDS.getRepository(Status).findOne({
+					where: { id: 2 },
+				});
+				await SitranDS.getRepository(UsuariosSitran).update(resUserDS.id, {
+					password: passEncript,
+					status: activo,
+				});
+				break;
+			case 2: //Activo
+				const validPassword = await bcrypt.compare(password, resUserDS.password);
+				//console.log(validPassword);
+				if (!validPassword) {
+					throw { message: 'Contrasena incorrecta', code: 400 };
+				}
+				break;
+			case 3: //Bloqueado
+				throw { message: 'Usuario Bloquado', code: 401 };
+			case 4: //Inactivo
+				throw { message: 'Usuario Inactivo', code: 401 };
+		}
 
 		const DS: DataSource = getDatasource(req.headers.key_agregador);
 
@@ -62,7 +92,7 @@ export const login = async (req: Request<body, any>, res: Response<msg>) => {
 			relations: ['id_views'],
 		});
 
-		const { department }: any = resUserDS;
+		const department = resUserDS.department;
 		const rol = {
 			id: 1,
 		};

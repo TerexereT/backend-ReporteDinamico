@@ -7,6 +7,7 @@ import Views from '../../db/global/models/Views';
 import { default as ViewsXDepartment } from '../../db/global/models/ViewsXDepartment';
 import Department from '../../db/sitran/models/Department';
 import Roles from '../../db/sitran/models/Roles';
+import Status from '../../db/sitran/models/Status';
 import UsuariosSitran from '../../db/sitran/models/Usuario';
 import saveLogs from '../logs';
 // @ts-ignore
@@ -71,6 +72,16 @@ export default {
 		}
 	},
 
+	async allStatus(req: Request<any, msg, body, Querys>, res: Response<msg>) {
+		try {
+			const info = await SitranDS.getRepository(Status).find();
+
+			res.status(200).json({ message: 'Estatus', info });
+		} catch (err) {
+			res.status(400).json(err);
+		}
+	},
+
 	async dataUser(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
 			//console.log('entreeee');
@@ -89,16 +100,13 @@ export const dataUserData = async (req: Request<any, msg, body, Querys>, res: Re
 		//console.log('dataUserData', req.params);
 		const id = req.params.id;
 		if (!id) throw { message: 'No existe el usuario' };
-		console.log(id);
 
 		const user = await SitranDS.getRepository(UsuariosSitran).findOne({
 			where: {
 				id,
 			},
-			relations: ['rol', 'department'],
+			relations: ['rol', 'department', 'status'],
 		});
-
-		console.log(user);
 
 		if (!user) throw { message: 'No existe el usuario' };
 
@@ -108,6 +116,7 @@ export const dataUserData = async (req: Request<any, msg, body, Querys>, res: Re
 			active: user.estatus,
 			id_rol: user.rol,
 			id_department: user.department,
+			id_status: user.status,
 		};
 
 		console.log(info);
@@ -118,27 +127,39 @@ export const dataUserData = async (req: Request<any, msg, body, Querys>, res: Re
 	}
 };
 
-export const updateUserData = async (req: Request<any, msg, body, Querys>, res: Response<msg>): Promise<void> => {
+interface BodyUpdateUser {
+	id_rol: number;
+	id_department: number;
+	id_status: number;
+}
+
+export const updateUserData = async (
+	req: Request<any, msg, BodyUpdateUser, Querys>,
+	res: Response<msg>
+): Promise<void> => {
 	try {
 		const idUser: number = req.params.id;
 
-		const { id_rol, id_department, block }: any = req.body;
+		const { id_rol, id_department, id_status }: BodyUpdateUser = req.body;
 
 		const resUser = await SitranDS.getRepository(UsuariosSitran).findOne({ where: { id: idUser } });
 
 		if (!resUser) throw { message: 'Usuario no existe' };
 
-		if (!id_rol || !id_department) throw { message: 'Faltan departamento o rol' };
+		if (!id_rol || !id_department || !id_status) throw { message: 'Faltan departamento, rol o estatus' };
 
 		const rol = await SitranDS.getRepository(Roles).findOne({ where: { id: id_rol } });
 		const department = await SitranDS.getRepository(Department).findOne({ where: { id: id_department } });
+		const status = await SitranDS.getRepository(Status).findOne({ where: { id: id_status } });
 
 		if (!rol) throw { message: 'Rol no existe' };
 		if (!department) throw { message: 'Departamento no existe' };
+		if (!status) throw { message: 'Estatus no existe' };
 
 		const user = await SitranDS.getRepository(UsuariosSitran).update(resUser.id, {
 			rol,
 			department,
+			status,
 		});
 
 		const { email }: any = req.headers.token;
@@ -474,6 +495,63 @@ export const updateDepartments = async (
 
 		res.status(200).json({ message: 'updated department' });
 	} catch (err) {
+		res.status(400).json(err);
+	}
+};
+
+interface InterfaceBody {
+	login: string;
+	name: string;
+	email: string;
+	type_doc: string;
+	doc: string;
+	rol: Roles;
+	dep: Department;
+}
+
+export const createUser = async (req: Request<any>, res: Response<msg>): Promise<void> => {
+	try {
+		const { login, name, email, type_doc, doc, rol, dep }: InterfaceBody = req.body;
+		console.log(req.body);
+
+		const validIdent = await SitranDS.getRepository(UsuariosSitran).findOne({
+			where: {
+				id_type: type_doc,
+				ident: doc,
+			},
+		});
+		if (validIdent) throw { message: 'El documento de identidad ya existe' };
+
+		const validLogin = await SitranDS.getRepository(UsuariosSitran).findOne({
+			where: { login },
+		});
+		if (validLogin) throw { message: 'El login ya existe' };
+
+		const validMail = await SitranDS.getRepository(UsuariosSitran).findOne({
+			where: { email },
+		});
+		if (validMail) throw { message: 'El correo ya existe' };
+
+		const nuevo: Status = await SitranDS.getRepository(Status).findOne({
+			where: { id: 1 },
+		});
+
+		await SitranDS.getRepository(UsuariosSitran).save({
+			login,
+			password: '',
+			name,
+			id_type: type_doc,
+			ident: doc,
+			email,
+			department: dep,
+			rol: rol,
+			status: nuevo,
+			estatus: 1,
+		});
+
+		res.status(200).json({ message: 'Usuario creado' });
+	} catch (err) {
+		console.log(err);
 		res.status(400).json(err);
 	}
 };
