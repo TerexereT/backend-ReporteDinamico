@@ -43,11 +43,8 @@ export default {
 				return data;
 			});
 
-			//console.log(info);
-
 			res.status(200).json({ message: 'data del usuario', info });
 		} catch (err) {
-			//console.log(err);
 			res.status(400).json(err);
 		}
 	},
@@ -84,8 +81,6 @@ export default {
 
 	async dataUser(req: Request<any, msg, body, Querys>, res: Response<msg>) {
 		try {
-			//console.log('entreeee');
-			//console.log(req.params);
 			//const info = await SitranDS.getRepository(Roles).find();
 
 			res.status(200).json({ message: 'user', info: {} });
@@ -97,7 +92,6 @@ export default {
 
 export const dataUserData = async (req: Request<any, msg, body, Querys>, res: Response<msg>): Promise<void> => {
 	try {
-		//console.log('dataUserData', req.params);
 		const id = req.params.id;
 		if (!id) throw { message: 'No existe el usuario' };
 
@@ -303,8 +297,6 @@ export const updatePermissions = async (req: Request<any>, res: Response<msg>): 
 			relations: ['id_action'],
 		});
 
-		//console.log(newAction);
-
 		const saveListPermiss = async (perm: any[], action: any[]) => {
 			let listSave: any[] = [];
 			let listUpdate: any[] = [];
@@ -336,16 +328,11 @@ export const updatePermissions = async (req: Request<any>, res: Response<msg>): 
 				}
 			}
 
-			///console.log('existente', listUpdate);
-			//console.log('crear', listSave);
-
 			//if (listUpdate.length) await MilpagosDS.getRepository(fm_permissions).update(listUpdate, listUpdate);
 			if (listSave.length) await MilpagosDS.getRepository(Permissions).save(listSave);
 		};
 
 		await saveListPermiss(perm, newAction);
-
-		//console.log(perm);
 
 		const { email }: any = req.headers.token;
 		await saveLogs(email, 'POST', req.url, `Edito los permisos dep: ${id_dep}, Rol:${id_rol}`);
@@ -401,7 +388,6 @@ export const getViews = async (req: Request<any, msg, body, Querys>, res: Respon
 		};
 
 		const info = getListFormat(access, views);
-		// console.log(info);
 
 		res.status(200).json({ message: 'views', info });
 	} catch (err) {
@@ -425,8 +411,6 @@ export const updateViews = async (req: Request<any, msg, body, Querys>, res: Res
 			where: { id_department: dep.id },
 			relations: ['id_views'],
 		});
-
-		//console.log(newViews);
 
 		const saveListViews = async (access: any[], views: any[]) => {
 			let listSave: any[] = [];
@@ -512,7 +496,6 @@ interface InterfaceBody {
 export const createUser = async (req: Request<any>, res: Response<msg>): Promise<void> => {
 	try {
 		const { login, name, email, type_doc, doc, rol, dep }: InterfaceBody = req.body;
-		console.log(req.body);
 
 		const validIdent = await SitranDS.getRepository(UsuariosSitran).findOne({
 			where: {
@@ -551,7 +534,6 @@ export const createUser = async (req: Request<any>, res: Response<msg>): Promise
 
 		res.status(200).json({ message: 'Usuario creado' });
 	} catch (err) {
-		console.log(err);
 		res.status(400).json(err);
 	}
 };
