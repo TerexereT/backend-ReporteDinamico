@@ -188,17 +188,17 @@ export const createDepartment = async (
 
 		//[3312]
 		await MilpagosDS.getRepository(ViewsXDepartment).save({
-			id_department: 1,
+			id_department: newDep.id,
 			id_views: 1,
 		});
 
 		await CarropagoDS.getRepository(ViewsXDepartment).save({
-			id_department: 1,
+			id_department: newDep.id,
 			id_views: 1,
 		});
 
 		await LibrepagoDS.getRepository(ViewsXDepartment).save({
-			id_department: 1,
+			id_department: newDep.id,
 			id_views: 1,
 		});
 
@@ -465,10 +465,11 @@ export const updateDepartments = async (
 	res: Response<msg>
 ): Promise<void> => {
 	try {
-		const { listDeps }: any = req.body;
+		const DS: DataSource = getDatasource(req.headers.key_agregador);
 
+		const { listDeps }: any = req.body;
 		listDeps.forEach(async (dep: any) => {
-			await MilpagosDS.getRepository(Department).update(dep.id, {
+			await DS.getRepository(Department).update(dep.id, {
 				active: dep.active,
 			});
 		});
