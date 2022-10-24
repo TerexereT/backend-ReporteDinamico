@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import * as path from 'path';
-import { MilpagosDS } from './../../db/config/DataSource';
+import { getDatasource, MilpagosDS } from './../../db/config/DataSource';
 //
+import { DataSource } from 'typeorm';
 import contra_cargo from '../../db/global/models/contra_cargo';
 import Historico_Contracargo from '../../db/global/models/Historico_Contracargo';
 import { FormatQuery, selects } from '../../functions/Lote1000pagos/Contracargo';
@@ -48,6 +49,7 @@ export const base: string = path.resolve('static');
 export default {
 	async upFile(req: Request<body>, res: Response<msg>) {
 		try {
+			const DS: DataSource = getDatasource(req.headers.key_agregador);
 			if (!req.body.lote && !req.body.nameFile) throw { message: 'No se encontro ningun lote' };
 
 			const lote: any[] = JSON.parse(req.body.lote);
@@ -56,7 +58,7 @@ export default {
 			// const iso = new Date().toISOString().split('T')[0];
 			const iso = new Date();
 
-			const dateCargo = await MilpagosDS.getRepository(contra_cargo).findOne({
+			const dateCargo = await DS.getRepository(contra_cargo).findOne({
 				where: { createdAt: iso },
 			});
 
@@ -82,7 +84,7 @@ export default {
 				let term = item[Object.keys(item)[0]];
 				let monto: number = item[Object.keys(item)[1]];
 				if (term) {
-					const terminal = await MilpagosDS.getRepository(Historico_Contracargo).findOne({
+					const terminal = await DS.getRepository(Historico_Contracargo).findOne({
 						where: { TERMINAL: term },
 					});
 					if (terminal) {
@@ -90,11 +92,11 @@ export default {
 						let suma = terminal.MONTO_COBRA + monto;
 
 						//console.log(item.Terminal, 'sumar: ', terminal.MONTO_COBRA, '+', item['Monto de Cuota ($)'], ':', suma);
-						await MilpagosDS.getRepository(Historico_Contracargo).update(terminal.ID, {
+						await DS.getRepository(Historico_Contracargo).update(terminal.ID, {
 							MONTO_COBRA: suma,
 						});
 					} else {
-						await MilpagosDS.getRepository(Historico_Contracargo).save({
+						await DS.getRepository(Historico_Contracargo).save({
 							TERMINAL: term,
 							MONTO_COBRA: monto,
 							MONTO_PAGO: 0,
@@ -103,12 +105,12 @@ export default {
 				}
 			}
 
-			const fileContracargo = await MilpagosDS.getRepository(contra_cargo).save({
+			const fileContracargo = await DS.getRepository(contra_cargo).save({
 				name: req.body.nameFile,
 			});
 
 			const { email }: any = req.headers.token;
-			await saveLogs(email, 'POST', req.url, `Subio un archivo de contracardo id: [${fileContracargo.id}]`);
+			await saveLogs(email, 'POST', req.url, `Subio un archivo de contracardo id: [${fileContracargo.id}]`, DS);
 
 			res.status(200).json({ message: 'File Saved' });
 		} catch (err) {
@@ -157,6 +159,7 @@ export default {
 
 	async execContracargo(req: Request<any, msg, bodyContra, Querys>, res: Response<msg>) {
 		try {
+			const DS: DataSource = getDatasource(req.headers.key_agregador);
 			if (!req.body.fecha) throw { message: 'fecha invalida' };
 			const { fecha } = req.body;
 			//console.log(fecha);
@@ -165,12 +168,12 @@ export default {
 
 			//console.log('Ejecutar contracargo el dia ', date);
 			//const SP_contracargo: any = await MilpagosDS.query(`EXEC sp_contracargos '${date}'`);
-			const SP_contracargo: any = await MilpagosDS.query(`EXEC sp_contracargos '${date}'`);
+			const SP_contracargo: any = await DS.query(`EXEC sp_contracargos '${date}'`);
 
 			//console.log('Respuesta sp -> ', SP_contracargo);
 
 			const { email }: any = req.headers.token;
-			await saveLogs(email, 'GET', req.url, `Ejecutado contracargo`);
+			await saveLogs(email, 'GET', req.url, `Ejecutado contracargo`, DS);
 
 			res.status(200).json({ message: 'contracargo ejecutado', info: { ok: true, line: 11, fecha: date } });
 		} catch (err) {

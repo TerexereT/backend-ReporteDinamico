@@ -1,16 +1,15 @@
+import bcrypt from 'bcrypt';
 import { exec } from 'child_process';
 import { Request, Response } from 'express';
 import * as path from 'path';
 import { DataSource } from 'typeorm';
 import ViewsXDep from '../../db/global/models/ViewsXDepartment';
-import Department from '../../db/sitran/models/Department';
+import Status from '../../db/sitran/models/Status';
 import UsuariosSitran from '../../db/sitran/models/Usuario';
 import saveLogs from '../logs';
 import createToken from '../token';
 import { getDatasource, SitranDS } from './../../db/config/DataSource';
 import { getViews } from './formatData';
-import bcrypt from 'bcrypt';
-import Status from '../../db/sitran/models/Status';
 //import { authenticate } from 'ldap-authentication';
 
 function execCommand(cmd: string, password: string) {
@@ -122,7 +121,7 @@ export const login = async (req: Request<body, any>, res: Response<msg>) => {
 		const token: string = createToken(resUserDS.id, resUserDS.email, department.id, rol.id);
 
 		//save in log
-		await saveLogs(resUserDS.email, 'POST', '/auth/login', `Login de Usuario`);
+		await saveLogs(resUserDS.email, 'POST', '/auth/login', `Login de Usuario`, DS);
 
 		const userRes = {
 			login: resUserDS.login,

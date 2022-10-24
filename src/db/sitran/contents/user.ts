@@ -3,8 +3,6 @@ import Department from '../models/Department';
 import Roles from '../models/Roles';
 import Status from '../models/Status';
 import Usuarios from '../models/Usuario';
-import roles from './roles';
-import status from './status';
 
 const preUsuario = (department: Department, rol: Roles, status: Status): Usuarios => ({
 	login: 'test',
@@ -20,7 +18,6 @@ const preUsuario = (department: Department, rol: Roles, status: Status): Usuario
 });
 
 const preUser = async (db: DataSource): Promise<void> => {
-	console.log('llegueeee');
 	const dep = await db.getRepository(Department).findOne({ where: { name: 'Seguridad' } });
 	//console.log(dep);
 
