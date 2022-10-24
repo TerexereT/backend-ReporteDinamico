@@ -1,30 +1,20 @@
 import { CarropagoDS } from './../../config/DataSource';
 import access_views from './access.views';
 import actions from './actions';
-import roles from '../../sitran/contents/roles';
-import preUser from './user';
-import preDataUser from './usuariosPerfil';
 import views from './views';
 // init server
 
 CarropagoDS.initialize()
 	.then(async () => {
-		console.log('Running PreData');
-		console.log(1);
-		await roles(CarropagoDS);
-		console.log(2);
+		console.log('Running PreData Carropago');
+		console.log('1 carro');
 		await views(CarropagoDS);
-		console.log(3);
+		console.log('2 carro');
 		await actions(CarropagoDS);
-		console.log(4);
+		console.log('3 carro');
 		await access_views(CarropagoDS);
-		console.log(5);
-		//await permissions(CarropagoDS);
-		console.log(6);
-		await preUser(CarropagoDS);
-		console.log(7);
-		await preDataUser(CarropagoDS);
-		console.log('Listo carropago');
+		console.log('4 carro');
+		console.log('Listo');
 		process.exit();
 	})
 	.catch((err) => {

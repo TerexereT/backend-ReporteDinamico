@@ -445,7 +445,7 @@ export const updateViews = async (req: Request<any, msg, body, Querys>, res: Res
 			await saveLogs(email, 'POST', req.url, `Edito las vistas dep: ${id_dep}`);
 
 			//if (listUpdate.length) await MilpagosDS.getRepository(fm_permissions).update(listUpdate, listUpdate);
-			if (listSave.length) await MilpagosDS.getRepository(ViewsXDepartment).save(listSave);
+			if (listSave.length) await DS.getRepository(ViewsXDepartment).save(listSave);
 		};
 
 		await saveListViews(accessList, newViews);
@@ -456,6 +456,7 @@ export const updateViews = async (req: Request<any, msg, body, Querys>, res: Res
 
 		res.status(200).json({ message: 'updated view' });
 	} catch (err) {
+		// console.log(err);
 		res.status(400).json(err);
 	}
 };
@@ -468,7 +469,7 @@ export const updateDepartments = async (
 		const { listDeps }: any = req.body;
 
 		listDeps.forEach(async (dep: any) => {
-			await MilpagosDS.getRepository(Department).update(dep.id, {
+			await SitranDS.getRepository(Department).update(dep.id, {
 				active: dep.active,
 			});
 		});
