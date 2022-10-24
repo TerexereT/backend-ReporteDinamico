@@ -157,7 +157,7 @@ export const updateUserData = async (
 		});
 
 		const { email }: any = req.headers.token;
-		await saveLogs(email, 'POST', req.url, `Modifico el usuario: [${idUser}], Perfil [${resUser.id}]`);
+		await saveLogs(email, 'POST', req.url, `Modifico el usuario: [${idUser}], Perfil [${resUser.id}]`, SitranDS);
 
 		//
 		res.status(200).json({ message: 'update user' });
@@ -188,22 +188,22 @@ export const createDepartment = async (
 
 		//[3312]
 		await MilpagosDS.getRepository(ViewsXDepartment).save({
-			id_department: 1,
+			id_department: newDep.id,
 			id_views: 1,
 		});
 
 		await CarropagoDS.getRepository(ViewsXDepartment).save({
-			id_department: 1,
+			id_department: newDep.id,
 			id_views: 1,
 		});
 
 		await LibrepagoDS.getRepository(ViewsXDepartment).save({
-			id_department: 1,
+			id_department: newDep.id,
 			id_views: 1,
 		});
 
 		const { email }: any = req.headers.token;
-		await saveLogs(email, 'POST', req.url, `Creo el departamento: ${nameDep}`);
+		await saveLogs(email, 'POST', req.url, `Creo el departamento: ${nameDep}`, SitranDS);
 
 		//
 		res.status(200).json({ message: 'Departamento creado', info: newDep });
@@ -214,9 +214,10 @@ export const createDepartment = async (
 
 export const getPermissions = async (req: Request<any, msg, body, Querys>, res: Response<msg>): Promise<void> => {
 	try {
+		const DS: DataSource = getDatasource(req.headers.key_agregador);
 		const { id_dep, id_rol }: { id_dep: number; id_rol: number } = req.params;
 
-		const viewsXdep = await MilpagosDS.getRepository(Department).findOne({
+		const viewsXdep = await DS.getRepository(Department).findOne({
 			where: { active: 1, id: id_dep },
 			relations: ['access_views', 'access_views.id_views', 'access_views.id_views.actions'],
 		});
@@ -243,7 +244,7 @@ export const getPermissions = async (req: Request<any, msg, body, Querys>, res: 
 			}
 		});
 
-		const rol = await MilpagosDS.getRepository(Roles).findOne({
+		const rol = await DS.getRepository(Roles).findOne({
 			where: { id: id_rol },
 		});
 
@@ -289,10 +290,11 @@ export const getPermissions = async (req: Request<any, msg, body, Querys>, res: 
 
 export const updatePermissions = async (req: Request<any>, res: Response<msg>): Promise<void> => {
 	try {
+		const DS: DataSource = getDatasource(req.headers.key_agregador);
 		const { id_dep, id_rol }: any = req.params;
 		const newAction: any = req.body;
 
-		const perm = await MilpagosDS.getRepository(Permissions).find({
+		const perm = await DS.getRepository(Permissions).find({
 			where: { id_rol, id_department: id_dep },
 			relations: ['id_action'],
 		});
@@ -312,7 +314,7 @@ export const updatePermissions = async (req: Request<any>, res: Response<msg>): 
 							id_action: action[j].id,
 							active: action[j].status ? 1 : 0,
 						});
-						await MilpagosDS.getRepository(Permissions).update(perm[i].id, {
+						await DS.getRepository(Permissions).update(perm[i].id, {
 							active: action[j].status ? 1 : 0,
 						});
 					}
@@ -328,14 +330,14 @@ export const updatePermissions = async (req: Request<any>, res: Response<msg>): 
 				}
 			}
 
-			//if (listUpdate.length) await MilpagosDS.getRepository(fm_permissions).update(listUpdate, listUpdate);
-			if (listSave.length) await MilpagosDS.getRepository(Permissions).save(listSave);
+			//if (listUpdate.length) await DS.getRepository(fm_permissions).update(listUpdate, listUpdate);
+			if (listSave.length) await DS.getRepository(Permissions).save(listSave);
 		};
 
 		await saveListPermiss(perm, newAction);
 
 		const { email }: any = req.headers.token;
-		await saveLogs(email, 'POST', req.url, `Edito los permisos dep: ${id_dep}, Rol:${id_rol}`);
+		await saveLogs(email, 'POST', req.url, `Edito los permisos dep: ${id_dep}, Rol:${id_rol}`, DS);
 
 		res.status(200).json({ message: 'updated permisses' });
 	} catch (err) {
@@ -442,7 +444,7 @@ export const updateViews = async (req: Request<any, msg, body, Querys>, res: Res
 			}
 
 			const { email }: any = req.headers.token;
-			await saveLogs(email, 'POST', req.url, `Edito las vistas dep: ${id_dep}`);
+			await saveLogs(email, 'POST', req.url, `Edito las vistas dep: ${id_dep}`, DS);
 
 			//if (listUpdate.length) await MilpagosDS.getRepository(fm_permissions).update(listUpdate, listUpdate);
 			if (listSave.length) await DS.getRepository(ViewsXDepartment).save(listSave);
@@ -452,7 +454,7 @@ export const updateViews = async (req: Request<any, msg, body, Querys>, res: Res
 
 		//logs
 		const { email }: any = req.headers.token;
-		await saveLogs(email, 'POST', req.url, `Cambio de vistas al dep: ${id_dep} `);
+		await saveLogs(email, 'POST', req.url, `Cambio de vistas al dep: ${id_dep} `, DS);
 
 		res.status(200).json({ message: 'updated view' });
 	} catch (err) {
@@ -466,8 +468,8 @@ export const updateDepartments = async (
 	res: Response<msg>
 ): Promise<void> => {
 	try {
+		const DS: DataSource = getDatasource(req.headers.key_agregador);
 		const { listDeps }: any = req.body;
-
 		listDeps.forEach(async (dep: any) => {
 			await SitranDS.getRepository(Department).update(dep.id, {
 				active: dep.active,
@@ -476,7 +478,7 @@ export const updateDepartments = async (
 
 		//Logs
 		const { email }: any = req.headers.token;
-		await saveLogs(email, 'POST', req.url, `Cambio de departamentos disponibles`);
+		await saveLogs(email, 'POST', req.url, `Cambio de departamentos disponibles`, DS);
 
 		res.status(200).json({ message: 'updated department' });
 	} catch (err) {

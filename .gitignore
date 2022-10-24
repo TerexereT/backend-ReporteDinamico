@@ -5,5 +5,5 @@ build/
 tmp/
 temp/
 yarn.lock
-.env
+#.env
 #ormconfig.*
