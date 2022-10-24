@@ -1,6 +1,7 @@
 import { SitranDS } from './../../config/DataSource';
 import agregadores from './agregadores';
 import department from './department';
+import originLogs_sitran from './originLogs_sitran';
 import roles from './roles';
 import status from './status';
 import user from './user';
@@ -18,6 +19,8 @@ SitranDS.initialize()
 		await agregadores(SitranDS);
 		console.log(4);
 		await user(SitranDS);
+		console.log(5);
+		await originLogs_sitran(SitranDS);
 		console.log('Listo');
 		process.exit();
 	})
